@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raphaël Chaumény — Data Analyst & Supply Chain</title>
+  <meta name="description" content="Portfolio de Raphaël Chaumény, Data Analyst & Supply Chain Coordinator. Expert en modélisation de données logistiques et optimisation des processus.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js & Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* CSS Variables for Dynamic Theming */
+    :root {
+      --bg0:#060a12; --bg1:#0a111c; --bg2:#101926; --bg3:#162333;
+      --gold:#d0af4c; --goldL:#e6cc7a; --goldD:#9c8031;
+      --azure:#2a5ca8; --azureL:#5086d9;
+      --chalk:#eae6db; --silver:#94a0b3; --slate:#435c75; --dim:#1c2838;
+      --emerald:#789c65; --coral:#c7645d; --lilac:#5e7a96;
+      
+      --font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+      --font-ui: 'DM Sans', 'Manrope', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--bg0); }
+    body { 
+      font-family: var(--font-ui); color: var(--chalk); background: var(--bg0);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased; 
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+    
+    ::selection { background: var(--gold); color: var(--bg0); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg0); }
+    ::-webkit-scrollbar-thumb { background: var(--slate); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 4px; }
+    
+    @media(pointer: fine) { html, body, a, button, [role=button] { cursor: none !important; } }
+
+    /* Elegant Preloader */
+    #preloader {
+      position: fixed; inset: 0; z-index: 99999; background: var(--bg0);
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+    }
+    .loader-logo {
+      width: 60px; height: 60px;
+      animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 12px var(--gold)); }
+      50% { opacity: 0.5; transform: scale(0.95); filter: drop-shadow(0 0 2px var(--gold)); }
+    }
+
+    /* Dropdowns */
+    .dd { position: relative; display: inline-block; }
+    .dd-menu { 
+      position: absolute; top: calc(100% + 8px); right: 0; background: var(--bg2); 
+      border: 1px solid var(--dim); border-radius: 10px; overflow: hidden; z-index: 700; 
+      min-width: 148px; box-shadow: 0 16px 48px rgba(0,0,0,.55);
+      opacity: 0; transform: translateY(-8px) scale(.96); pointer-events: none; 
+      transition: opacity .25s, transform .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    .dd.open .dd-menu { opacity: 1; transform: none; pointer-events: all; }
+    .dd-opt { 
+      display: flex; align-items: center; gap: 9px; padding: 11px 16px; 
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 1.2px; 
+      color: var(--silver); transition: all .15s; border: none; background: none; 
+      width: 100%; text-align: left; cursor: pointer;
+    }
+    .dd-opt:hover { background: var(--bg3); color: var(--gold); }
+    .dd-opt.active { color: var(--gold); background: rgba(255,255,255,0.05); font-weight: 700; }
+
+    /* Utilities & Animations */
+    .flex { display: flex; } .grid { display: grid; } .relative { position: relative; }
+    .absolute { position: absolute; } .w-full { width: 100%; } .h-full { height: 100%; }
+    
+    @keyframes shimmer { 0% { background-position: -300% 0; } 100% { background-position: 300% 0; } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+    @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(16,214,138,0.55); } 70% { box-shadow: 0 0 0 10px transparent; } }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    @keyframes scanline { 0% { top: 0%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+
+    /* Cards */
+    .gc { transition: transform .45s cubic-bezier(.23,1,.32,1), box-shadow .45s ease, border-color .3s; }
+    .gc:hover { transform: translateY(-7px) !important; box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px var(--gold) !important; border-color: var(--gold) !important; z-index: 10; }
+    
+    .xpc { transition: transform .35s cubic-bezier(.23,1,.32,1), border-left-color .3s; }
+    .xpc:hover { transform: translateX(10px) !important; }
+
+    .pj .pov { opacity: 0; transform: translateY(10px); transition: opacity .4s, transform .4s; }
+    .pj:hover .pov { opacity: 1; transform: none; }
+    .pj .pbg { transition: transform .7s cubic-bezier(.2,.8,.2,1); }
+    .pj:hover .pbg { transform: scale(1.07); }
+
+    /* Intersection Observer Reveals */
+    .reveal { opacity: 0; transform: translateY(28px) scale(.98); transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+    .reveal.on { opacity: 1; transform: none; }
+
+    /* Responsive */
+    .pcnav { display: flex !important; } .burg { display: none !important; }
+    @media(max-width: 1100px) { .sdots { display: none !important; } }
+    @media(max-width: 900px) { .b7, .b5 { grid-column: 1 / -1 !important; } .c2 { grid-template-columns: 1fr !important; } .pjg { grid-template-columns: 1fr !important; } }
+    @media(max-width: 720px) { .pcnav { display: none !important; } .burg { display: flex !important; } .hsg { grid-template-columns: 1fr 1fr !important; } .edg { grid-template-columns: 1fr !important; } }
+    
+    .shimmer-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% 100%; animation: shimmer 4s linear infinite; }
+
+    /* Table styles */
+    .kpi-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; text-align: right; }
+    .kpi-table th { padding: 12px; font-weight: 600; border-bottom: 1px solid var(--dim); }
+    .kpi-table td { padding: 12px; border-bottom: 1px solid var(--dim); color: var(--chalk); }
+    .kpi-table tr:last-child td { border-bottom: none; }
+    .kpi-table .text-left { text-align: left; }
+    .kpi-table .text-center { text-align: center; }
+    .kpi-table th.top-hdr { border-bottom: none; padding-bottom: 4px; font-size: 11px; letter-spacing: 1px; color: var(--silver); }
+    .kpi-table .total-row td { font-weight: 700; color: var(--gold); border-top: 1px solid var(--slate); }
+
+    /* 3D Flip Card (Digital Twin Easter Egg) */
+    .flip-container { perspective: 1000px; cursor: pointer; display: inline-block; position: relative; }
+    .flip-container:hover .flipper, .flip-container.flipped .flipper { transform: rotateY(180deg); }
+    .flipper { transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); transform-style: preserve-3d; position: relative; width: 220px; height: 220px; z-index:2; }
+    .front, .back { backface-visibility: hidden; position: absolute; inset: 0; border-radius: 50%; overflow: hidden; }
+    .front { border: 4px solid var(--gold); box-shadow: 0 8px 32px rgba(201,168,76,0.3); z-index: 2; transform: rotateY(0deg); }
+    .back { border: 4px solid var(--azure); background: var(--bg2); transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 8px 32px rgba(30,122,255,0.4); }
+    .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--azure); box-shadow: 0 0 10px var(--azureL), 0 0 20px var(--azureL); animation: scanline 2.5s ease-in-out infinite; opacity: 0.8; z-index: 10; }
+    
+    .hint-toast { position: absolute; right: -80px; top: 20px; background: var(--bg3); border: 1px solid var(--dim); color: var(--silver); padding: 6px 12px; border-radius: 8px; font-family: var(--font-ui); font-size: 11px; opacity: 0; transform: translateX(-10px); transition: all 0.4s; pointer-events: none; }
+    .flip-container:hover .hint-toast { opacity: 1; transform: translateX(0); }
+
+    /* Interactive Terminal Input */
+    .term-input-row { display: flex; gap: 12px; align-items: center; }
+    .term-input { background: transparent; border: none; color: var(--chalk); font-family: var(--font-mono); font-size: 13px; flex: 1; outline: none; caret-color: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <!-- Elegant Preloader -->
+  <div id="preloader">
+    <div class="loader-logo">
+      <svg viewBox="0 0 40 40" fill="none" width="100%" height="100%">
+        <rect x="1" y="1" width="38" height="38" rx="10" stroke="var(--gold)" stroke-width="1.5"/>
+        <text x="20" y="26" text-anchor="middle" fill="var(--gold)" font-family="var(--font-display)" font-size="17" font-weight="600">RC</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Backgrounds & Overlays -->
+  <canvas id="particle-canvas" style="position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.65;"></canvas>
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 5% 0%,var(--gold) 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 95% 100%,var(--azure) 0%,transparent 50%);opacity:0.05;"></div>
+  
+  <div id="scroll-line" style="position:fixed;top:0;left:0;z-index:9997;height:2px;width:0%;background:linear-gradient(90deg,var(--goldD),var(--gold),var(--goldL));transition:width .08s linear;box-shadow:0 0 10px var(--gold);"></div>
+  
+  <div id="cursor-dot" style="position:fixed;z-index:9999;width:8px;height:8px;border-radius:50%;background:var(--gold);pointer-events:none;top:0;left:0;transition:transform .04s linear,background .3s;display:none;"></div>
+  <div id="cursor-ring" style="position:fixed;z-index:9998;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--gold);pointer-events:none;top:0;left:0;transition:transform .13s ease,opacity .25s,border-color .3s;display:none;"></div>
+
+  <!-- Navigation -->
+  <nav id="sidenav" class="sdots" style="position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:18px;"></nav>
+  <header id="navbar" style="position:fixed;top:0;left:0;right:0;z-index:500;transition:all .5s;padding:20px 0;"></header>
+
+  <!-- Main Content Wrappers -->
+  <main style="position:relative;z-index:10;">
+    <section id="hero-wrap" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:130px 32px 90px;position:relative;text-align:center;"></section>
+    <section id="skills-wrap" style="padding:110px 32px;position:relative;"></section>
+    <section id="xp-wrap" style="padding:110px 32px;background:var(--bg1);position:relative;"></section>
+    <section id="projects-wrap" style="padding:110px 32px;position:relative;"></section>
+    <section id="dash-wrap" style="padding:110px 32px;background:var(--bg1);position:relative;"></section>
+    <section id="edu-wrap" style="padding:110px 32px;position:relative;"></section>
+    <section id="future-wrap" style="padding:110px 32px;background:var(--bg1);position:relative;"></section>
+    <section id="term-wrap" style="padding:110px 32px;position:relative;"></section>
+  </main>
+
+  <footer id="cta-wrap" style="padding:110px 32px 64px;position:relative;z-index:10;background:linear-gradient(to bottom,transparent,var(--bg1))"></footer>
+
+  <script>
+    /* ════════════════════════════════════════════════════════════════════
+       DATA & THEMES
+    ════════════════════════════════════════════════════════════════════ */
+    const F = {
+      display: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
+      ui: "'DM Sans', 'Manrope', system-ui, sans-serif",
+      mono: "'JetBrains Mono', 'Fira Code', monospace"
+    };
+
+    const THEMES = {
+      wada1: { id:"wada1", name:"❀ Karashi & Ruri", bg0:"#060a12", bg1:"#0a111c", bg2:"#101926", bg3:"#162333", gold:"#d0af4c", goldL:"#e6cc7a", goldD:"#9c8031", azure:"#2a5ca8", azureL:"#5086d9", chalk:"#eae6db", silver:"#94a0b3", slate:"#435c75", dim:"#1c2838", emerald:"#789c65", coral:"#c7645d", lilac:"#5e7a96" },
+      wada2: { id:"wada2", name:"✿ Asagi & Toki", bg0:"#051115", bg1:"#091a20", bg2:"#0e252e", bg3:"#143440", gold:"#1c7c91", goldL:"#33a2bd", goldD:"#115261", azure:"#c78b90", azureL:"#e3a8ad", chalk:"#ebe5dc", silver:"#8fa5ad", slate:"#395b66", dim:"#172d36", emerald:"#89a874", coral:"#c96f6f", lilac:"#d4b872" },
+      wada3: { id:"wada3", name:"❖ Tetsu & Moegi", bg0:"#080c12", bg1:"#0d131c", bg2:"#141e2a", bg3:"#1b2a3b", gold:"#4f8da6", goldL:"#6fb1cc", goldD:"#336478", azure:"#9fbca6", azureL:"#bddeca", chalk:"#eaeee3", silver:"#8e9ba8", slate:"#405263", dim:"#1f2c3b", emerald:"#7eab88", coral:"#d26c59", lilac:"#c4897e" },
+      wada4: { id:"wada4", name:"✺ Uguisu & Kokihi", bg0:"#121110", bg1:"#1a1816", bg2:"#24211e", bg3:"#2e2925", gold:"#8f2e3b", goldL:"#a64552", goldD:"#611a24", azure:"#6c7c59", azureL:"#8a9c73", chalk:"#e8e0d5", silver:"#998c7e", slate:"#5e544a", dim:"#332d28", emerald:"#bba15a", coral:"#d96c5b", lilac:"#7a6358" },
+      wada5: { id:"wada5", name:"❂ Nibi & Yamabuki", bg0:"#151617", bg1:"#1e1f21", bg2:"#292b2e", bg3:"#35383b", gold:"#f8a91b", goldL:"#fccd58", goldD:"#b37509", azure:"#9e4539", azureL:"#bd6053", chalk:"#f2ece4", silver:"#a1a5ab", slate:"#52575e", dim:"#2c2f33", emerald:"#d18a44", coral:"#d15252", lilac:"#7a805c" },
+      luxury: { id:"luxury", name:"✦ Luxury Dark", bg0:"#02040a", bg1:"#060b16", bg2:"#0a1220", bg3:"#0e1929", gold:"#c9a84c", goldL:"#e8cc7e", goldD:"#8a6b28", azure:"#1e7aff", azureL:"#5fa3ff", chalk:"#f0ece4", silver:"#8a9bb5", slate:"#3a4a62", dim:"#1a2438", emerald:"#10d68a", coral:"#ff5a5a", lilac:"#8b7cf8" },
+      hack: { id:"hack", name:"☠️ Override", bg0:"#000000", bg1:"#020804", bg2:"#051408", bg3:"#08240f", gold:"#10d68a", goldL:"#20f69a", goldD:"#088550", azure:"#10d68a", azureL:"#20f69a", chalk:"#20f69a", silver:"#10d68a", slate:"#088550", dim:"#05331a", emerald:"#10d68a", coral:"#10d68a", lilac:"#10d68a" }
+    };
+
+    const LANG_FLAGS = { fr:"🇫🇷", en:"🇬🇧", de:"🇩🇪", ru:"🇷🇺" };
+    const LANG_LIST = ["fr","en","de","ru"];
+
+    const SIDS = ["skills","xp","projects","dash","edu","future","term","cta"];
+
+    const DICT = {
+      fr:{
+        badge:"Disponible — Mobile en Europe", eyebrow:"Data Analyst & Supply Chain Coordinator", h1:["Transformer les flux","en décisions."], sub:"Expert en modélisation de données logistiques et optimisation des processus industriels. M1 MTLCI — Kedge Business School.", cta1:"Voir le parcours", cta2:"Mes Projets", 
+        navLabels:["Expertise","Expérience","Projets","Dashboard","Formation","Avenir","Terminal","Contact"], 
+        sNums:["01","02","03","04","05","06","07","08"], 
+        kpis:["Taux de Service","OTIF","Rotation Stock","Écart de Stock"], 
+        periods:[["ytd","YTD 2025"],["q3","Q3 2025"],["q2","Q2 2025"]], 
+        charts:["OTIF & Taux de Service","Compétences Analytiques","Évolution Écarts de Stock"], chartSubs:["évolution mensuelle","radar d'expertise","VS VOLUME GLOBAL"], 
+        contactTitle:"Travaillons ensemble", contactSub:"Ouvert aux opportunités Supply Chain, Data & Logistique — mobile en Europe et à l'international.", contactCTA:"Contact", tags:["Kedge Business School","GROHE · SNCF · T.E.A.","Disponible"], 
+        stats:[["4+","Ans d'XP"],["6","Entreprises"],["5","Langues"],["10+","Outils"]], scrollLabel:"DÉFILER", footerLeft:`© ${new Date().getFullYear()} Raphaël Chaumény — Tous droits réservés`, footerRight:"Développé avec HTML/JS Vanilla · Chart.js", 
+        techTitle:"Data & Analytique", techSub:"STACK TECHNIQUE", opsTitle:"Opérations SC", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"LEADERSHIP & COMMS", langsTitle:"Langues", langsSub:"MULTILINGUE", kpiCard:"Écarts d'Inventaire", projPlaceholder:"// Projets continuellement mis à jour via JSON.",
+        futureTitle:"Vision & Avenir", futureSub:"OBJECTIFS POST-MASTER",
+        termTitle:"Terminal Interactif",
+        termCmd:"python analyze.py --profile=chaumeny_r --verbose",
+        termLines:[{t:"info",s:"[init]  Module Supply Chain Intelligence chargé"},{t:"proc",s:"[scan]  Extraction des compétences en cours..."},{t:"code",s:"> Python  BigQuery  Power BI  SQL  AppSheet"},{t:"ok",s:"[match] Profil aligné · Rôles Data × Logistique"}],
+        techStack:[{n:"Power BI",sub:"Visualisation",color:"gold"},{n:"Python",sub:"Analyse",color:"azure"},{n:"BigQuery",sub:"Entrepôt de données",color:"lilac"},{n:"SQL",sub:"Requêtage",color:"gold"},{n:"Apps Script",sub:"Automatisation",color:"emerald"},{n:"AppSheet",sub:"No-Code",color:"azure"},{n:"ERP / WMS",sub:"Opérations",color:"lilac"},{n:"Syniti",sub:"Qualité données",color:"coral"}],
+        opsSkills:["VMI & Réapprovisionnement automatique","Optimisation de stock & couverture","Transport Planning & TMS","Gestion WMS / ERP avancée","Amélioration Continue (Lean/Kaizen)"],
+        softSkills:[{s:"Résolution de problèmes",p:94,c:"gold"},{s:"Communication Int.",p:92,c:"azure"},{s:"Adaptabilité",p:91,c:"lilac"},{s:"Data Storytelling",p:89,c:"emerald"},{s:"Management Transverse",p:86,c:"gold"}],
+        langs:[{l:"Français",lv:"Natif",p:100,f:"FR"},{l:"Anglais",lv:"C1",p:85,f:"EN"},{l:"Ukrainien",lv:"B1",p:55,f:"UA"},{l:"Russe",lv:"A2",p:35,f:"RU"},{l:"Allemand",lv:"A1",p:25,f:"DE"}],
+        radar:[{s:"Coordination",v:100},{s:"WMS/ERP",v:100},{s:"VMI",v:80},{s:"Transport",v:80},{s:"Data Viz",v:60},{s:"SQL/Python",v:40}],
+        xps:[
+          {co:"GROHE — LIXIL Group",role:"Supply Chain Coordinator",period:"Sep 2025 — Présent",loc:"France",color:"gold",tags:["VMI","BigQuery","Python","OTIF"],pts:["Pilotage VMI : portefeuille produits, réapprovisionnements automatiques, disponibilité.","Tableaux de bord KPIs logistiques (ruptures, couverture, OTIF) via data multi-sources.","Déploiement Apps Script, AppSheet, BigQuery et Syniti pour l'automatisation des flux."]},
+          {co:"SNCF Supply Chain",role:"Pilote Performance Production",period:"Jan — Sep 2025",loc:"Paris",color:"azure",tags:["Power BI","ERP","Ticketing"],pts:["Suivi KPIs via ERP, WMS et dashboards Power BI temps réel.","Conception et déploiement d'un outil de ticketing interne (−40% délai résolution).","Optimisation des niveaux d'inventaire par analyses croisées et modélisation."]},
+          {co:"Lapeyre Logistique",role:"Superviseur Logistique",period:"Sep — Déc 2024",loc:"Rungis",color:"emerald",tags:["Management","WMS","Stocks"],pts:["Supervision réceptions, commandes et inventaires physiques (35 000 m²).","Management, formation et coaching d'une équipe de 12 opérateurs terrain."]},
+          {co:"T.E.A.",role:"Planificateur Transport",period:"Avr 2023 — Jun 2024",loc:"Fleury-Mérogis",color:"lilac",tags:["Exploitant","TMS","Optimisation"],pts:["Planification et optimisation des tournées de livraison nationales sur TMS.","Coordination inter-sites et gestion proactive des exceptions opérationnelles."]},
+          {co:"Promocash",role:"Responsable Logistique & Opérations",period:"Jul 2022 — Mar 2023",loc:"Antony",color:"coral",tags:["Opérations","Commandes","Tournées"],pts:["Gestion des commandes et litiges clients, garantie de la fiabilité des livraisons.","Optimisation des tournées de livraison et des ressources opérationnelles."]},
+        ],
+        schools:[
+          {school:"KEDGE Business School",loc:"Marseille",period:"2025–2027",color:"gold",degree:"Master (MSc) Transport, Logistique & Commerce Int.",desc:"Spécialisation : Digitalisation et intégration de l'IA au sein de la Supply Chain et de la logistique."},
+          {school:"Institut Nemo — iSTELI",loc:"Paris",period:"2024–2025",color:"azure",degree:"Licence Pro Responsable en Logistique",desc:"Flux internationaux, contrôle supply chain, leadership opérationnel et douanes."},
+          {school:"LPO Gaspard Monge",loc:"Savigny-sur-Orge",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Gestion des Transports et Logistique Associée)",desc:"Fondations techniques, transports multimodaux et gestion de flotte."},
+        ],
+        future: [
+          {role:"Projet V.I.E.", co:"Supply Chain / Data Analyst", period:"Post-Master (Novembre 2027)", loc:"Singapour / Allemagne / Australie", color:"azure", tags:["Expatriation","Opérations","Langues"], pts:["Disponibilité à partir du 1er Novembre 2027 pour une immersion professionnelle à l'étranger (Volontariat International en Entreprise).","Pratique immersive et perfectionnement continu de mes compétences linguistiques."]},
+          {role:"MSc Supply Chain Engineering / Management", co:"KLU Hamburg ou TUM Asia", period:"2028 — 2029", loc:"Allemagne / Singapour", color:"gold", tags:["Ingénierie","Stratégie","Excellence"], pts:["Spécialisation de haut niveau technique et managérial au sein d'institutions prestigieuses.","Projet d'intégrer soit l'approche ingénierie de la TUM Asia (Singapour), soit l'expertise Supply Chain de la KLU (Hambourg)."]}
+        ],
+        projects:[
+          {id:"p1",title:"Reverse Logistics App",type:"App Development",color:"gold",desc:"Outil de réception des bons de retour en entrepôt, développé sur AppSheet avec l'écosystème Google Workspace (présenté au HQ).",kpis:["0 Papier","Adoption Monde"],tags:["AppSheet","Google Apps Script","Logistique"],link:"#",github:"#"},
+          {id:"p2",title:"SAP Python Automation",type:"RPA & Scripting",color:"azure",desc:"Scripts Python automatisant les tâches SAP (validation retours, vérif. prix/quantités) avec reporting direct sur Google Chat.",kpis:["Gain de temps massif","0 Erreur de saisie"],tags:["Python","SAP","Google Chat API"],link:"#",github:null},
+          {id:"p3",title:"VMI Automation Engine",type:"Data Engineering",color:"lilac",desc:"Automatisation complète des réapprovisionnements VMI via Python et BigQuery, réduisant les ruptures de 15%.",kpis:["-15% OOS","+22h/mois"],tags:["Python","BigQuery","GCP"],link:null,github:"#"},
+          {id:"p4",title:"Ticketing System SNCF",type:"App Development",color:"emerald",desc:"Application interne pour la gestion et le suivi des incidents de production logistique en temps réel.",kpis:["-40% Résolution","200+ Users"],tags:["React","Node.js","SQL"],link:"#",github:null},
+        ],
+        chat: {
+          dispo: "Je serai disponible à partir du 1er Novembre 2027, idéalement pour un contrat V.I.E.",
+          mob: "Je vise en priorité Singapour, l'Allemagne et l'Australie pour mon V.I.E.",
+          pitch: "J'ai grandi dans l'univers de la Supply Chain. J'évolue pas à pas, avec une forte appétence pour la recherche et la digitalisation de nos processus.",
+          proud: "Sans hésiter, l'application AppSheet de Reverse Logistics pour Grohe. Présentée au HQ en Allemagne, elle est en voie d'adoption par d'autres pays !",
+          hobbies: "Je m'entraîne actuellement pour un marathon et je pratique la musculation (ancien nageur). Je suis très curieux, j'aime toucher à tout et j'adore voyager !",
+          flaw: "J'ai souvent peur de ne pas faire assez bien. Mais cela se transforme en moteur : ça me pousse paradoxalement à l'exigence et à la rigueur.",
+          salary: "Pour un poste Junior (hors V.I.E), mes prétentions se situent entre 39k€ et 45k€ selon le périmètre et la localisation."
+        }
+      },
+      en:{
+        badge:"Available — Mobile Across Europe", eyebrow:"Data Analyst & Supply Chain Coordinator", h1:["Transforming flows","into decisions."], sub:"Expert in logistics data modeling and industrial process optimization. MSc MTLCI — Kedge Business School.", cta1:"View Experience", cta2:"My Projects", 
+        navLabels:["Expertise","Experience","Projects","Dashboard","Education","Future","Terminal","Contact"], navCV: "CV",
+        sids:["skills","xp","projects","dash","edu","future","term","cta"], 
+        sNums:["01","02","03","04","05","06","07","08"], 
+        kpis:["Service Rate","OTIF","Inventory Turn","Stock Discrepancy"], 
+        periods:[["ytd","YTD 2025"],["q3","Q3 2025"],["q2","Q2 2025"]], 
+        charts:["OTIF & Service Rate","Analytical Skills","Stock Discrepancy Evolution"], chartSubs:["monthly trend","expertise radar","VS OVERALL VOLUME"], 
+        contactTitle:"Let's work together", contactSub:"Open to Supply Chain, Data & Logistics roles — mobile across Europe and internationally.", contactCTA:"Contact", tags:["Kedge Business School","GROHE · SNCF · T.E.A.","Available"], 
+        stats:[["4+","Years XP"],["6","Companies"],["5","Languages"],["10+","Tools"]], scrollLabel:"SCROLL", footerLeft:`© ${new Date().getFullYear()} Raphaël Chaumény — All rights reserved`, footerRight:"Built with HTML/JS Vanilla · Chart.js", 
+        techTitle:"Data & Analytics", techSub:"TECH STACK", opsTitle:"SC Operations", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"LEADERSHIP & COMMS", langsTitle:"Languages", langsSub:"MULTILINGUAL", kpiCard:"Inventory Discrepancy", projPlaceholder:"// Projects continuously updated via JSON.",
+        futureTitle:"Vision & Future", futureSub:"POST-MASTER GOALS",
+        termTitle:"Interactive Terminal",
+        termCmd:"python analyze.py --profile=chaumeny_r --verbose",
+        termLines:[{t:"info",s:"[init]  Supply Chain Intelligence module loaded"},{t:"proc",s:"[scan]  Extracting skills & competency map..."},{t:"code",s:"> Python  BigQuery  Power BI  SQL  AppSheet"},{t:"ok",s:"[match] Profile aligned · Data × Logistics roles"}],
+        techStack:[{n:"Power BI",sub:"Data Viz",color:"gold"},{n:"Python",sub:"Analysis",color:"azure"},{n:"BigQuery",sub:"Data Warehouse",color:"lilac"},{n:"SQL",sub:"Querying",color:"gold"},{n:"Apps Script",sub:"Automation",color:"emerald"},{n:"AppSheet",sub:"No-Code",color:"azure"},{n:"ERP / WMS",sub:"Operations",color:"lilac"},{n:"Syniti",sub:"Data Quality",color:"coral"}],
+        opsSkills:["VMI & Automated Replenishment","Stock optimization & coverage","Transport Planning & TMS","Advanced WMS / ERP Management","Continuous Improvement (Lean/Kaizen)"],
+        softSkills:[{s:"Problem Solving",p:94,c:"gold"},{s:"Int. Communication",p:92,c:"azure"},{s:"Adaptability",p:91,c:"lilac"},{s:"Data Storytelling",p:89,c:"emerald"},{s:"Cross-team Mgmt",p:86,c:"gold"}],
+        langs:[{l:"French",lv:"Native",p:100,f:"FR"},{l:"English",lv:"C1",p:85,f:"EN"},{l:"Ukrainian",lv:"B1",p:55,f:"UA"},{l:"Russian",lv:"A2",p:35,f:"RU"},{l:"German",lv:"A1",p:25,f:"DE"}],
+        radar:[{s:"Coordination",v:100},{s:"WMS/ERP",v:100},{s:"VMI",v:80},{s:"Transport",v:80},{s:"Data Viz",v:60},{s:"SQL/Python",v:40}],
+        xps:[
+          {co:"GROHE — LIXIL Group",role:"Supply Chain Coordinator",period:"Sep 2025 — Present",loc:"France",color:"gold",tags:["VMI","BigQuery","Python","OTIF"],pts:["VMI management: product portfolio, automated replenishments, availability optimization.","Logistics KPI dashboards (stockouts, coverage, OTIF) via multi-source data.","Deployment of Apps Script, AppSheet, BigQuery & Syniti for flow automation."]},
+          {co:"SNCF Supply Chain",role:"Production Performance Lead",period:"Jan — Sep 2025",loc:"Paris",color:"azure",tags:["Power BI","ERP","Ticketing"],pts:["Tracking logistics KPIs via ERP, WMS and real-time Power BI dashboards.","Design and deployment of an internal ticketing tool (−40% resolution time).","Inventory level optimization through cross-analysis and modeling."]},
+          {co:"Lapeyre Logistique",role:"Logistics Supervisor",period:"Sep — Dec 2024",loc:"Rungis",color:"emerald",tags:["Management","WMS","Stocks"],pts:["Supervision of receipts, orders and physical inventories (35,000 m² warehouse).","Management, training and coaching of a 12-person floor team."]},
+          {co:"T.E.A.",role:"Transport Planner",period:"Apr 2023 — Jun 2024",loc:"Fleury-Mérogis",color:"lilac",tags:["Transport Planning","TMS","Optimization"],pts:["Planning and optimization of national delivery routes on TMS.","Inter-site coordination and proactive management of operational exceptions."]},
+          {co:"Promocash",role:"Logistics & Operations Manager",period:"Jul 2022 — Mar 2023",loc:"Antony",color:"coral",tags:["Operations","Orders","Routing"],pts:["Management of orders and customer disputes, guaranteeing delivery reliability.","Optimization of delivery routes and operational resources."]},
+        ],
+        schools:[
+          {school:"KEDGE Business School",loc:"Marseille",period:"2025–2027",color:"gold",degree:"Master (MSc) Transport, Logistics & Int. Trade",desc:"Specialization: Digitalization and integration of AI within Supply Chain and logistics."},
+          {school:"Institut Nemo — iSTELI",loc:"Paris",period:"2024–2025",color:"azure",degree:"Bachelor's — Responsable en Logistique",desc:"International flows, supply chain control, operational leadership and customs regulations."},
+          {school:"LPO Gaspard Monge",loc:"Savigny-sur-Orge",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Transport & Logistics)",desc:"Technical foundations, multimodal transport and fleet management."},
+        ],
+        future: [
+          {role:"V.I.E. Project", co:"Supply Chain / Data Analyst", period:"Post-Master (Nov 2027)", loc:"Singapore / Germany / Aus.", color:"azure", tags:["Expatriation","Operations","Languages"], pts:["Available from November 1st, 2027 for a professional immersion abroad (V.I.E program) to consolidate my international expertise.","Immersive practice and continuous improvement of my language skills."]},
+          {role:"MSc Supply Chain Engineering / Management", co:"KLU Hamburg or TUM Asia", period:"2028 — 2029", loc:"Germany / Singapore", color:"gold", tags:["Engineering","Strategy","Excellence"], pts:["High-level technical and managerial specialization in prestigious institutions.","Goal to join either the engineering approach of TUM Asia (Singapore) or the Supply Chain expertise of KLU (Hamburg)."]}
+        ],
+        projects:[
+          {id:"p1",title:"Reverse Logistics App",type:"App Development",color:"gold",desc:"Warehouse return slips receiving tool, built on AppSheet with the Google Workspace ecosystem (presented at HQ).",kpis:["Paperless","Global Adoption"],tags:["AppSheet","Google Apps Script","Logistics"],link:"#",github:"#"},
+          {id:"p2",title:"SAP Python Automation",type:"RPA & Scripting",color:"azure",desc:"Python scripts to automate SAP tasks (return validation, price/quantity checks) with direct Google Chat reporting.",kpis:["Massive time saved","0 Input Error"],tags:["Python","SAP","Google Chat API"],link:"#",github:null},
+          {id:"p3",title:"VMI Automation Engine",type:"Data Engineering",color:"lilac",desc:"Full automation of VMI replenishments via Python and BigQuery, reducing stockouts by 15%.",kpis:["-15% OOS","+22h/month"],tags:["Python","BigQuery","GCP"],link:null,github:"#"},
+          {id:"p4",title:"SNCF Ticketing System",type:"App Development",color:"emerald",desc:"Full-stack internal application for real-time management of logistics production incidents.",kpis:["-40% Resolution","200+ Users"],tags:["React","Node.js","SQL"],link:"#",github:null},
+        ],
+        chat: {
+          dispo: "I will be available starting November 1st, 2027, ideally for a V.I.E contract.",
+          mob: "I am primarily targeting Singapore, Germany, and Australia for my V.I.E.",
+          pitch: "I grew up in the Supply Chain world. I am progressing step by step, with a strong appetite for research and process digitalization.",
+          proud: "Definitely the AppSheet Reverse Logistics app for Grohe. Presented at HQ in Germany, it is on its way to being adopted by other countries!",
+          hobbies: "I am currently training for a marathon and doing weightlifting (former swimmer). I am very curious, love to learn about everything, and love traveling!",
+          flaw: "I often fear not doing well enough. But it acts as an engine: paradoxically, it pushes me to be highly demanding and rigorous.",
+          salary: "For a Junior position (outside V.I.E), my expectations are between €39k and €45k depending on scope and location."
+        }
+      },
+      de:{
+        badge:"Verfügbar — Mobil in Europa", eyebrow:"Datenanalyst & Supply Chain Koordinator", h1:["Flüsse in Daten,","Daten in Entscheidungen."], sub:"Experte für logistische Datenmodellierung und Prozessoptimierung. M1 MTLCI — Kedge Business School.", cta1:"Erfahrung ansehen", cta2:"Meine Projekte", 
+        navLabels:["Expertise","Erfahrung","Projekte","Dashboard","Ausbildung","Zukunft","Terminal","Kontakt"], navCV: "Lebenslauf",
+        sids:["skills","xp","projects","dash","edu","future","term","cta"], 
+        sNums:["01","02","03","04","05","06","07","08"], 
+        kpis:["Servicequote","OTIF","Lagerumschlag","Bestandsabweichung"], 
+        periods:[["ytd","YTD 2025"],["q3","Q3 2025"],["q2","Q2 2025"]], 
+        charts:["OTIF & Servicegrad","Analytische Fähigkeiten","Bestandsabweichungen"], chartSubs:["monatlicher Verlauf","Kompetenz-Radar","VS GESAMTVOLUMEN"], 
+        contactTitle:"Zusammenarbeiten", contactSub:"Offen für Supply-Chain-, Data- und Logistik-Stellen — mobil in Europa und international.", contactCTA:"Kontakt", tags:["Kedge Business School","GROHE · SNCF · T.E.A.","Verfügbar"], 
+        stats:[["4+","Jahre XP"],["6","Unternehmen"],["5","Sprachen"],["10+","Tools"]], scrollLabel:"SCROLLEN", footerLeft:`© ${new Date().getFullYear()} Raphaël Chaumény — Alle Rechte vorbehalten`, footerRight:"Erstellt mit HTML/JS Vanilla · Chart.js", 
+        techTitle:"Daten & Analytik", techSub:"TECH-STACK", opsTitle:"SC-Operationen", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"FÜHRUNG & KOMM.", langsTitle:"Sprachen", langsSub:"MEHRSPRACHIG", kpiCard:"Inventarabweichungen", projPlaceholder:"// Projekte werden kontinuierlich über JSON aktualisiert.",
+        futureTitle:"Vision & Zukunft", futureSub:"POST-MASTER ZIELE",
+        termTitle:"Interaktives Terminal",
+        termCmd:"python analyze.py --profile=chaumeny_r --verbose",
+        termLines:[{t:"info",s:"[init]  Supply-Chain-Intelligenzmodul geladen"},{t:"proc",s:"[scan]  Kompetenzen werden extrahiert..."},{t:"code",s:"> Python  BigQuery  Power BI  SQL  AppSheet"},{t:"ok",s:"[match] Profil ausgerichtet · Data × Logistik"}],
+        techStack:[{n:"Power BI",sub:"Visualisierung",color:"gold"},{n:"Python",sub:"Analyse",color:"azure"},{n:"BigQuery",sub:"Data Warehouse",color:"lilac"},{n:"SQL",sub:"Abfragen",color:"gold"},{n:"Apps Script",sub:"Automatisierung",color:"emerald"},{n:"AppSheet",sub:"No-Code",color:"azure"},{n:"ERP / WMS",sub:"Betrieb",color:"lilac"},{n:"Syniti",sub:"Datenqualität",color:"coral"}],
+        opsSkills:["VMI & automatische Nachbestellung","Bestandsoptimierung & Reichweite","Transportplanung & TMS","Erweitertes WMS/ERP-Management","Kontinuierliche Verbesserung (Lean/Kaizen)"],
+        softSkills:[{s:"Problemlösung",p:94,c:"gold"},{s:"Int. Kommunikation",p:92,c:"azure"},{s:"Anpassungsfähigkeit",p:91,c:"lilac"},{s:"Data Storytelling",p:89,c:"emerald"},{s:"Teamübergreif. Mgmt",p:86,c:"gold"}],
+        langs:[{l:"Französisch",lv:"Muttersprache",p:100,f:"FR"},{l:"Englisch",lv:"C1",p:85,f:"EN"},{l:"Ukrainisch",lv:"B1",p:55,f:"UA"},{l:"Russisch",lv:"A2",p:35,f:"RU"},{l:"Deutsch",lv:"A1",p:25,f:"DE"}],
+        radar:[{s:"Koordination",v:100},{s:"WMS/ERP",v:100},{s:"VMI",v:80},{s:"Transport",v:80},{s:"Data Viz",v:60},{s:"SQL/Python",v:40}],
+        xps:[
+          {co:"GROHE — LIXIL Group",role:"Supply Chain Koordinator",period:"Sep 2025 — Heute",loc:"Frankreich",color:"gold",tags:["VMI","BigQuery","Python","OTIF"],pts:["VMI-Steuerung: Produktportfolio, automatische Nachbestellung, Verfügbarkeitsoptimierung.","Logistik-KPI-Dashboards (Fehlbestände, Reichweite, OTIF) per Multi-Source-Daten.","Einführung von Apps Script, AppSheet, BigQuery & Syniti zur Automatisierung."]},
+          {co:"SNCF Supply Chain",role:"Produktionsleistungsmanager",period:"Jan — Sep 2025",loc:"Paris",color:"azure",tags:["Power BI","ERP","Ticketing"],pts:["KPI-Tracking über ERP, WMS und Power BI-Echtzeit-Dashboards.","Konzeption und Einführung eines Ticketing-Tools (−40 % Bearbeitungszeit).","Bestandsoptimierung durch Kreuzanalysen und Modellierung."]},
+          {co:"Lapeyre Logistique",role:"Logistiksupervisor",period:"Sep — Dez 2024",loc:"Rungis",color:"emerald",tags:["Management","WMS","Bestand"],pts:["Überwachung Wareneingang, Bestellungen und Inventuren (35.000 m²).","Führung, Schulung und Coaching eines 12-köpfigen Teams."]},
+          {co:"T.E.A.",role:"Transportplaner",period:"Apr 2023 — Jun 2024",loc:"Fleury-Mérogis",color:"lilac",tags:["Transportplanung","TMS","Optimierung"],pts:["Planung und Optimierung nationaler Liefertouren im TMS.","Standortübergreifende Koordination und proaktives Ausnahmemanagement."]},
+          {co:"Promocash",role:"Logistik- und Betriebsleiter",period:"Jul 2022 — Mar 2023",loc:"Antony",color:"coral",tags:["Operationen","Bestellungen","Routen"],pts:["Verwaltung von Bestellungen und Kundenstreitigkeiten, Gewährleistung der Lieferzuverlässigkeit.","Optimierung von Lieferrouten und operativen Ressourcen."]},
+        ],
+        schools:[
+          {school:"KEDGE Business School",loc:"Marseille",period:"2025–2027",color:"gold",degree:"Master (MSc) Transport, Logistik & Int. Handel",desc:"Spezialisierung: Digitalisierung und Integration von KI in Supply Chain und Logistik."},
+          {school:"Institut Nemo — iSTELI",loc:"Paris",period:"2024–2025",color:"azure",degree:"Bachelor — Responsable en Logistique",desc:"Internationale Warenströme, Supply-Chain-Kontrolle, operative Führung und Zollrecht."},
+          {school:"LPO Gaspard Monge",loc:"Savigny-sur-Orge",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Transport & Logistik)",desc:"Technische Grundlagen, multimodaler Transport und Flottenmanagement."},
+        ],
+        future: [
+          {role:"V.I.E. Projekt", co:"Supply Chain / Data Analyst", period:"Post-Master (Nov 2027)", loc:"Singapur / Deutschland / Aus.", color:"azure", tags:["Auslandseinsatz","Operationen","Sprachen"], pts:["Verfügbar ab dem 1. November 2027 für eine berufliche Auslandserfahrung (V.I.E), um meine internationale Expertise zu festigen.","Praktische Anwendung und kontinuierliche Verbesserung meiner Sprachkenntnisse."]},
+          {role:"MSc Supply Chain Engineering / Management", co:"KLU Hamburg oder TUM Asia", period:"2028 — 2029", loc:"Deutschland / Singapur", color:"gold", tags:["Ingenieurwesen","Strategie","Exzellenz"], pts:["Technische und betriebswirtschaftliche Spezialisierung auf höchstem Niveau an renommierten Instituten.","Ziel ist entweder der Ingenieuransatz der TUM Asia (Singapur) oder die Supply-Chain-Expertise der KLU (Hamburg)."]}
+        ],
+        projects:[
+          {id:"p1",title:"Reverse Logistics App",type:"App-Entwicklung",color:"gold",desc:"Werkzeug für den Wareneingang von Retouren, entwickelt mit AppSheet und Google Workspace (am HQ präsentiert).",kpis:["Papierlos","Globale Adaption"],tags:["AppSheet","Google Apps Script","Logistik"],link:"#",github:"#"},
+          {id:"p2",title:"SAP Python Automation",type:"RPA & Scripting",color:"azure",desc:"Python-Skripte zur Automatisierung von SAP-Aufgaben (Retourenvalidierung, Preisprüfungen) mit direkter Google Chat-Berichterstattung.",kpis:["Massive Zeitersparnis","0 Eingabefehler"],tags:["Python","SAP","Google Chat API"],link:"#",github:null},
+          {id:"p3",title:"VMI Automation Engine",type:"Data Engineering",color:"lilac",desc:"Vollständige Automatisierung der VMI-Nachbestellungen via Python und BigQuery — Fehlbestände um 15 % reduziert.",kpis:["-15% OOS","+22h/Monat"],tags:["Python","BigQuery","GCP"],link:null,github:"#"},
+          {id:"p4",title:"SNCF Ticketing-System",type:"App-Entwicklung",color:"emerald",desc:"Full-Stack-Anwendung für das Echtzeit-Management von Produktionsvorfällen in der Logistik.",kpis:["-40% Bearbeitung","200+ Nutzer"],tags:["React","Node.js","SQL"],link:"#",github:null},
+        ],
+        chat: {
+          dispo: "Ich stehe ab dem 1. November 2027 zur Verfügung, idealerweise für einen V.I.E.-Vertrag.",
+          mob: "Ich ziele für mein V.I.E. vorrangig auf Singapur, Deutschland und Australien ab.",
+          pitch: "Ich bin in der Supply Chain aufgewachsen. Ich entwickle mich Schritt für Schritt, mit einer starken Leidenschaft für Forschung und Prozessdigitalisierung.",
+          proud: "Definitiv die AppSheet Reverse Logistics App für Grohe. Am HQ in Deutschland präsentiert, ist sie auf dem Weg, in weiteren Ländern eingeführt zu werden!",
+          hobbies: "Ich trainiere aktuell für einen Marathon und mache Krafttraining (ehemaliger Schwimmer). Ich bin sehr neugierig, interessiere mich für alles und reise gerne!",
+          flaw: "Ich habe oft Angst, nicht gut genug zu sein. Das wirkt sich jedoch als Antrieb aus: Paradoxerweise zwingt es mich zu hohen Ansprüchen und Genauigkeit.",
+          salary: "Für eine Junior-Position (außerhalb des V.I.E) liegen meine Gehaltsvorstellungen zwischen 39.000 € und 45.000 €."
+        }
+      },
+      ru:{
+        badge:"Доступен — Мобилен в Европе", eyebrow:"Аналитик данных & Координатор цепи поставок", h1:["Превращаю потоки","в решения."], sub:"Эксперт по моделированию логистических данных и оптимизации процессов. M1 MTLCI — Kedge Business School.", cta1:"Посмотреть опыт", cta2:"Мои проекты", 
+        navLabels:["Навыки","Опыт","Проекты","Дашборд","Образование","Будущее","Терминал","Контакт"], navCV: "Резюме",
+        sids:["skills","xp","projects","dash","edu","future","term","cta"], 
+        sNums:["01","02","03","04","05","06","07","08"], 
+        kpis:["Уровень сервиса","OTIF","Оборот запасов","Расхождение"], 
+        periods:[["ytd","ЗА 2025"],["q3","Q3 2025"],["q2","Q2 2025"]], 
+        charts:["OTIF & Уровень сервиса","Аналитические навыки","Эволюция расхождений"], chartSubs:["ежемесячная динамика","радар компетенций","VS ОБЩИЙ ОБЪЕМ"], 
+        contactTitle:"Работаем вместе", contactSub:"Открыт к предложениям в сфере Supply Chain, Data и логистики — мобилен в Европе.", contactCTA:"Контакт", tags:["Kedge Business School","GROHE · SNCF · T.E.A.","Доступен"], 
+        stats:[["4+","Лет опыта"],["6","Компаний"],["5","Языков"],["10+","Инструментов"]], scrollLabel:"ПРОКРУТИТЬ", footerLeft:`© ${new Date().getFullYear()} Рафаэль Шомени — Все права защищены`, footerRight:"Создано на HTML/JS Vanilla · Chart.js", 
+        techTitle:"Данные & Аналитика", techSub:"СТЕК ТЕХНОЛОГИЙ", opsTitle:"Операции SC", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"ЛИДЕРСТВО & КОММ.", langsTitle:"Языки", langsSub:"МНОГОЯЗЫЧНЫЙ", kpiCard:"Расхождения запасов", projPlaceholder:"// Проекты постоянно обновляются через JSON.",
+        futureTitle:"Видение и Будущее", futureSub:"ЦЕЛИ ПОСЛЕ МАГИСТРАТУРЫ",
+        termTitle:"Интерактивный терминал",
+        termCmd:"python analyze.py --profile=chaumeny_r --verbose",
+        termLines:[{t:"info",s:"[init]  Модуль Supply Chain Intelligence загружен"},{t:"proc",s:"[scan]  Извлечение навыков и карты компетенций..."},{t:"code",s:"> Python  BigQuery  Power BI  SQL  AppSheet"},{t:"ok",s:"[match] Профиль совпадает · Data × Логистика"}],
+        techStack:[{n:"Power BI",sub:"Визуализация",color:"gold"},{n:"Python",sub:"Анализ",color:"azure"},{n:"BigQuery",sub:"Хранилище данных",color:"lilac"},{n:"SQL",sub:"Запросы",color:"gold"},{n:"Apps Script",sub:"Автоматизация",color:"emerald"},{n:"AppSheet",sub:"No-Code",color:"azure"},{n:"ERP / WMS",sub:"Операции",color:"lilac"},{n:"Syniti",sub:"Качество данных",color:"coral"}],
+        opsSkills:["VMI & Автоматическое пополнение","Оптимизация запасов & покрытие","Планирование транспорта & TMS","Продвинутое управление WMS/ERP","Непрерывное улучшение (Lean/Kaizen)"],
+        softSkills:[{s:"Решение проблем",p:94,c:"gold"},{s:"Межд. коммуникация",p:92,c:"azure"},{s:"Адаптируемость",p:91,c:"lilac"},{s:"Data Storytelling",p:89,c:"emerald"},{s:"Кросс-ком. менедж.",p:86,c:"gold"}],
+        langs:[{l:"Французский",lv:"Родной",p:100,f:"FR"},{l:"Английский",lv:"C1",p:85,f:"EN"},{l:"Украинский",lv:"B1",p:55,f:"UA"},{l:"Русский",lv:"A2",p:35,f:"RU"},{l:"Немецкий",lv:"A1",p:25,f:"DE"}],
+        radar:[{s:"Координация",v:100},{s:"WMS/ERP",v:100},{s:"VMI",v:80},{s:"Транспорт",v:80},{s:"Data Viz",v:60},{s:"SQL/Python",v:40}],
+        xps:[
+          {co:"GROHE — LIXIL Group",role:"Координатор цепи поставок",period:"Сен 2025 — н.в.",loc:"Франция",color:"gold",tags:["VMI","BigQuery","Python","OTIF"],pts:["Управление VMI: портфель продуктов, автоматическое пополнение, оптимизация наличия.","Дашборды KPI логистики (дефицит, покрытие, OTIF) на основе многоисточниковых данных.","Внедрение Apps Script, AppSheet, BigQuery и Syniti для автоматизации потоков."]},
+          {co:"SNCF Supply Chain",role:"Менеджер производительности",period:"Янв — Сен 2025",loc:"Париж",color:"azure",tags:["Power BI","ERP","Тикетинг"],pts:["Отслеживание KPI через ERP, WMS и Power BI в реальном времени.","Разработка и внедрение тикет-системы (−40% времени обработки).","Оптимизация запасов с помощью перекрёстного анализа и моделирования."]},
+          {co:"Lapeyre Logistique",role:"Супервайзер логистики",period:"Сен — Дек 2024",loc:"Рунжи",color:"emerald",tags:["Менеджмент","WMS","Запасы"],pts:["Контроль приёмки, заказов и физической инвентаризации (склад 35 000 м²).","Управление, обучение и коучинг команды из 12 сотрудников."]},
+          {co:"T.E.A.",role:"Планировщик транспорта",period:"Апр 2023 — Июн 2024",loc:"Флёри-Мерожи",color:"lilac",tags:["Транспорт","TMS","Оптимизация"],pts:["Планирование и оптимизация национальных маршрутов доставки в TMS.","Межплощадочная координация и проактивное управление исключения."]},
+          {co:"Promocash",role:"Менеджер по логистике и операциям",period:"Июл 2022 — Мар 2023",loc:"Антони",color:"coral",tags:["Операции","Заказы","Маршруты"],pts:["Управление заказами и спорами клиентов, обеспечение надежности поставок.","Оптимизация маршрутов доставки и операционных ресурсов."]},
+        ],
+        schools:[
+          {school:"KEDGE Business School",loc:"Марсель",period:"2025–2027",color:"gold",degree:"Master (MSc) Транспорт, Логистика & Межд. торговля",desc:"Специализация: Цифровизация и внедрение ИИ в Supply Chain и логистике."},
+          {school:"Institut Nemo — iSTELI",loc:"Париж",period:"2024–2025",color:"azure",degree:"Бакалавр — Responsable en Logistique",desc:"Международные потоки, контроль цепи поставок, операционное лидерство и таможня."},
+          {school:"LPO Gaspard Monge",loc:"Савиньи-сюр-Орж",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Транспорт и логистика)",desc:"Технические основы, мультимодальный транспорт и управление флотом."},
+        ],
+        future: [
+          {role:"Проект V.I.E.", co:"Supply Chain / Data Analyst", period:"С Ноября 2027", loc:"Сингапур / Германия / Австр.", color:"azure", tags:["Стажировка","Операции","Языки"], pts:["Готовность к зарубежной стажировке (V.I.E) с 1 ноября 2027 для укрепления международного опыта.","Непрерывное совершенствование языковых навыков на практике."]},
+          {role:"MSc Supply Chain Engineering / Management", co:"KLU Гамбург или TUM Asia", period:"2028 — 2029", loc:"Германия / Сингапур", color:"gold", tags:["Инженерия","Стратегия","Превосходство"], pts:["Высокоуровневая техническая и управленческая специализация в престижных учебных заведениях.","Цель — инженерный подход TUM Asia (Сингапур) или экспертиза в Supply Chain в KLU (Гамбург)."]}
+        ],
+        projects:[
+          {id:"p1",title:"Reverse Logistics App",type:"Разработка приложений",color:"gold",desc:"Инструмент приема возвратных накладных на складе, создан на AppSheet (Google Workspace). Представлен в HQ.",kpis:["Без бумаги","Адаптация в мире"],tags:["AppSheet","Google Apps Script","Логистика"],link:"#",github:"#"},
+          {id:"p2",title:"SAP Python Automation",type:"RPA & Скриптинг",color:"azure",desc:"Python скрипты для автоматизации задач SAP (проверка возвратов, цен) с прямыми отчетами в Google Chat.",kpis:["Экономия времени","0 Ошибок ввода"],tags:["Python","SAP","Google Chat API"],link:"#",github:null},
+          {id:"p3",title:"VMI Automation Engine",type:"Инж. данных",color:"lilac",desc:"Полная автоматизация пополнения VMI через Python и BigQuery — дефицит снижен на 15%.",kpis:["-15% дефицит","+22ч/мес"],tags:["Python","BigQuery","GCP"],link:null,github:"#"},
+          {id:"p4",title:"Тикет-система SNCF",type:"Разработка приложений",color:"emerald",desc:"Full-stack приложение для управления и отслеживания производственных инцидентов.",kpis:["-40% решение","200+ польз."],tags:["React","Node.js","SQL"],link:"#",github:null},
+        ],
+        chat: {
+          dispo: "Я буду доступен с 1 ноября 2027 года, в идеале для контракта V.I.E.",
+          mob: "В первую очередь я ориентируюсь на Сингапур, Германию и Австралию для моего V.I.E.",
+          pitch: "Я вырос в сфере Supply Chain. Я развиваюсь шаг за шагом, с сильной тягой к исследованиям и цифровизации процессов.",
+          proud: "Безусловно, приложение AppSheet для возвратной логистики в Grohe. Представленное в штаб-квартире в Германии, оно находится на пути к внедрению в других странах!",
+          hobbies: "В настоящее время я тренируюсь для марафона и занимаюсь в тренажерном зале (бывший пловец). Я очень любопытен, люблю узнавать новое и обожаю путешествовать!",
+          flaw: "Я часто боюсь сделать что-то недостаточно хорошо. Но это работает как двигатель: парадоксальным образом это заставляет меня быть очень требовательным и точным.",
+          salary: "Для позиции Junior (вне V.I.E) мои ожидания составляют от 39 до 45 тысяч евро."
+        }
+      },
+    };
+
+    const DASH_DATA = {
+      ytd:{trend:[{m:"Jan",otif:88,svc:91,vol:1200,ecart:0.6},{m:"Fév",otif:89,svc:92,vol:1250,ecart:0.5},{m:"Mar",otif:87,svc:91,vol:1100,ecart:0.55},{m:"Avr",otif:92,svc:94,vol:1350,ecart:0.4},{m:"Mai",otif:91,svc:95,vol:1400,ecart:0.35},{m:"Jun",otif:94,svc:96,vol:1500,ecart:0.42},{m:"Jul",otif:93,svc:95,vol:1450,ecart:0.38},{m:"Aoû",otif:96,svc:97,vol:1600,ecart:0.3},{m:"Sep",otif:97,svc:98,vol:1650,ecart:0.25}],kpis:{svc:"96.2%",otif:"94.1%",rot:"8.4×",rup:"0.3%"}},
+      q3:{trend:[{m:"Jul",otif:93,svc:95,vol:1450,ecart:0.38},{m:"Aoû",otif:96,svc:97,vol:1600,ecart:0.3},{m:"Sep",otif:97,svc:98,vol:1650,ecart:0.25}],kpis:{svc:"97.5%",otif:"96.5%",rot:"9.1×",rup:"0.25%"}},
+      q2:{trend:[{m:"Avr",otif:92,svc:94,vol:1350,ecart:0.4},{m:"Mai",otif:91,svc:95,vol:1400,ecart:0.35},{m:"Jun",otif:94,svc:96,vol:1500,ecart:0.42}],kpis:{svc:"95.0%",otif:"92.3%",rot:"7.8×",rup:"0.4%"}},
+    };
+
+    /* ════════════════════════════════════════════════════════════════════
+       STATE & INITIALIZATION
+    ════════════════════════════════════════════════════════════════════ */
+    let currentLang = 'fr';
+    let currentTheme = 'wada1';
+    let dashFilter = 'ytd';
+    let charts = {};
+    let activeObserver = null;
+    let canvasRAF = null;
+    let isPageVisible = true;
+    let isHackMode = false;
+
+    const $ = id => document.getElementById(id);
+    const getVar = name => getComputedStyle(document.documentElement).getPropertyValue(`--${name}`).trim();
+    const hexToRgb = hex => { const n=parseInt(hex.replace("#",""),16); return `${(n>>16)&255},${(n>>8)&255},${n&255}`; };
+
+    function init() {
+      applyTheme(currentTheme);
+      updateUI();
+      setupEventListeners();
+      initCanvas();
+      initCursor();
+      
+      // Console Easter Egg
+      console.log(
+        `%c
+         _________________
+        |  DATA / SUPPLY  |\\_
+        |___CHAUMÉNY______|__\\__
+        |//_//_//_//_//_| /__|__\\
+        |_O_____________|_|O____|
+
+        Vous inspectez mon code ? J'aime ce niveau de détail.
+        Contactez-moi : chaumenyr@gmail.com
+        `, "color: #c9a84c; font-family: monospace; font-size: 14px; font-weight: bold;");
+
+      document.addEventListener('visibilitychange', () => {
+        isPageVisible = !document.hidden;
+        if(isPageVisible) initCanvas();
+      });
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       RENDER LOGIC
+    ════════════════════════════════════════════════════════════════════ */
+    function updateUI() {
+      const t = DICT[currentLang];
+      renderNav(t);
+      renderSideNav(t);
+      renderHero(t);
+      renderSkills(t);
+      renderXP(t);
+      renderProjects(t);
+      renderDashboard(t);
+      renderEducation(t);
+      renderFuture(t);
+      renderTerminal(t);
+      renderFooter(t);
+      
+      lucide.createIcons();
+      initObservers();
+      initCounters();
+      updateCharts();
+    }
+
+    function anchorFor(sid) {
+      return sid === 'cta' ? '#cta-wrap' : `#${sid}-wrap`;
+    }
+
+    function SectionHeader(num, title) {
+      return `
+        <div class="reveal" style="margin-bottom:64px;">
+          <div style="display:flex;align-items:center;gap:20px;margin-bottom:16px;">
+            <div style="font-family:var(--font-mono);font-size:11px;color:var(--gold);letter-spacing:3px;font-weight:500">${num}</div>
+            <div style="flex:1;height:1px;background:linear-gradient(90deg,var(--goldD),transparent)"></div>
+          </div>
+          <h2 style="font-family:var(--font-display);font-size:clamp(38px,5vw,64px);font-weight:600;letter-spacing:-0.02em;line-height:1.05;color:var(--chalk)">${title}</h2>
+        </div>`;
+    }
+
+    function renderNav(t) {
+      $('navbar').innerHTML = `
+        <div style="max-width:1280px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between">
+          <a href="#hero-wrap" style="text-decoration:none;display:flex;align-items:center;gap:14px">
+            <svg viewBox="0 0 40 40" fill="none" width="40" height="40" aria-label="RC Logo">
+              <rect x="1" y="1" width="38" height="38" rx="10" stroke="var(--gold)" stroke-width="1.5"/>
+              <text x="20" y="26" text-anchor="middle" fill="var(--gold)" font-family="var(--font-display)" font-size="17" font-weight="600">RC</text>
+            </svg>
+            <div>
+              <div style="font-family:var(--font-display);font-weight:600;font-size:18px;letter-spacing:2px;color:var(--chalk);line-height:1">CHAUMÉNY</div>
+              <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:3px;color:var(--gold);margin-top:2px">DATA · SUPPLY CHAIN</div>
+            </div>
+          </a>
+          <nav class="pcnav" style="display:flex;gap:2px;align-items:center" aria-label="Navigation principale">
+            ${t.navLabels.map((l,i) => `<a href="${anchorFor(SIDS[i])}" class="nav-link" style="padding:8px 16px;border-radius:8px;color:var(--silver);text-decoration:none;font-size:13px;font-weight:400;font-family:var(--font-ui);transition:color .2s,background .2s;letter-spacing:.3px;">${l}</a>`).join('')}
+          </nav>
+          <div class="pcnav" style="display:flex;gap:10px;align-items:center">
+            
+            <div class="dd" id="theme-dd">
+              <button onclick="toggleDD('theme-dd')" aria-expanded="false" aria-label="Changer le thème" style="background:var(--bg2);border:1px solid var(--dim);color:var(--silver);border-radius:8px;padding:7px 10px;font-size:13px;display:flex;align-items:center;cursor:pointer;transition:all .2s">
+                <i data-lucide="palette" style="width:14px;height:14px"></i>
+              </button>
+              <div class="dd-menu" role="menu" style="min-width:180px">
+                ${Object.values(THEMES).map(th => `<button class="dd-opt ${currentTheme===th.id?'active':''}" role="menuitem" onclick="setTheme('${th.id}')" ${th.id==='hack'?'style="display:none"':''}>${th.name}</button>`).join('')}
+              </div>
+            </div>
+
+            <div class="dd" id="lang-dd">
+              <button onclick="toggleDD('lang-dd')" aria-expanded="false" aria-label="Changer la langue" style="background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:var(--gold);border-radius:8px;padding:7px 13px;font-size:12px;font-family:var(--font-mono);font-weight:700;letter-spacing:1.2px;display:flex;align-items:center;gap:7px;cursor:pointer;">
+                ${LANG_FLAGS[currentLang]} ${currentLang.toUpperCase()} <span style="font-size:9px;opacity:.7" aria-hidden="true">▾</span>
+              </button>
+              <div class="dd-menu" role="menu">
+                ${LANG_LIST.map(l => `<button class="dd-opt ${currentLang===l?'active':''}" role="menuitem" onclick="setLang('${l}')">${LANG_FLAGS[l]} ${l.toUpperCase()}</button>`).join('')}
+              </div>
+            </div>
+
+            <a href="#cta-wrap" style="background:linear-gradient(135deg,var(--goldD),var(--gold));color:var(--bg0);padding:8px 22px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 20px rgba(201,168,76,0.3);font-family:var(--font-ui);transition:all .3s" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform='none'">${t.contactCTA}</a>
+          </div>
+          <button class="burg" onclick="toggleMobileMenu()" aria-expanded="false" aria-label="Menu" style="background:none;border:none;color:var(--chalk);font-size:22px;padding:4px;cursor:pointer">☰</button>
+        </div>
+        <div id="mobile-menu" style="display:none;background:var(--bg1);border-top:1px solid var(--dim);padding:20px 32px 28px;flex-direction:column;gap:16px;" role="navigation" aria-label="Menu mobile">
+          ${t.navLabels.map((l,i) => `<a href="${anchorFor(SIDS[i])}" onclick="closeMobileMenu()" style="color:var(--silver);text-decoration:none;font-size:16px;font-family:var(--font-ui)">0${i+1} &nbsp; ${l}</a>`).join('')}
+          <div style="height:1px;background:var(--dim)"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            ${LANG_LIST.map(l => `<button onclick="setLang('${l}');closeMobileMenu()" style="background:${currentLang===l?'rgba(201,168,76,.15)':'none'};border:1px solid ${currentLang===l?'var(--gold)':'var(--dim)'};color:${currentLang===l?'var(--gold)':'var(--silver)'};border-radius:8px;padding:6px 14px;font-size:12px;font-family:var(--font-mono);letter-spacing:1px;cursor:pointer">${LANG_FLAGS[l]} ${l.toUpperCase()}</button>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSideNav(t) {
+      $('sidenav').innerHTML = t.navLabels.map((l,i) => `
+        <a href="${anchorFor(SIDS[i])}" class="dot-link" data-id="${SIDS[i]}-wrap" aria-label="${l}" style="display:flex;align-items:center;gap:8px;text-decoration:none;justify-content:flex-end">
+          <span class="dot-label" style="display:none;color:var(--gold);font-size:9px;font-weight:700;font-family:var(--font-mono);letter-spacing:2px;text-transform:uppercase">${l}</span>
+          <div class="dot-indicator" style="width:6px;height:6px;border-radius:3px;background:var(--slate);transition:all .4s cubic-bezier(.34,1.56,.64,1)"></div>
+        </a>
+      `).join('');
+    }
+
+    function renderHero(t) {
+      $('hero-wrap').innerHTML = `
+        <div style="max-width:960px;width:100%">
+          
+          <!-- 3D Digital Twin Card -->
+          <div class="reveal flip-container" style="display:inline-flex;align-items:center;justify-content:center;margin-bottom:36px;position:relative" onclick="this.classList.toggle('flipped')">
+            <div class="flipper">
+              <div class="front">
+                <img src="CHAUMENY Raphael.jpg" alt="Raphaël Chaumény" onerror="this.style.display='none'" style="width:100%;height:100%;object-fit:cover;">
+              </div>
+              <div class="back">
+                <div class="scan-line"></div>
+                <div style="font-family:var(--font-mono);color:var(--azure);font-size:11px;letter-spacing:3px;margin-bottom:12px">DIGITAL TWIN</div>
+                <div style="font-family:var(--font-mono);color:var(--chalk);font-size:15px;font-weight:bold;letter-spacing:1px">ID: 8492-RC</div>
+                <div style="font-family:var(--font-mono);color:var(--emerald);font-size:10px;margin-top:6px;letter-spacing:2px">SYS: OPTIMAL</div>
+                <div style="display:flex;gap:3px;margin-top:16px;height:30px">
+                  <div style="width:3px;background:var(--azure);opacity:0.8"></div>
+                  <div style="width:6px;background:var(--azure);opacity:0.8"></div>
+                  <div style="width:2px;background:var(--azure);opacity:0.8"></div>
+                  <div style="width:4px;background:var(--azure);opacity:0.8"></div>
+                  <div style="width:3px;background:var(--azure);opacity:0.8"></div>
+                  <div style="width:7px;background:var(--azure);opacity:0.8"></div>
+                  <div style="width:2px;background:var(--azure);opacity:0.8"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br/>
+          
+          <div class="reveal" style="display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(201,168,76,.3);border-radius:100px;padding:8px 24px;margin-bottom:48px;background:rgba(201,168,76,.06);transition-delay:.1s">
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--emerald);display:block;animation:pulse 2.5s infinite" aria-hidden="true"></span>
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--gold);letter-spacing:2.5px;font-weight:500">${t.badge}</span>
+          </div>
+          <div class="reveal" style="transition-delay:.2s">
+            <div style="font-family:var(--font-mono);font-size:clamp(10px,1.2vw,13px);color:var(--silver);letter-spacing:4px;margin-bottom:24px;text-transform:uppercase">${t.eyebrow}</div>
+            <h1 style="font-family:var(--font-display);font-size:clamp(52px,9vw,118px);font-weight:600;line-height:.96;letter-spacing:-0.04em;margin-bottom:36px">
+              <span style="display:block;color:var(--chalk)">${t.h1[0]}</span>
+              <span class="shimmer-text" style="display:block;background-image:linear-gradient(135deg,var(--gold),var(--goldL) 50%,var(--gold))">${t.h1[1]}</span>
+            </h1>
+          </div>
+          <p class="reveal" style="font-family:var(--font-ui);font-size:clamp(15px,1.8vw,18px);color:var(--silver);line-height:1.7;max-width:580px;margin:0 auto 52px;font-weight:300;transition-delay:.3s">${t.sub}</p>
+          <div class="reveal flex" style="gap:16px;justify-content:center;flex-wrap:wrap;transition-delay:.4s">
+            <a href="#xp-wrap" style="background:linear-gradient(135deg,var(--goldD),var(--gold));color:var(--bg0);padding:15px 36px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(201,168,76,.35);font-family:var(--font-ui)">
+              ${t.cta1} <i data-lucide="arrow-up-right" style="width:16px" aria-hidden="true"></i>
+            </a>
+            <a href="#projects-wrap" style="border:1px solid var(--slate);color:var(--silver);padding:15px 36px;border-radius:10px;font-weight:400;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:10px;letter-spacing:.3px;transition:all .3s;font-family:var(--font-ui)" onmouseenter="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseleave="this.style.borderColor='var(--slate)';this.style.color='var(--silver)'">
+              <i data-lucide="folder-open" style="width:16px" aria-hidden="true"></i> ${t.cta2}
+            </a>
+          </div>
+          <div class="reveal hsg" style="display:grid;grid-template-columns:repeat(4,1fr);margin-top:88px;border-top:1px solid var(--dim);transition-delay:.5s">
+            ${t.stats.map((s,i) => `
+              <div style="padding:28px 20px;border-right:${i<3?'1px solid var(--dim)':'none'}">
+                <div style="font-family:var(--font-display);font-size:clamp(30px,4vw,52px);font-weight:600;color:var(--chalk);line-height:1">
+                  <span class="stat-counter" data-target="${parseInt(s[0])||0}" aria-label="${s[0]}">0</span>${s[0].includes('+')?'+':''}
+                </div>
+                <div style="font-family:var(--font-ui);color:var(--silver);font-size:12px;margin-top:8px;letter-spacing:.5px;font-weight:300">${s[1]}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <div style="position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;animation:float 3s ease-in-out infinite" aria-hidden="true">
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--slate);letter-spacing:3px">${t.scrollLabel}</div>
+          <svg width="1" height="36"><line x1=".5" y1="0" x2=".5" y2="36" stroke="var(--gold)" stroke-width=".5" stroke-dasharray="4 4"/></svg>
+        </div>
+      `;
+    }
+
+    function renderSkills(t) {
+      const card = `background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:36px;position:relative;overflow:hidden;height:100%`;
+      $('skills-wrap').innerHTML = `
+        <div style="max-width:1280px;margin:0 auto">
+          ${SectionHeader(t.sNums[0], t.navLabels[0])}
+          <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:16px">
+            
+            <div class="reveal b7" style="grid-column:span 7">
+              <div class="gc" style="${card}">
+                <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.1) 0%,transparent 70%)"></div>
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px">
+                  <div style="width:2px;height:28px;background:linear-gradient(180deg,var(--gold),var(--goldD));border-radius:1px"></div>
+                  <div>
+                    <h3 style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--chalk);margin:0">${t.techTitle}</h3>
+                    <p style="font-family:var(--font-mono);color:var(--gold);font-size:11px;letter-spacing:2px;margin:2px 0 0">${t.techSub}</p>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px;margin-bottom:32px">
+                  ${t.techStack.map(s => `
+                    <div style="background:var(--bg3);border:1px solid var(--dim);border-radius:12px;padding:13px 12px;text-align:center">
+                      <div style="font-family:var(--font-ui);font-weight:600;font-size:13px;color:var(--chalk);margin-bottom:4px">${s.n}</div>
+                      <div style="font-family:var(--font-mono);font-size:9px;color:var(--${s.color});letter-spacing:1px">${s.sub.toUpperCase()}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <div class="reveal b5" style="grid-column:span 5;transition-delay:.1s">
+              <div class="gc" style="${card}">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px">
+                  <div style="width:2px;height:28px;background:linear-gradient(180deg,var(--azure),var(--azureL));border-radius:1px"></div>
+                  <div>
+                    <h3 style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--chalk);margin:0">${t.opsTitle}</h3>
+                    <p style="font-family:var(--font-mono);color:var(--azure);font-size:11px;letter-spacing:2px;margin:2px 0 0">${t.opsSub}</p>
+                  </div>
+                </div>
+                ${t.opsSkills.map((s,i) => `
+                  <div style="display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:${i<t.opsSkills.length-1?'1px solid var(--dim)':'none'}">
+                    <span style="font-family:var(--font-mono);color:var(--gold);font-size:12px;margin-top:1px" aria-hidden="true">▸</span>
+                    <span style="font-family:var(--font-ui);color:var(--silver);font-size:13px;line-height:1.5">${s}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="reveal b5" style="grid-column:span 5;transition-delay:.2s">
+              <div class="gc" style="${card}">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px">
+                  <div style="width:2px;height:28px;background:linear-gradient(180deg,var(--lilac),var(--lilac));border-radius:1px"></div>
+                  <div>
+                    <h3 style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--chalk);margin:0">${t.softTitle}</h3>
+                    <p style="font-family:var(--font-mono);color:var(--lilac);font-size:11px;letter-spacing:2px;margin:2px 0 0">${t.softSub}</p>
+                  </div>
+                </div>
+                ${t.softSkills.map(s => `
+                  <div style="margin-bottom:14px">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:7px">
+                      <span style="font-family:var(--font-ui);color:var(--silver);font-size:13px">${s.s}</span>
+                      <span style="font-family:var(--font-mono);color:var(--${s.c});font-size:11px;font-weight:700">${s.p}%</span>
+                    </div>
+                    <div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden" role="progressbar" aria-valuenow="${s.p}" aria-valuemin="0" aria-valuemax="100" aria-label="${s.s}">
+                      <div class="anim-bar" data-width="${s.p}" style="height:100%;background:var(--${s.c});width:0;transition:width 1s ease"></div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="reveal b7" style="grid-column:span 7;transition-delay:.3s">
+              <div class="gc" style="${card}display:flex;flex-wrap:wrap;align-items:center;gap:16px">
+                <div style="display:flex;align-items:center;gap:12px;width:100%">
+                  <div style="width:2px;height:28px;background:linear-gradient(180deg,var(--emerald),var(--emerald));border-radius:1px"></div>
+                  <div>
+                    <h3 style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--chalk);margin:0">${t.langsTitle}</h3>
+                    <p style="font-family:var(--font-mono);color:var(--emerald);font-size:11px;letter-spacing:2px;margin:2px 0 0">${t.langsSub}</p>
+                  </div>
+                </div>
+                ${t.langs.map(lg => `
+                  <div style="flex:1 0 110px;background:var(--bg3);border:1px solid var(--dim);border-radius:14px;padding:16px 20px">
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+                      <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--slate);letter-spacing:2px">${lg.f}</span>
+                      <span style="font-family:var(--font-mono);font-size:10px;color:var(--emerald);letter-spacing:1px">${lg.lv}</span>
+                    </div>
+                    <div style="font-family:var(--font-ui);font-weight:600;font-size:14px;color:var(--chalk);margin-bottom:10px">${lg.l}</div>
+                    <div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden" role="progressbar" aria-valuenow="${lg.p}" aria-valuemin="0" aria-valuemax="100" aria-label="${lg.l} — ${lg.lv}">
+                      <div class="anim-bar" data-width="${lg.p}" style="height:100%;background:var(--emerald);width:0;transition:width 1s ease"></div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderXP(t) {
+      $('xp-wrap').innerHTML = `
+        <div style="max-width:960px;margin:0 auto;position:relative">
+          ${SectionHeader(t.sNums[1], t.navLabels[1])}
+          <div style="position:relative;padding-left:48px">
+            <div style="position:absolute;left:18px;top:4px;bottom:4px;width:1px;background:linear-gradient(180deg,var(--gold),var(--azure),var(--lilac),var(--emerald),var(--coral),transparent)" aria-hidden="true"></div>
+            <div style="display:flex;flex-direction:column;gap:24px">
+              ${t.xps.map((x,i) => `
+                <div class="reveal" style="position:relative;transition-delay:${i*.1}s">
+                  <div style="position:absolute;left:-36px;top:28px;width:32px;height:32px;border-radius:50%;background:var(--bg0);border:2px solid var(--${x.color});display:flex;align-items:center;justify-content:center;z-index:2" aria-hidden="true">
+                    <div style="width:8px;height:8px;border-radius:50%;background:var(--${x.color})"></div>
+                  </div>
+                  <article class="xpc gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:32px;border-left:3px solid var(--${x.color})">
+                    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+                      <div>
+                        <h3 style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--chalk);margin:0 0 4px;letter-spacing:-0.01em">${x.role}</h3>
+                        <div style="font-family:var(--font-mono);font-size:12px;color:var(--${x.color});letter-spacing:1.5px">${x.co}</div>
+                      </div>
+                      <div style="text-align:right">
+                        <div style="display:inline-flex;gap:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px 14px;margin-bottom:6px">
+                          <span style="font-family:var(--font-mono);font-size:11px;color:var(--${x.color})">${x.period}</span>
+                        </div>
+                        <div style="font-family:var(--font-mono);font-size:10px;color:var(--slate);display:flex;align-items:center;gap:4px;justify-content:flex-end">
+                          <i data-lucide="map-pin" style="width:10px" aria-hidden="true"></i> ${x.loc}
+                        </div>
+                      </div>
+                    </div>
+                    <ul style="padding:0;margin:0 0 22px;list-style:none;display:flex;flex-direction:column;gap:10px">
+                      ${x.pts.map(p => `
+                        <li style="display:flex;gap:12px;font-size:13px;color:var(--silver);line-height:1.6;font-family:var(--font-ui)">
+                          <span style="color:var(--${x.color});flex-shrink:0;margin-top:1px;font-family:var(--font-mono)" aria-hidden="true">▸</span>${p}
+                        </li>
+                      `).join('')}
+                    </ul>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px" aria-label="Tags">
+                      ${x.tags.map(tag => `<span style="background:rgba(255,255,255,0.03);border:1px solid var(--dim);color:var(--${x.color});border-radius:6px;padding:4px 12px;font-size:11px;font-weight:600;font-family:var(--font-mono)">${tag}</span>`).join('')}
+                    </div>
+                  </article>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderProjects(t) {
+      $('projects-wrap').innerHTML = `
+        <div style="max-width:1280px;margin:0 auto">
+          ${SectionHeader(t.sNums[2], t.navLabels[2])}
+          <div class="pjg" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px">
+            ${t.projects.map((p,i) => `
+              <article class="reveal pj gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition-delay:${i*.1}s">
+                <div style="height:180px;position:relative;border-bottom:1px solid var(--dim)">
+                  <div class="pbg" style="position:absolute;inset:0;background:radial-gradient(circle at bottom right,var(--${p.color}),var(--bg2) 80%);opacity:0.3"></div>
+                  <div style="position:absolute;inset:0;background-image:radial-gradient(var(--${p.color}) 1px,transparent 1px);background-size:20px 20px;opacity:0.1" aria-hidden="true"></div>
+                  <div style="position:absolute;top:16px;right:20px;font-family:var(--font-display);font-size:72px;font-weight:600;color:var(--${p.color});opacity:.15;line-height:1" aria-hidden="true">0${i+1}</div>
+                  <div style="position:absolute;top:24px;left:24px">
+                    <span style="font-family:var(--font-mono);font-size:10px;color:var(--${p.color});padding:4px 10px;border:1px solid var(--${p.color});border-radius:100px;background:var(--bg0)">${p.type.toUpperCase()}</span>
+                  </div>
+                  <div class="pov" style="position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;gap:16px">
+                    ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" aria-label="Voir le projet ${p.title}" style="width:44px;height:44px;border-radius:50%;background:var(--${p.color});color:var(--bg0);display:flex;align-items:center;justify-content:center"><i data-lucide="external-link" style="width:20px" aria-hidden="true"></i></a>` : ''}
+                    ${p.github ? `<a href="${p.github}" target="_blank" rel="noopener" aria-label="Code source de ${p.title}" style="width:44px;height:44px;border-radius:50%;background:var(--bg3);border:1px solid var(--dim);color:var(--chalk);display:flex;align-items:center;justify-content:center"><i data-lucide="github" style="width:20px" aria-hidden="true"></i></a>` : ''}
+                  </div>
+                </div>
+                <div style="padding:32px;flex:1;display:flex;flex-direction:column">
+                  <h3 style="font-family:var(--font-display);font-size:24px;color:var(--chalk);margin:0 0 12px">${p.title}</h3>
+                  <p style="font-family:var(--font-ui);font-size:13px;color:var(--silver);line-height:1.6;margin:0 0 24px;flex-grow:1">${p.desc}</p>
+                  <div style="display:flex;gap:16px;margin-bottom:24px">
+                    ${p.kpis.map(k => `
+                      <div style="display:flex;align-items:center;gap:6px">
+                        <i data-lucide="target" style="width:11px;color:var(--${p.color})" aria-hidden="true"></i>
+                        <span style="font-family:var(--font-mono);font-size:11px;color:var(--chalk)">${k}</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:8px">
+                    ${p.tags.map(tag => `<span style="background:var(--bg3);border:1px solid var(--dim);color:var(--silver);border-radius:6px;padding:4px 10px;font-size:11px;font-family:var(--font-mono)">${tag}</span>`).join('')}
+                  </div>
+                </div>
+              </article>
+            `).join('')}
+          </div>
+          <div class="reveal" style="text-align:center;margin-top:40px;font-family:var(--font-mono);font-size:11px;color:var(--slate)">${t.projPlaceholder}</div>
+        </div>
+      `;
+    }
+
+    function renderDashboard(t) {
+      $('dash-wrap').innerHTML = `
+        <div style="max-width:1280px;margin:0 auto">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px">
+            ${SectionHeader(t.sNums[3], t.navLabels[3])}
+            <div style="margin-bottom:64px;display:flex;background:var(--bg2);border:1px solid var(--dim);border-radius:100px;padding:4px" role="group" aria-label="Filtre de période">
+              ${t.periods.map(p => `
+                <button onclick="setDashFilter('${p[0]}')" class="dash-btn ${dashFilter===p[0]?'active':''}" aria-pressed="${dashFilter===p[0]}" style="background:${dashFilter===p[0]?'linear-gradient(135deg,var(--goldD),var(--gold))':'none'};color:${dashFilter===p[0]?'var(--bg0)':'var(--silver)'};padding:8px 20px;border-radius:100px;border:none;font-size:12px;font-family:var(--font-mono);cursor:pointer;transition:all .2s">${p[1]}</button>
+              `).join('')}
+            </div>
+          </div>
+          
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:16px" id="kpi-cards">
+            <!-- Filled by updateCharts -->
+          </div>
+
+          <div class="c2" style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px">
+            <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:28px;height:360px;display:flex;flex-direction:column">
+              <div><h3 style="font-family:var(--font-display);font-size:18px;margin:0 0 4px">${t.charts[0]}</h3><p style="font-family:var(--font-mono);font-size:10px;color:var(--silver);margin:0">${t.chartSubs[0].toUpperCase()}</p></div>
+              <div style="flex:1;position:relative"><canvas id="chart1" aria-label="${t.charts[0]}"></canvas></div>
+            </div>
+            <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:28px;height:360px;display:flex;flex-direction:column;transition-delay:.1s">
+              <div><h3 style="font-family:var(--font-display);font-size:18px;margin:0 0 4px">${t.charts[1]}</h3><p style="font-family:var(--font-mono);font-size:10px;color:var(--silver);margin:0">${t.chartSubs[1].toUpperCase()}</p></div>
+              <div style="flex:1;position:relative"><canvas id="chart2" aria-label="${t.charts[1]}"></canvas></div>
+            </div>
+          </div>
+
+          <div class="c2" style="display:grid;grid-template-columns:3fr 2fr;gap:16px">
+            <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:28px;height:320px;display:flex;flex-direction:column">
+              <div><h3 style="font-family:var(--font-display);font-size:18px;margin:0 0 4px">${t.charts[2]}</h3><p style="font-family:var(--font-mono);font-size:10px;color:var(--silver);margin:0">${t.chartSubs[2].toUpperCase()}</p></div>
+              <div style="flex:1;position:relative"><canvas id="chart3" aria-label="${t.charts[2]}"></canvas></div>
+            </div>
+
+            <!-- TABLEAU DES ECARTS D'INVENTAIRE -->
+            <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:28px;height:320px;display:flex;flex-direction:column;transition-delay:.1s;overflow-x:auto;">
+              <h3 style="font-family:var(--font-display);font-size:18px;color:var(--chalk);margin:0 0 16px">${t.kpiCard} (< 0.5%)</h3>
+              <table class="kpi-table" aria-label="${t.kpiCard}" style="width:100%;border-collapse:collapse;">
+                <thead>
+                  <tr>
+                    <th class="top-hdr"></th>
+                    <th colspan="3" class="top-hdr text-center" style="border-left:1px solid var(--dim);border-right:1px solid var(--dim)">RÉPARTITION DES ÉCARTS</th>
+                    <th colspan="2" class="top-hdr text-center">POURCENTAGE</th>
+                  </tr>
+                  <tr style="background:var(--bg3);color:var(--silver);">
+                    <th class="text-left" scope="col" style="color:var(--chalk)">Magasin</th>
+                    <th scope="col" style="color:var(--coral)">FAUX</th>
+                    <th scope="col" style="color:var(--emerald)">VRAI</th>
+                    <th scope="col" style="border-right:1px solid var(--dim)">Total</th>
+                    <th scope="col" style="color:var(--coral)">ÉCART</th>
+                    <th scope="col" style="color:var(--emerald)">ISO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="text-left">L001</td><td>0</td><td>435</td><td style="border-right:1px solid var(--dim);font-weight:600">435</td><td style="color:var(--silver)">0%</td><td>100%</td></tr>
+                  <tr><td class="text-left">L002</td><td>0</td><td>15</td><td style="border-right:1px solid var(--dim);font-weight:600">15</td><td style="color:var(--silver)">0%</td><td>100%</td></tr>
+                  <tr><td class="text-left">L003</td><td>0</td><td>28</td><td style="border-right:1px solid var(--dim);font-weight:600">28</td><td style="color:var(--silver)">0%</td><td>100%</td></tr>
+                  <tr><td class="text-left">L004</td><td>0</td><td>118</td><td style="border-right:1px solid var(--dim);font-weight:600">118</td><td style="color:var(--silver)">0%</td><td>100%</td></tr>
+                  <tr class="total-row"><td class="text-left">Total</td><td style="color:var(--coral)">0</td><td style="color:var(--emerald)">596</td><td style="border-right:1px solid var(--dim)">596</td><td style="color:var(--coral)">0.0%</td><td style="color:var(--emerald)">100%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEducation(t) {
+      $('edu-wrap').innerHTML = `
+        <div style="max-width:1280px;margin:0 auto">
+          ${SectionHeader(t.sNums[4], t.navLabels[4])}
+          <div class="edg" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+            ${t.schools.map((s,i) => `
+              <article class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:36px;position:relative;overflow:hidden;transition-delay:${i*.1}s">
+                <div style="position:absolute;bottom:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,var(--${s.color}) 0%,transparent 70%);opacity:.15" aria-hidden="true"></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px">
+                  <span style="font-family:var(--font-mono);font-size:11px;color:var(--${s.color});padding:4px 10px;border:1px solid var(--${s.color});border-radius:6px;background:rgba(0,0,0,0.2)">${s.period}</span>
+                  <span style="font-family:var(--font-mono);font-size:10px;color:var(--slate);display:flex;align-items:center;gap:4px"><i data-lucide="map-pin" style="width:10px" aria-hidden="true"></i> ${s.loc}</span>
+                </div>
+                <h3 style="font-family:var(--font-display);font-size:20px;margin:0 0 8px">${s.school}</h3>
+                <h4 style="font-family:var(--font-ui);font-size:13px;font-weight:500;color:var(--${s.color});margin:0 0 20px">${s.degree}</h4>
+                <p style="font-family:var(--font-ui);font-size:13px;color:var(--silver);line-height:1.65;margin:0">${s.desc}</p>
+              </article>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFuture(t) {
+      $('future-wrap').innerHTML = `
+        <div style="max-width:1280px;margin:0 auto">
+          ${SectionHeader(t.sNums[5], t.navLabels[5])}
+          <div style="position:relative;padding-left:48px">
+            <div style="position:absolute;left:18px;top:4px;bottom:4px;width:1px;background:linear-gradient(180deg,var(--azure),var(--gold),transparent)" aria-hidden="true"></div>
+            <div style="display:flex;flex-direction:column;gap:24px">
+              ${t.future.map((f,i) => `
+                <div class="reveal" style="position:relative;transition-delay:${i*.1}s">
+                  <div style="position:absolute;left:-36px;top:28px;width:32px;height:32px;border-radius:50%;background:var(--bg0);border:2px solid var(--${f.color});display:flex;align-items:center;justify-content:center;z-index:2" aria-hidden="true">
+                    <div style="width:8px;height:8px;border-radius:50%;background:var(--${f.color})"></div>
+                  </div>
+                  <article class="xpc gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:32px;border-left:3px solid var(--${f.color})">
+                    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+                      <div>
+                        <h3 style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--chalk);margin:0 0 4px">${f.role}</h3>
+                        <div style="font-family:var(--font-mono);font-size:12px;color:var(--${f.color});letter-spacing:1.5px">${f.co}</div>
+                      </div>
+                      <div style="text-align:right">
+                        <div style="display:inline-flex;gap:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px 14px;margin-bottom:6px">
+                          <span style="font-family:var(--font-mono);font-size:11px;color:var(--${f.color})">${f.period}</span>
+                        </div>
+                        <div style="font-family:var(--font-mono);font-size:10px;color:var(--slate);display:flex;align-items:center;gap:4px;justify-content:flex-end">
+                          <i data-lucide="map-pin" style="width:10px" aria-hidden="true"></i> ${f.loc}
+                        </div>
+                      </div>
+                    </div>
+                    <ul style="padding:0;margin:0 0 22px;list-style:none;display:flex;flex-direction:column;gap:10px">
+                      ${f.pts.map(pt => `
+                        <li style="display:flex;gap:12px;font-size:13px;color:var(--silver);line-height:1.6;font-family:var(--font-ui)">
+                          <span style="color:var(--${f.color});flex-shrink:0;margin-top:1px;font-family:var(--font-mono)" aria-hidden="true">▸</span>${pt}
+                        </li>
+                      `).join('')}
+                    </ul>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px">
+                      ${f.tags.map(tag => `<span style="background:rgba(255,255,255,0.03);border:1px solid var(--dim);color:var(--${f.color});border-radius:6px;padding:4px 12px;font-size:11px;font-weight:600;font-family:var(--font-mono)">${tag}</span>`).join('')}
+                    </div>
+                  </article>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTerminal(t) {
+      $('term-wrap').innerHTML = `
+        <div style="max-width:800px;margin:0 auto">
+          ${SectionHeader(t.sNums[6], t.termTitle)}
+          <div class="reveal term-box" style="border-radius:16px;overflow:hidden;border:1px solid var(--dim);box-shadow:0 40px 80px rgba(0,0,0,.6)">
+            <div style="background:var(--bg3);padding:12px 20px;display:flex;align-items:center;border-bottom:1px solid var(--dim)">
+              <div style="display:flex;gap:7px">
+                <div style="width:12px;height:12px;border-radius:50%;background:var(--coral)"></div>
+                <div style="width:12px;height:12px;border-radius:50%;background:#f0a030"></div>
+                <div style="width:12px;height:12px;border-radius:50%;background:var(--emerald)"></div>
+              </div>
+              <div style="flex:1;text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--silver)">rchaumeny@portfolio:~</div>
+            </div>
+            <!-- Interactive Terminal Content -->
+            <div style="background:var(--bg0);padding:32px;font-family:var(--font-mono);font-size:13px;min-height:300px;line-height:2;overflow-y:auto" id="term-content">
+              <!-- Animated via JS -->
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFooter(t) {
+      $('cta-wrap').innerHTML = `
+        <div style="max-width:800px;margin:0 auto;text-align:center">
+          <div class="reveal" style="background:var(--bg2);border:1px solid rgba(201,168,76,0.2);border-radius:28px;padding:72px 52px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)" aria-hidden="true"></div>
+            <div style="position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.07) 0%,transparent 70%);filter:blur(40px)" aria-hidden="true"></div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--gold);letter-spacing:4px;margin-bottom:20px" aria-hidden="true">${t.sNums[7]} CONTACT</div>
+            <h2 style="font-family:var(--font-display);font-size:clamp(36px,5vw,60px);color:var(--chalk);margin:0 0 20px;line-height:1">${t.contactTitle}</h2>
+            <p style="font-family:var(--font-ui);color:var(--silver);font-size:16px;max-width:500px;margin:0 auto 52px">${t.contactSub}</p>
+            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:48px">
+              <a href="mailto:chaumenyr@gmail.com" style="background:linear-gradient(135deg,var(--goldD),var(--gold));color:var(--bg0);padding:15px 36px;border-radius:10px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(201,168,76,0.3);font-family:var(--font-ui);transition:all .3s" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 16px 48px rgba(201,168,76,0.45)'" onmouseleave="this.style.transform='none';this.style.boxShadow='0 8px 32px rgba(201,168,76,0.3)'">
+                <i data-lucide="mail" style="width:16px" aria-hidden="true"></i> chaumenyr@gmail.com
+              </a>
+              <a href="tel:+33666220527" style="border:1px solid var(--slate);color:var(--silver);padding:15px 36px;border-radius:10px;text-decoration:none;display:flex;align-items:center;gap:10px;font-family:var(--font-ui);transition:all .3s" onmouseenter="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseleave="this.style.borderColor='var(--slate)';this.style.color='var(--silver)'">
+                <i data-lucide="phone" style="width:16px" aria-hidden="true"></i> +33 6 66 22 05 27
+              </a>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px">
+              ${t.tags.map(tag => `<span style="background:rgba(255,255,255,0.03);border:1px solid var(--dim);color:var(--silver);padding:6px 18px;border-radius:100px;font-size:11px;font-family:var(--font-mono)">${tag}</span>`).join('')}
+            </div>
+          </div>
+          <div style="margin-top:64px;border-top:1px solid var(--dim);padding-top:40px;color:var(--slate);font-size:11px;font-family:var(--font-mono);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <span>${t.footerLeft}</span>
+            <span>${t.footerRight}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       CORE LOGIC
+    ════════════════════════════════════════════════════════════════════ */
+    function setLang(l) { currentLang = l; updateUI(); }
+    function setTheme(id) { 
+      currentTheme = id; 
+      isHackMode = (id === 'hack');
+      applyTheme(id); updateCharts(); renderNav(DICT[currentLang]); lucide.createIcons(); 
+    }
+    function setDashFilter(f) { dashFilter = f; updateCharts(); renderDashboard(DICT[currentLang]); lucide.createIcons(); initObservers(); }
+
+    function applyTheme(id) {
+      const t = THEMES[id];
+      const root = document.documentElement;
+      for (const [k, v] of Object.entries(t)) {
+        if (k !== 'id' && k !== 'name') root.style.setProperty(`--${k}`, v);
+      }
+    }
+
+    function toggleDD(id) {
+      document.querySelectorAll('.dd').forEach(el => { if(el.id !== id) el.classList.remove('open'); });
+      $(id).classList.toggle('open');
+    }
+    function toggleMobileMenu() {
+      const el = $('mobile-menu');
+      el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+    }
+    function closeMobileMenu() {
+      const el = $('mobile-menu');
+      if(el) el.style.display = 'none';
+    }
+
+    function initObservers() {
+      if(activeObserver) activeObserver.disconnect();
+      activeObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          // Fade & Parallax effect for sections scrolling out of view
+          if(e.target.tagName.toLowerCase() === 'section') {
+            const rect = e.target.getBoundingClientRect();
+            if(rect.top < 0 && rect.bottom > 0) {
+              const progress = Math.min(1, Math.abs(rect.top) / window.innerHeight);
+              e.target.style.opacity = 1 - (progress * 0.3); // Attenuated from 0.8
+              e.target.style.transform = `translateY(${progress * 20}px)`; // Reduced from 40px
+            } else {
+              e.target.style.opacity = 1;
+              e.target.style.transform = 'none';
+            }
+          }
+          
+          if (e.isIntersecting && e.target.classList.contains('reveal')) {
+            e.target.classList.add('on');
+            const bars = e.target.querySelectorAll('.anim-bar');
+            bars.forEach(b => b.style.width = b.dataset.width + '%');
+            
+            // Trigger interactive terminal animation ONLY ONCE
+            if(e.target.classList.contains('term-box') && !e.target.dataset.run) {
+              e.target.dataset.run = '1'; 
+              runTermAnim();
+            }
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      document.querySelectorAll('.reveal').forEach(el => activeObserver.observe(el));
+      document.querySelectorAll('main > section').forEach(el => {
+        // Add scroll listener directly to handle parallax
+        window.addEventListener('scroll', () => {
+          const rect = el.getBoundingClientRect();
+          if(rect.top < 0 && rect.bottom > 0) {
+            const progress = Math.min(1, Math.abs(rect.top) / window.innerHeight);
+            el.style.opacity = 1 - (progress * 0.3); 
+            el.style.transform = `translateY(${progress * 20}px)`;
+          } else {
+            el.style.opacity = 1;
+            el.style.transform = 'none';
+          }
+        }, {passive:true});
+      });
+    }
+
+    function initCounters() {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.querySelectorAll('.stat-counter').forEach(el => {
+              if (el.dataset.done) return; el.dataset.done = '1';
+              const target = parseFloat(el.dataset.target); // keep decimals if needed
+              let start;
+              const step = ts => {
+                if(!start) start = ts; const p = Math.min((ts - start)/1600, 1);
+                el.textContent = Math.round((1 - Math.pow(1-p, 4)) * target);
+                if (p < 1) requestAnimationFrame(step);
+              };
+              requestAnimationFrame(step);
+            });
+          }
+        });
+      });
+      const hsg = document.querySelector('.hsg');
+      if(hsg) obs.observe(hsg);
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       CHART.JS IMPLEMENTATION
+    ════════════════════════════════════════════════════════════════════ */
+    Chart.defaults.color = '#8a9bb5';
+    Chart.defaults.font.family = F.mono;
+
+    function updateCharts() {
+      const t = DICT[currentLang];
+      const data = DASH_DATA[dashFilter];
+      
+      const kpiMap = [
+        {l:t.kpis[0], v:data.kpis.svc, c:'gold', i:'◉'},
+        {l:t.kpis[1], v:data.kpis.otif, c:'azure', i:'◈'},
+        {l:t.kpis[2], v:data.kpis.rot, c:'emerald', i:'◎'},
+        {l:t.kpis[3], v:data.kpis.rup, c:'coral', i:'◇'}
+      ];
+      const kpiCardsEl = $('kpi-cards');
+      if(kpiCardsEl) {
+        kpiCardsEl.innerHTML = kpiMap.map((k,i) => `
+          <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:16px;padding:24px;transition-delay:${i*.05}s">
+            <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+              <span style="font-family:var(--font-ui);font-size:12px;color:var(--silver)">${k.l}</span>
+              <span style="font-family:var(--font-mono);font-size:16px;color:var(--${k.c});opacity:.6">${k.i}</span>
+            </div>
+            <div style="font-family:var(--font-display);font-size:42px;font-weight:600;color:var(--${k.c})">${k.v}</div>
+            <div style="height:2px;background:var(--dim);margin-top:16px"><div style="height:100%;background:var(--${k.c});width:100%"></div></div>
+          </div>
+        `).join('');
+      }
+
+      const cGold = getVar('gold'), cAzure = getVar('azure'), cCoral = getVar('coral'), cDim = getVar('dim');
+      
+      if(charts.c1) charts.c1.destroy();
+      const ctx1 = $('chart1');
+      if(ctx1) {
+        charts.c1 = new Chart(ctx1, {
+          type: 'line',
+          data: {
+            labels: data.trend.map(d=>d.m),
+            datasets: [
+              { label: 'OTIF', data: data.trend.map(d=>d.otif), borderColor: cGold, backgroundColor: hexToRgbA(cGold, 0.2), fill: true, tension: 0.4, borderWidth: 2 },
+              { label: t.kpis[0], data: data.trend.map(d=>d.svc), borderColor: cAzure, backgroundColor: hexToRgbA(cAzure, 0.2), fill: true, tension: 0.4, borderWidth: 2 }
+            ]
+          },
+          options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false } }, y: { min: 80, grid: { color: cDim } } }, plugins: { legend: { display: false } } }
+        });
+      }
+
+      if(charts.c2) charts.c2.destroy();
+      const ctx2 = $('chart2');
+      if(ctx2) {
+        charts.c2 = new Chart(ctx2, {
+          type: 'radar',
+          data: {
+            labels: t.radar.map(d=>d.s),
+            datasets: [{ data: t.radar.map(d=>d.v), backgroundColor: hexToRgbA(cGold, 0.2), borderColor: cGold, pointBackgroundColor: cGold }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, scales: { r: { grid: { color: cDim }, angleLines: { color: cDim }, pointLabels: { color: getVar('silver'), font: { size: 10 } }, ticks: { display: false }, min: 0, max: 100 } }, plugins: { legend: { display: false } } }
+        });
+      }
+
+      if(charts.c3) charts.c3.destroy();
+      const ctx3 = $('chart3');
+      if(ctx3) {
+        charts.c3 = new Chart(ctx3, {
+          type: 'bar',
+          data: {
+            labels: data.trend.map(d=>d.m),
+            datasets: [
+              { type: 'bar', label: 'Volume (U)', data: data.trend.map(d=>d.vol), backgroundColor: cAzure, yAxisID: 'y', borderRadius: 4 },
+              { type: 'line', label: 'Écart (%)', data: data.trend.map(d=>d.ecart), borderColor: cCoral, backgroundColor: cCoral, yAxisID: 'y1', tension: 0.4, borderWidth: 2 }
+            ]
+          },
+          options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false } }, y: { grid: { color: cDim } }, y1: { position: 'right', min: 0, grid: { display: false } } }, plugins: { legend: { display: false } } }
+        });
+      }
+      
+      if(activeObserver) {
+        document.querySelectorAll('#kpi-cards .reveal').forEach(el => activeObserver.observe(el));
+      }
+    }
+
+    function hexToRgbA(hex, alpha){
+        let c;
+        if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+            c= hex.substring(1).split('');
+            if(c.length== 3) c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+            c= '0x'+c.join('');
+            return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+alpha+')';
+        }
+        return `rgba(200,200,200,${alpha})`;
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       INTERACTIVE TERMINAL (NLP CHATBOT & EASTER EGG)
+    ════════════════════════════════════════════════════════════════════ */
+    function runTermAnim() {
+      const tc = $('term-content');
+      if(!tc) return;
+      const lines = DICT[currentLang].termLines;
+      const cmd = DICT[currentLang].termCmd;
+      let html = `<div style="display:flex;gap:12px;margin-bottom:4px"><span style="color:var(--gold)">❯</span><span style="color:var(--chalk)">${cmd}</span></div>`;
+      tc.innerHTML = html;
+      
+      let delay = 0;
+      lines.forEach((l, i) => {
+        delay += 600 + (Math.random() * 400);
+        setTimeout(() => {
+          let c = 'var(--silver)';
+          if(l.t === 'info') c = 'var(--azure)';
+          if(l.t === 'code') c = 'var(--lilac)';
+          if(l.t === 'ok') c = 'var(--emerald)';
+          html += `<div style="color:${c};padding-left:4px">${l.s}</div>`;
+          if(i === lines.length - 1) {
+            setTimeout(() => {
+              renderInteractivePrompt(tc, html);
+            }, 800);
+          } else {
+            tc.innerHTML = html + `<div style="margin-top:12px;display:flex;gap:12px"><span style="color:var(--gold)">❯</span><span style="width:7px;height:16px;background:var(--chalk);animation:blink 1s step-end infinite"></span></div>`;
+          }
+        }, delay);
+      });
+    }
+
+    function renderInteractivePrompt(container, historyHtml) {
+      container.innerHTML = historyHtml + `
+        <div id="term-history"></div>
+        <div class="term-input-row" style="margin-top:12px;display:flex;gap:12px;align-items:center;">
+          <span style="color:var(--gold)">❯</span>
+          <input type="text" id="term-input" class="term-input" autocomplete="off" spellcheck="false" placeholder="Type 'help'..." style="background:transparent;border:none;color:var(--chalk);font-family:var(--font-mono);font-size:13px;flex:1;outline:none;caret-color:var(--gold);" />
+        </div>
+      `;
+      
+      const input = $('term-input');
+      const box = container.parentElement;
+      box.style.cursor = "text";
+      box.onclick = () => input.focus();
+
+      input.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') {
+          const val = input.value.trim();
+          if(val) processTerminalCommand(val);
+          input.value = '';
+        }
+      });
+    }
+
+    function processTerminalCommand(cmd) {
+      const hist = $('term-history');
+      let response = '';
+      const c = cmd.toLowerCase();
+      const t = DICT[currentLang].chat || DICT['fr'].chat;
+
+      // Basic NLP Keywords mapping
+      const kw = {
+        dispo: ['dispo', 'contrat', 'quand', 'date', 'v.i.e', 'vie', 'novembre', 'start', 'available', 'contract'],
+        mob: ['mobilit', 'pays', 'où', 'ou ', 'destination', 'singapour', 'allemagne', 'australie', 'location', 'country'],
+        pitch: ['qui', 'pitch', 'presentation', 'présentation', 'about', 'toi', 'you'],
+        proud: ['fiert', 'succes', 'succès', 'accomplissement', 'projet', 'best', 'appsheet', 'proud', 'achievement'],
+        hobbies: ['hobby', 'hobbies', 'sport', 'passion', 'perso', 'temps libre', 'fun'],
+        flaw: ['defaut', 'défaut', 'faiblesse', 'weakness', 'pire', 'flaw', 'bad'],
+        salary: ['salaire', 'remuneration', 'rémunération', 'pretention', 'prétention', '€', 'euro', 'salary', 'pay', 'money']
+      };
+
+      let found = false;
+
+      if(c === 'help') {
+        response = `Commandes disponibles :<br>
+        <span style="color:var(--azure)">clear</span>   : Nettoyer le terminal<br>
+        <span style="color:var(--azure)">skills</span>  : Afficher les KPIs majeurs<br>
+        <span style="color:var(--azure)">contact</span> : Afficher les coordonnées<br>
+        <span style="color:var(--azure)">theme</span>   : Lister les thèmes (ex: theme wada2)<br>
+        <span style="color:var(--coral)">matrix</span>  : [ACCÈS SÉCURISÉ REQUIS]<br>
+        ... ou posez-moi des questions naturelles (ex: "quand es-tu dispo ?", "quel est ton défaut ?")`;
+        found = true;
+      } 
+      else if(c === 'clear') { hist.innerHTML = ''; return; }
+      else if(c === 'skills') { response = `> Coord: 100% | WMS: 100% | VMI: 80% | Transp: 80% | Data Viz: 60% | SQL/Python: 40%`; found = true; }
+      else if(c === 'contact') { response = `> Email: chaumenyr@gmail.com | Tel: +33 6 66 22 05 27`; found = true; }
+      else if(c.startsWith('theme')) {
+        const parts = c.split(' ');
+        if(parts.length > 1 && THEMES[parts[1]]) {
+          setTheme(parts[1]);
+          response = `> Thème changé pour : ${THEMES[parts[1]].name}`;
+        } else {
+          response = `> Thèmes dispos: luxury, wada1, wada2, wada3, wada4, wada5, wada6`;
+        }
+        found = true;
+      }
+      else if(c === 'matrix' || c === 'hack') {
+        setTheme('hack');
+        response = `<span style="color:var(--emerald);font-weight:bold;">[ACCÈS AUTORISÉ]</span> Bienvenue dans le flux logistique central.`;
+        found = true;
+      }
+      else if(c === 'sudo hire raphael') {
+        response = `<span style="color:var(--emerald);font-weight:bold;">Excellente décision.</span> Le candidat a été prévenu.`;
+        found = true;
+      }
+      
+      // Check keywords if not a direct command
+      if(!found) {
+        for(const [key, words] of Object.entries(kw)) {
+          if(words.some(w => c.includes(w))) {
+            response = `<span style="color:var(--gold)">></span> ${t[key]}`;
+            found = true;
+            break;
+          }
+        }
+      }
+
+      if(!found) {
+        response = `<span style="color:var(--coral)">bash: command not found: ${cmd}</span>. Tapez 'help' ou posez une question simple (ex: 'dispo').`;
+      }
+
+      hist.innerHTML += `
+        <div style="display:flex;gap:12px;margin-top:4px"><span style="color:var(--gold)">❯</span><span style="color:var(--chalk)">${cmd}</span></div>
+        <div style="color:var(--silver);padding-left:4px;margin-bottom:8px;line-height:1.5">${response}</div>
+      `;
+      $('term-content').scrollTop = $('term-content').scrollHeight;
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       CANVAS PARTICLES & MATRIX MODE
+    ════════════════════════════════════════════════════════════════════ */
+    function initCanvas() {
+      if(canvasRAF) { cancelAnimationFrame(canvasRAF); canvasRAF = null; }
+      const canvas = $('particle-canvas');
+      if(!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let mouse = {x:-999, y:-999};
+      const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+      window.addEventListener('resize', resize, {passive:true}); resize();
+      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, {passive:true});
+
+      const pts = Array.from({length: 50}, () => ({
+        x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+        vx: (Math.random()-.5)*.3, vy: (Math.random()-.5)*.3, r: Math.random()*1.2+.4, ph: Math.random()*Math.PI*2,
+        col: ['gold','azure','silver','slate'][Math.floor(Math.random()*4)],
+        char: Math.random() > 0.5 ? '1' : '0' // For matrix mode
+      }));
+
+      const draw = ts => {
+        if(!isPageVisible) { canvasRAF = requestAnimationFrame(draw); return; }
+        
+        if (isHackMode) {
+          // Matrix Mode
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+          ctx.fillRect(0,0,canvas.width,canvas.height);
+          ctx.fillStyle = '#10d68a';
+          ctx.font = '14px monospace';
+          pts.forEach(p => {
+            p.y += 3 + Math.random()*2; // Fast fall
+            if(p.y > canvas.height) { p.y = 0; p.x = Math.random()*canvas.width; }
+            if(Math.random()<0.05) p.char = Math.random() > 0.5 ? '1' : '0';
+            ctx.fillText(p.char, p.x, p.y);
+          });
+        } else {
+          // Normal Mode
+          ctx.clearRect(0,0,canvas.width,canvas.height);
+          const cG = hexToRgb(getVar('gold')), cS = hexToRgb(getVar('slate'));
+          
+          pts.forEach(p => {
+            const d = Math.hypot(mouse.x - p.x, mouse.y - p.y);
+            if(d < 180) { ctx.beginPath(); ctx.strokeStyle=`rgba(${cG},${.15*(1-d/180)})`; ctx.moveTo(p.x,p.y); ctx.lineTo(mouse.x,mouse.y); ctx.stroke(); }
+          });
+          for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++) {
+            const d = Math.hypot(pts[i].x-pts[j].x, pts[i].y-pts[j].y);
+            if(d < 120) { ctx.beginPath(); ctx.strokeStyle=`rgba(${cS},${.3*(1-d/120)})`; ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y); ctx.stroke(); }
+          }
+          pts.forEach(p => {
+            p.x+=p.vx; p.y+=p.vy;
+            if(p.x<0||p.x>canvas.width) p.vx*=-1; if(p.y<0||p.y>canvas.height) p.vy*=-1;
+            ctx.beginPath(); ctx.arc(p.x,p.y,p.r*(1+(Math.sin(ts*.001+p.ph)*.5+.5)*.4),0,Math.PI*2);
+            ctx.fillStyle = `rgba(${hexToRgb(getVar(p.col))}, 0.6)`; ctx.fill();
+          });
+        }
+        canvasRAF = requestAnimationFrame(draw);
+      };
+      canvasRAF = requestAnimationFrame(draw);
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       CUSTOM CURSOR
+    ════════════════════════════════════════════════════════════════════ */
+    function initCursor() {
+      if(!window.matchMedia("(pointer:fine)").matches) return;
+      const dot = $('cursor-dot'), ring = $('cursor-ring');
+      dot.style.display = 'block'; ring.style.display = 'block';
+      let mx=-200, my=-200, rx=-200, ry=-200, hov=false;
+      window.addEventListener('mousemove', e => { 
+        mx=e.clientX; my=e.clientY; 
+      }, {passive:true});
+      
+      document.addEventListener('mouseover', e => { if(e.target.closest('a,button,[role=button],.dash-btn,input,.flip-container,.reco-card')) hov=true; });
+      document.addEventListener('mouseout', () => hov=false);
+      const tick = () => {
+        rx += (mx - rx)*.15; ry += (my - ry)*.15;
+        dot.style.transform = `translate(${mx-4}px,${my-4}px) scale(${hov?.3:1})`;
+        ring.style.transform = `translate(${rx-20}px,${ry-20}px) scale(${hov?2:1})`;
+        ring.style.opacity = hov?".5":".3";
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    /* ════════════════════════════════════════════════════════════════════
+       ACTIVE SECTION SCROLL SPY
+    ════════════════════════════════════════════════════════════════════ */
+    function setupEventListeners() {
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.dd')) {
+          document.querySelectorAll('.dd').forEach(el => {
+            el.classList.remove('open');
+            const btn = el.querySelector('button[aria-expanded]');
+            if(btn) btn.setAttribute('aria-expanded','false');
+          });
+        }
+      });
+
+      document.addEventListener('keydown', e => {
+        if(e.key === 'Escape') {
+          document.querySelectorAll('.dd').forEach(el => {
+            el.classList.remove('open');
+            const btn = el.querySelector('button[aria-expanded]');
+            if(btn) btn.setAttribute('aria-expanded','false');
+          });
+          closeMobileMenu();
+        }
+      });
+
+      window.addEventListener('scroll', () => {
+        const sids = SIDS;
+        const mid = window.scrollY + window.innerHeight * 0.4;
+        let active = sids[0];
+        for(let i=sids.length-1; i>=0; i--) {
+          const el = $(sids[i]+'-wrap');
+          if(el && el.offsetTop <= mid) { active = sids[i]; break; }
+        }
+        document.querySelectorAll('.nav-link').forEach(l => {
+          const isActive = l.getAttribute('href') === anchorFor(active);
+          l.style.background = isActive ? 'rgba(255,255,255,0.05)' : 'transparent';
+          l.style.color = isActive ? 'var(--chalk)' : 'var(--silver)';
+        });
+        document.querySelectorAll('.dot-link').forEach(l => {
+          const on = l.getAttribute('href') === anchorFor(active);
+          const ind = l.querySelector('.dot-indicator');
+          const lbl = l.querySelector('.dot-label');
+          if(ind) { ind.style.background = on ? 'var(--gold)' : 'var(--slate)'; ind.style.width = on ? '26px' : '6px'; }
+          if(lbl) lbl.style.display = on ? 'block' : 'none';
+        });
+      }, {passive:true});
+
+      window.addEventListener('scroll', () => {
+        const nb = $('navbar');
+        if(!nb) return;
+        nb.style.background = window.scrollY > 20 ? 'rgba(6,11,22,0.85)' : 'transparent';
+        nb.style.backdropFilter = window.scrollY > 20 ? 'blur(20px)' : 'none';
+        nb.style.borderBottom = window.scrollY > 20 ? '1px solid rgba(255,255,255,0.05)' : 'none';
+      }, {passive:true});
+    }
+
+    // Initialize App
+    window.addEventListener('load', () => {
+      init();
+      // Remove elegant preloader smoothly
+      setTimeout(() => {
+        const p = $('preloader');
+        if(p) {
+          p.style.opacity = '0';
+          p.style.visibility = 'hidden';
+          setTimeout(() => p.remove(), 800);
+        }
+      }, 1000);
+    });
+
+  </script>
+</body>
+</html>
