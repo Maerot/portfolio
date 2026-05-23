@@ -106,7 +106,7 @@
     }
     .gc:hover::before { opacity: 1; }
     .gc > * { position: relative; z-index: 2; }
-    .gc:hover { transform: translateY(-7px) !important; box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px var(--gold) !important; border-color: var(--gold) !important; z-index: 10; }
+    .gc:hover { transform: translateY(-7px) !important; box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px var(--gold) !important; border-color: var(--gold) !important; z-index: 10; cursor: pointer;}
     
     .xpc { border-left-color: transparent; }
 
@@ -132,22 +132,44 @@
     /* Responsive */
     .pcnav { display: flex !important; } .burg { display: none !important; }
     @media(max-width: 1100px) { .sdots { display: none !important; } }
-    @media(max-width: 900px) { .b7, .b5 { grid-column: 1 / -1 !important; } .c2 { grid-template-columns: 1fr !important; } .pjg { grid-template-columns: 1fr !important; } }
-    @media(max-width: 720px) { .pcnav { display: none !important; } .burg { display: flex !important; } .hsg { grid-template-columns: 1fr 1fr !important; } .edg { grid-template-columns: 1fr !important; } .b12 { grid-column: 1 / -1 !important; } }
+    @media(max-width: 900px) { .b7, .b5, .b12 { grid-column: 1 / -1 !important; } .c2 { grid-template-columns: 1fr !important; } .pjg { grid-template-columns: 1fr !important; } }
+    @media(max-width: 720px) { .pcnav { display: none !important; } .burg { display: flex !important; } .hsg { grid-template-columns: 1fr 1fr !important; } .edg { grid-template-columns: 1fr !important; } }
     
     .shimmer-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% 100%; animation: shimmer 4s linear infinite; }
 
-    /* Table styles */
-    .kpi-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; text-align: right; }
-    .kpi-table th { padding: 12px; font-weight: 600; border-bottom: 1px solid var(--dim); }
-    .kpi-table td { padding: 12px; border-bottom: 1px solid var(--dim); color: var(--chalk); }
-    .kpi-table tr:last-child td { border-bottom: none; }
+    /* Table styles (pour les modales) */
+    .kpi-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; text-align: right; margin: 24px 0;}
+    .kpi-table th { padding: 12px; font-weight: 600; border-bottom: 1px solid var(--dim); color: var(--chalk); }
+    .kpi-table td { padding: 12px; border-bottom: 1px solid var(--dim); color: var(--silver); }
     .kpi-table .text-left { text-align: left; }
     .kpi-table .text-center { text-align: center; }
-    .kpi-table th.top-hdr { border-bottom: none; padding-bottom: 4px; font-size: 11px; letter-spacing: 1px; color: var(--silver); }
-    .kpi-table .total-row td { font-weight: 700; color: var(--gold); border-top: 1px solid var(--slate); }
+    .kpi-table th.top-hdr { border-bottom: none; padding-bottom: 4px; font-size: 11px; letter-spacing: 1px; color: var(--gold); }
+    .kpi-table .total-row td { font-weight: 700; color: var(--chalk); border-top: 1px solid var(--slate); }
 
-    /* 3D Flip Card */
+    /* Modal System */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(6, 10, 18, 0.85); backdrop-filter: blur(8px);
+      z-index: 999999; display: flex; justify-content: flex-end; opacity: 0; pointer-events: none;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-content {
+      width: 100%; max-width: 700px; height: 100%; background: var(--bg1); border-left: 1px solid var(--dim);
+      box-shadow: -20px 0 60px rgba(0,0,0,0.5); transform: translateX(100%);
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden;
+    }
+    .modal-overlay.open .modal-content { transform: translateX(0); }
+    .modal-header { padding: 32px 40px; border-bottom: 1px solid var(--dim); position: sticky; top: 0; background: var(--bg1); z-index: 10; display: flex; justify-content: space-between; align-items: center; }
+    .modal-close { background: var(--bg3); border: 1px solid var(--dim); color: var(--silver); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+    .modal-close:hover { background: var(--coral); color: #fff; border-color: var(--coral); transform: rotate(90deg); }
+    .modal-body { padding: 40px; flex: 1; font-family: var(--font-ui); color: var(--silver); line-height: 1.7; font-size: 15px; }
+    .modal-body h4 { font-family: var(--font-display); font-size: 24px; color: var(--chalk); margin: 32px 0 16px; font-weight: 600; }
+    .modal-body p { margin-bottom: 16px; }
+    .modal-body ul { margin-bottom: 24px; padding-left: 20px; }
+    .modal-body li { margin-bottom: 8px; }
+
+    /* 3D Flip Card Hero (Digital Twin) */
     .flip-container { perspective: 1000px; cursor: pointer; display: inline-block; position: relative; }
     .flip-container:hover .flipper, .flip-container.flipped .flipper { transform: rotateY(180deg); }
     .flipper { transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); transform-style: preserve-3d; position: relative; width: 220px; height: 220px; z-index:2; }
@@ -155,9 +177,20 @@
     .front { border: 4px solid var(--gold); box-shadow: 0 8px 32px rgba(201,168,76,0.3); z-index: 2; transform: rotateY(0deg); }
     .back { border: 4px solid var(--azure); background: var(--bg2); transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 8px 32px rgba(30,122,255,0.4); }
     .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--azure); box-shadow: 0 0 10px var(--azureL), 0 0 20px var(--azureL); animation: scanline 2.5s ease-in-out infinite; opacity: 0.8; z-index: 10; }
-    
+    @keyframes scanline { 0%, 100% { top: 0; } 50% { top: 100%; } }
     .hint-toast { position: absolute; right: -80px; top: 20px; background: var(--bg3); border: 1px solid var(--dim); color: var(--silver); padding: 6px 12px; border-radius: 8px; font-family: var(--font-ui); font-size: 11px; opacity: 0; transform: translateX(-10px); transition: all 0.4s; pointer-events: none; }
     .flip-container:hover .hint-toast { opacity: 1; transform: translateX(0); }
+
+    /* 3D Flip Card Business Card (Footer) */
+    .bcard-container { perspective: 1200px; cursor: pointer; display: block; width: 100%; max-width: 600px; margin: 0 auto 48px; aspect-ratio: 16/9;}
+    .bcard-container:hover .bcard-flipper { transform: rotateY(180deg); }
+    .bcard-flipper { transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); transform-style: preserve-3d; position: relative; width: 100%; height: 100%; }
+    .bcard-front, .bcard-back { backface-visibility: hidden; position: absolute; inset: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid var(--dim); }
+    .bcard-front { z-index: 2; transform: rotateY(0deg); }
+    .bcard-back { transform: rotateY(180deg); }
+    .bcard-img { width: 100%; height: 100%; object-fit: cover; }
+    .click-hint { font-family: var(--font-mono); font-size: 10px; color: var(--gold); text-align: center; margin-top: 16px; letter-spacing: 2px; animation: pulse-text 2s infinite; }
+    @keyframes pulse-text { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
     /* Interactive Terminal Input */
     .term-input-row { display: flex; gap: 12px; align-items: center; }
@@ -181,6 +214,11 @@
 
     #ai-chat-messages::-webkit-scrollbar { width: 4px; }
     #ai-chat-messages::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+
+    /* Scroll to Top Button */
+    #scroll-top-btn { position: fixed; bottom: 32px; right: 32px; z-index: 999; width: 48px; height: 48px; border-radius: 50%; background: var(--bg2); border: 1px solid var(--dim); color: var(--silver); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.3); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.34,1.56,.64,1); transform: translateY(20px); }
+    #scroll-top-btn.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+    #scroll-top-btn.visible:hover { background: var(--gold); color: var(--bg0); border-color: var(--gold); transform: translateY(-4px); }
   </style>
 </head>
 <body>
@@ -204,6 +242,11 @@
   <div id="cursor-dot" style="position:fixed;z-index:9999;width:8px;height:8px;border-radius:50%;background:var(--gold);pointer-events:none;top:0;left:0;transition:transform .04s linear,background .3s;display:none;"></div>
   <div id="cursor-ring" style="position:fixed;z-index:9998;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--gold);pointer-events:none;top:0;left:0;transition:transform .13s ease,opacity .25s,border-color .3s;display:none;"></div>
 
+  <!-- Scroll to Top Button -->
+  <button id="scroll-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" aria-label="Remonter en haut">
+    <i data-lucide="arrow-up" style="width: 20px; height: 20px;"></i>
+  </button>
+
   <!-- Floating AI Bot Wrapper -->
   <div id="bot-wrap" style="position: fixed; bottom: 32px; left: 32px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-start;"></div>
 
@@ -212,30 +255,138 @@
   <header id="navbar" style="position:fixed;top:0;left:0;right:0;z-index:500;transition:all .5s;padding:20px 0;"></header>
 
   <!-- Main Content Wrappers -->
+  <!-- Note : Suppression de dash-wrap selon votre demande -->
   <main style="position:relative;z-index:10;">
     <section id="hero-wrap" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:130px 32px 90px;position:relative;text-align:center;"></section>
     <section id="skills-wrap" style="padding:110px 32px;position:relative;"></section>
     <section id="xp-wrap" style="padding:110px 32px;background:var(--bg1);position:relative;"></section>
     <section id="projects-wrap" style="padding:110px 32px;position:relative;"></section>
     <section id="reco-wrap" style="padding:110px 32px;background:var(--bg1);position:relative;"></section>
-    <section id="dash-wrap" style="padding:110px 32px;position:relative;"></section>
-    <section id="edu-wrap" style="padding:110px 32px;background:var(--bg1);position:relative;"></section>
-    <section id="future-wrap" style="padding:110px 32px;position:relative;"></section>
-    <section id="term-wrap" style="padding:110px 32px;background:var(--bg1);position:relative;"></section>
+    <section id="edu-wrap" style="padding:110px 32px;position:relative;"></section>
+    <section id="future-wrap" style="padding:110px 32px;background:var(--bg1);position:relative;"></section>
+    <section id="term-wrap" style="padding:110px 32px;position:relative;"></section>
   </main>
 
-  <footer id="cta-wrap" style="padding:110px 32px 64px;position:relative;z-index:10;"></footer>
+  <footer id="cta-wrap" style="padding:110px 32px 64px;background:var(--bg1);position:relative;z-index:10;"></footer>
+
+  <!-- Global Modal Element -->
+  <div id="global-modal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <h3 id="modal-title" style="font-family:var(--font-display); font-size: 28px; color: var(--chalk); margin: 0 0 4px;">Titre</h3>
+          <div id="modal-subtitle" style="font-family:var(--font-mono); font-size: 12px; color: var(--gold); letter-spacing: 1.5px;">Sous-titre</div>
+        </div>
+        <button class="modal-close" onclick="closeModal()"><i data-lucide="x"></i></button>
+      </div>
+      <div id="modal-body" class="modal-body">
+        <!-- Rempli dynamiquement -->
+      </div>
+    </div>
+  </div>
 
   <script>
     /* ════════════════════════════════════════════════════════════════════
+       DÉTAILS DES MODALES (REMPLACE LES FICHIERS JSON EXTERNES)
+       Ici vous pouvez facilement éditer le texte détaillé de chaque élément.
+    ════════════════════════════════════════════════════════════════════ */
+    const EXPANDED_DATA = {
+      fr: {
+        xps: [
+          { // GROHE
+            content: `
+              <p>Au sein de Grohe, j'ai pris en charge le pilotage complet des flux VMI (Vendor Managed Inventory). Mon rôle consistait à assurer un réapprovisionnement fluide et automatisé afin d'éviter les ruptures de stock tout en minimisant les coûts d'entreposage.</p>
+              <h4>Missions principales</h4>
+              <ul>
+                <li>Optimisation des portefeuilles produits et ajustement des paramètres de couverture de stock.</li>
+                <li>Création de tableaux de bord automatisés sous BigQuery et Power BI pour suivre l'OTIF et la disponibilité en temps réel.</li>
+                <li>Développement d'outils internes via AppSheet pour digitaliser les processus terrain.</li>
+              </ul>
+              <h4>KPI : Suivi des Écarts d'Inventaire</h4>
+              <p>Voici un exemple de tableau de bord permettant d'identifier rapidement la justesse de l'inventaire en magasin (données d'illustration) :</p>
+              <table class="kpi-table">
+                <thead>
+                  <tr>
+                    <th class="top-hdr"></th>
+                    <th colspan="3" class="top-hdr text-center" style="border-left:1px solid var(--dim);border-right:1px solid var(--dim)">RÉPARTITION DES ÉCARTS</th>
+                    <th colspan="2" class="top-hdr text-center">POURCENTAGE</th>
+                  </tr>
+                  <tr style="background:var(--bg3);color:var(--silver);">
+                    <th class="text-left" style="color:var(--chalk)">Magasin</th>
+                    <th style="color:var(--coral)">FAUX</th>
+                    <th style="color:var(--emerald)">VRAI</th>
+                    <th style="border-right:1px solid var(--dim)">Total</th>
+                    <th style="color:var(--coral)">ÉCART</th>
+                    <th style="color:var(--emerald)">ISO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="text-left">L001</td><td>0</td><td>435</td><td style="border-right:1px solid var(--dim);font-weight:600">435</td><td style="color:var(--silver)">0%</td><td>100%</td></tr>
+                  <tr><td class="text-left">L002</td><td>3</td><td>147</td><td style="border-right:1px solid var(--dim);font-weight:600">150</td><td style="color:var(--silver)">2%</td><td>98%</td></tr>
+                  <tr class="total-row"><td class="text-left">Total</td><td style="color:var(--coral)">3</td><td style="color:var(--emerald)">582</td><td style="border-right:1px solid var(--dim)">585</td><td style="color:var(--coral)">0.5%</td><td style="color:var(--emerald)">99.5%</td></tr>
+                </tbody>
+              </table>
+            `
+          },
+          { // SNCF
+            content: `
+              <p>En tant que Pilote Performance Production, mon objectif était d'assurer la fluidité de la chaîne d'approvisionnement des pièces de maintenance pour les techniciens SNCF.</p>
+              <h4>Réalisations</h4>
+              <ul>
+                <li>Mise en place d'un suivi analytique poussé des KPIs de production.</li>
+                <li>Création d'un système de "Ticketing" pour centraliser et accélérer la résolution des litiges et anomalies logistiques.</li>
+                <li><strong>Gestion des stocks IT :</strong> Réorganisation physique et informatique de l'entrepôt, fiabilisation des inventaires et traitement des écarts de stock.</li>
+              </ul>
+            `
+          },
+          { // Lapeyre
+            content: `
+              <p>Supervision opérationnelle d'un entrepôt de 35 000 m². Mon rôle était fondamentalement axé sur le management de terrain et le maintien des flux de préparation.</p>
+              <h4>Focus : Gestion des préparations de commande</h4>
+              <ul>
+                <li>Animation d'une équipe de 12 préparateurs et caristes.</li>
+                <li>Suivi quotidien du taux de service et du volume de colis expédiés.</li>
+                <li>Garantie de l'intégrité des stocks et gestion des priorités d'expédition.</li>
+              </ul>
+            `
+          },
+          { // T.E.A
+            content: `
+              <p>Planification du transport à l'échelle nationale. Une expérience forte en réactivité et en optimisation sous contrainte.</p>
+              <h4>Focus : L'OTIF (On-Time In-Full)</h4>
+              <p>Le KPI roi de cette expérience était l'OTIF. Chaque jour nécessitait un ajustement fin des tournées pour garantir la livraison au client final dans les délais impartis, malgré les aléas climatiques ou mécaniques.</p>
+            `
+          },
+          { // Promocash
+            content: `
+              <p>Expérience polyvalente alliant logistique, gestion des commandes clients et management opérationnel.</p>
+            `
+          }
+        ],
+        projects: [
+          { content: "<p>Détails complets de l'application Reverse Logistics développée sur AppSheet. Présentée au siège social (HQ) en Allemagne, elle vise à éliminer l'usage du papier dans le processus de retour et est en voie d'adoption par d'autres pays.</p>" },
+          { content: "<p>Explications sur les scripts Python pour SAP. Ces scripts automatisent la vérification des quantités et des prix lors des retours clients, avec un envoi automatique des anomalies sur Google Chat.</p>" },
+          { content: "<p>Détails sur l'automatisation VMI sous BigQuery. Extraction, transformation et chargement (ETL) des données fournisseurs pour alimenter un algorithme de réapprovisionnement optimisé.</p>" },
+          { content: "<p>Système de ticketing SNCF : Développement d'une interface complète (React/Node.js) permettant aux techniciens de signaler les pièces manquantes en temps réel, réduisant le temps de traitement de 40%.</p>" }
+        ],
+        schools: [
+          { content: "<p><strong>Master (MSc) Transport, Logistique & Commerce International</strong></p><p>Mémoire de fin d'étude et projets KEDGE à insérer ici avec des images d'illustration.</p>" },
+          { content: "<p><strong>Licence Pro Responsable en Logistique (iSTELI)</strong></p><p>Détails du Bachelor ISTELI et des cas d'études douane/transport internationaux. Approfondissement des incoterms et de la législation douanière.</p>" },
+          { content: "<p><strong>BTS GTLA</strong></p><p>Informations sur le BTS GTLA. Maîtrise des fondamentaux du transport routier, maritime et aérien, ainsi que la gestion d'une flotte de véhicules.</p>" }
+        ],
+        future: [
+          { content: "<p>Pourquoi un VIE ? Je souhaite confronter ma rigueur analytique aux réalités de terrains internationaux complexes. Mes cibles (Singapour, Allemagne, Australie) représentent des hubs logistiques stratégiques où l'innovation technologique rencontre des volumes massifs.</p>" },
+          { content: "<p>Le choix entre un parcours très orienté ingénierie de la donnée (TUM) ou management stratégique (KLU) dépendra des opportunités découvertes lors de mon VIE. L'objectif final reste d'allier Data Science et Supply Chain Strategy à un niveau de direction.</p>" }
+        ]
+      }
+    };
+    
+    // Fallback dynamique pour les autres langues pour ne pas alourdir le fichier
+    ['en', 'de', 'ru'].forEach(l => { EXPANDED_DATA[l] = JSON.parse(JSON.stringify(EXPANDED_DATA.fr)); });
+
+    /* ════════════════════════════════════════════════════════════════════
        DATA, GLOSSARY & THEMES
     ════════════════════════════════════════════════════════════════════ */
-    const F = {
-      display: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
-      ui: "'DM Sans', 'Manrope', system-ui, sans-serif",
-      mono: "'JetBrains Mono', 'Fira Code', monospace"
-    };
-
     const THEMES = {
       wada1: { id:"wada1", name:"❀ Karashi & Ruri", bg0:"#060a12", bg1:"#0a111c", bg2:"#101926", bg3:"#162333", gold:"#d0af4c", goldL:"#e6cc7a", goldD:"#9c8031", azure:"#2a5ca8", azureL:"#5086d9", chalk:"#eae6db", silver:"#94a0b3", slate:"#435c75", dim:"#1c2838", emerald:"#789c65", coral:"#c7645d", lilac:"#5e7a96" },
       wada2: { id:"wada2", name:"✿ Asagi & Toki", bg0:"#051115", bg1:"#091a20", bg2:"#0e252e", bg3:"#143440", gold:"#1c7c91", goldL:"#33a2bd", goldD:"#115261", azure:"#c78b90", azureL:"#e3a8ad", chalk:"#ebe5dc", silver:"#8fa5ad", slate:"#395b66", dim:"#172d36", emerald:"#89a874", coral:"#c96f6f", lilac:"#d4b872" },
@@ -253,21 +404,25 @@
     const LANG_FLAGS = { fr:"🇫🇷", en:"🇬🇧", de:"🇩🇪", ru:"🇷🇺" };
     const LANG_LIST = ["fr","en","de","ru"];
 
-    const SIDS = ["skills","xp","projects","reco","dash","edu","future","term","cta"];
+    // Suppression de "dash" dans les sections de navigation
+    const SIDS = ["skills","xp","projects","reco","edu","future","term","cta"];
 
     const DICT = {
       fr:{
         badge:"Disponible — Mobile en Europe", eyebrow:"Data Analyst & Supply Chain Coordinator", h1:["Transformer les flux","en décisions."], sub:"Expert en modélisation de données logistiques et optimisation des processus industriels. M1 MTLCI — Kedge Business School.", cta1:"Voir le parcours", cta2:"Mes Projets", 
-        navLabels:["Expertise","Expérience","Projets","Références","Dashboard","Formation","Avenir","Terminal","Contact"], navCV: "CV",
+        navLabels:["Expertise","Expérience","Projets","Références","Formation","Avenir","Terminal","Contact"], navCV: "CV",
         statusLabel: "Dispo", statusFull: "Disponibilité : Nov. 2027",
-        sNums:["01","02","03","04","05","06","07","08","09"], 
-        kpis:["Taux de Service","OTIF","Rotation Stock","Écart de Stock"], 
-        periods:[["ytd","YTD 2025"],["q3","Q3 2025"],["q2","Q2 2025"]], 
-        charts:["OTIF & Taux de Service","Compétences Analytiques","Évolution Écarts de Stock"], chartSubs:["évolution mensuelle","radar d'expertise","VS VOLUME GLOBAL"], 
+        sNums:["01","02","03","04","05","06","07","08"], 
         contactTitle:"Travaillons ensemble", contactSub:"Ouvert aux opportunités Supply Chain, Data & Logistique — mobile en Europe et à l'international.", contactCTA:"Contact", tags:["Kedge Business School","GROHE · SNCF · T.E.A.","Disponible"], 
-        stats:[["4+","Ans d'XP"],["5","Entreprises"],["5","Langues"],["10+","Outils"]], scrollLabel:"DÉFILER", footerLeft:`© ${new Date().getFullYear()} Raphaël Chaumény — Tous droits réservés`, footerRight:"Développé avec HTML/JS Vanilla · Chart.js", 
-        techTitle:"Data & Analytique", techSub:"STACK TECHNIQUE", opsTitle:"Opérations SC", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"LEADERSHIP & COMMS", langsTitle:"Langues", langsSub:"MULTILINGUE", kpiCard:"Écarts d'Inventaire", projPlaceholder:"// Le projet AppSheet (Reverse logistic) est toujours en cours",
-        certifTitle: "Certifications & Standards", certifs: ["TOEIC (945/990) - C1", "Lean Six Sigma Green Belt", "Google Data Analytics", "APICS CPIM (En préparation)", "Scrum Master PSM I"],
+        stats:[["4+","Ans d'XP"],["5","Entreprises"],["5","Langues"],["10+","Outils"]], scrollLabel:"DÉFILER", footerLeft:`© ${new Date().getFullYear()} Raphaël Chaumény — Tous droits réservés`, footerRight:"Développé avec HTML/JS Vanilla", 
+        techTitle:"Data & Analytique", techSub:"STACK TECHNIQUE", opsTitle:"Opérations SC", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"LEADERSHIP & COMMS", langsTitle:"Langues", langsSub:"MULTILINGUE", projPlaceholder:"// Le projet AppSheet (Reverse logistic) est toujours en cours",
+        certifTitle: "Certifications", 
+        certifs: [
+          "TOEIC (En préparation)", 
+          "Lean Six Sigma Green Belt (En préparation)", 
+          "Google Data Analytics (En préparation)", 
+          "Certificat Commerce International (M1 Kedge BS)"
+        ],
         futureTitle:"Vision & Avenir", futureSub:"OBJECTIFS POST-MASTER",
         recoTitle:"Recommandations", recoSub:"RÉFÉRENCES PROFESSIONNELLES",
         termTitle:"Terminal Interactif",
@@ -277,32 +432,66 @@
         botFallback:"Je ne suis pas sûr de comprendre. Utilisez les suggestions ci-dessus !",
         chatSuggestions: ["📅 Dispo ?", "💰 Prétentions ?", "🎯 Fierté ?", "🌟 Passions ?"],
         glossary: { "VMI": "Vendor Managed Inventory : Gestion partagée des approvisionnements.", "OTIF": "On-Time In-Full : Taux de commandes livrées à l'heure et complètes.", "ERP": "Enterprise Resource Planning : Progiciel de gestion intégré.", "WMS": "Warehouse Management System : Système de gestion d'entrepôt.", "TMS": "Transport Management System : Logiciel d'optimisation transport.", "OOS": "Out of Stock : Rupture de stock.", "KPIs": "Key Performance Indicators : Indicateurs clés de performance." },
-        techStack:[{n:"Power BI",sub:"Visualisation",color:"gold"},{n:"Python",sub:"Analyse",color:"azure"},{n:"BigQuery",sub:"Entrepôt de données",color:"lilac"},{n:"SQL",sub:"Requêtage",color:"gold"},{n:"Apps Script",sub:"Automatisation",color:"emerald"},{n:"AppSheet",sub:"No-Code",color:"azure"},{n:"ERP / WMS",sub:"Opérations",color:"lilac"},{n:"Syniti",sub:"Qualité données",color:"coral"}],
-        opsSkills:["VMI & Réapprovisionnement automatique","Optimisation de stock & couverture","Transport Planning & TMS","Gestion WMS / ERP avancée","Amélioration Continue (Lean/Kaizen)"],
-        softSkills:[{s:"Résolution de problèmes",p:94,c:"gold"},{s:"Communication Int.",p:92,c:"azure"},{s:"Adaptabilité",p:91,c:"lilac"},{s:"Data Storytelling",p:89,c:"emerald"},{s:"Management Transverse",p:86,c:"gold"}],
-        langs:[{l:"Français",lv:"Natif",p:100,f:"FR"},{l:"Anglais",lv:"C1",p:85,f:"EN"},{l:"Ukrainien",lv:"B1",p:55,f:"UA"},{l:"Russe",lv:"A2",p:35,f:"RU"},{l:"Allemand",lv:"A1",p:25,f:"DE"}],
-        radar:[{s:"Coordination",v:100},{s:"WMS/ERP",v:100},{s:"VMI",v:80},{s:"Transport",v:80},{s:"Data Viz",v:60},{s:"SQL/Python",v:40}],
+        techStack:[
+          {n:"Power BI",sub:"Visualisation",color:"gold"},
+          {n:"Python",sub:"Analyse",color:"azure"},
+          {n:"BigQuery",sub:"Entrepôt de données",color:"lilac"},
+          {n:"SQL",sub:"Requêtage",color:"gold"},
+          {n:"Apps Script",sub:"Automatisation",color:"emerald"},
+          {n:"AppSheet",sub:"No-Code",color:"azure"},
+          {n:"ERP / WMS",sub:"Opérations",color:"lilac"},
+          {n:"Syniti",sub:"Qualité données",color:"coral"}
+        ],
+        opsSkills:[
+          "VMI & Réapprovisionnement automatique",
+          "Optimisation de stock & couverture",
+          "Transport Planning & TMS",
+          "Gestion WMS / ERP avancée",
+          "Amélioration Continue (Lean/Kaizen)"
+        ],
+        softSkills:[
+          {s:"Résolution de problèmes",p:94,c:"gold"},
+          {s:"Communication Int.",p:92,c:"azure"},
+          {s:"Adaptabilité",p:91,c:"lilac"},
+          {s:"Data Storytelling",p:89,c:"emerald"},
+          {s:"Management Transverse",p:86,c:"gold"}
+        ],
+        langs:[
+          {l:"Français",lv:"Natif",p:100,f:"FR"},
+          {l:"Anglais",lv:"C1",p:85,f:"EN"},
+          {l:"Ukrainien",lv:"A2",p:35,f:"UA"},
+          {l:"Russe",lv:"A1",p:20,f:"RU"},
+          {l:"Allemand",lv:"A1",p:20,f:"DE"}
+        ],
+        radar:[
+          {s:"Coordination",v:100},
+          {s:"WMS/ERP",v:100},
+          {s:"VMI",v:80},
+          {s:"Transport",v:80},
+          {s:"Data Viz",v:60},
+          {s:"SQL/Python",v:40}
+        ],
         xps:[
           {co:"GROHE — LIXIL Group",role:"Supply Chain Coordinator",period:"Sep 2025 — Présent",loc:"France",color:"gold",tags:["VMI","BigQuery","Python","OTIF"],pts:["Pilotage VMI : portefeuille produits, réapprovisionnements automatiques, disponibilité.","Tableaux de bord KPIs logistiques (ruptures, couverture, OTIF) via data multi-sources.","Déploiement Apps Script, AppSheet, BigQuery et Syniti pour l'automatisation des flux."]},
           {co:"SNCF Supply Chain",role:"Pilote Performance Production",period:"Jan — Sep 2025",loc:"Paris",color:"azure",tags:["Power BI","ERP","Ticketing"],pts:["Suivi KPIs via ERP, WMS et dashboards Power BI temps réel.","Conception et déploiement d'un outil de ticketing interne (−40% délai résolution).","Optimisation des niveaux d'inventaire par analyses croisées et modélisation."]},
           {co:"Lapeyre Logistique",role:"Superviseur Logistique",period:"Sep — Déc 2024",loc:"Rungis",color:"emerald",tags:["Management","WMS","Stocks"],pts:["Supervision réceptions, commandes et inventaires physiques (35 000 m²).","Management, formation et coaching d'une équipe de 12 opérateurs terrain."]},
           {co:"T.E.A.",role:"Planificateur Transport",period:"Avr 2023 — Jun 2024",loc:"Fleury-Mérogis",color:"lilac",tags:["Exploitant","TMS","Optimisation"],pts:["Planification et optimisation des tournées de livraison nationales sur TMS.","Coordination inter-sites et gestion proactive des exceptions opérationnelles."]},
-          {co:"Promocash",role:"Responsable Logistique & Opérations",period:"Jul 2022 — Mar 2023",loc:"Antony",color:"coral",tags:["Opérations","Commandes","Tournées"],pts:["Gestion des commandes et litiges clients, garantie de la fiabilité des livraisons.","Optimisation des tournées de livraison et des ressources opérationnelles."]},
+          {co:"Promocash",role:"Responsable Logistique & Opérations",period:"Jul 2022 — Mar 2023",loc:"Antony",color:"coral",tags:["Opérations","Commandes","Tournées"],pts:["Gestion des commandes et litiges clients, garantie de la fiabilité des livraisons.","Optimisation des tournées de livraison et des ressources opérationnelles."]}
         ],
         schools:[
           {school:"KEDGE Business School",loc:"Marseille",period:"2025–2027",color:"gold",degree:"Master (MSc) Transport, Logistique & Commerce Int.",desc:"Spécialisation : Digitalisation et intégration de l'IA au sein de la Supply Chain et de la logistique."},
           {school:"Institut Nemo — iSTELI",loc:"Paris",period:"2024–2025",color:"azure",degree:"Licence Pro Responsable en Logistique",desc:"Flux internationaux, contrôle supply chain, leadership opérationnel et douanes."},
-          {school:"LPO Gaspard Monge",loc:"Savigny-sur-Orge",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Gestion des Transports et Logistique Associée)",desc:"Fondations techniques, transports multimodaux et gestion de flotte."},
+          {school:"LPO Gaspard Monge",loc:"Savigny-sur-Orge",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Gestion des Transports et Logistique Associée)",desc:"Fondations techniques, transports multimodaux et gestion de flotte."}
         ],
         future: [
           {role:"Projet V.I.E.", co:"Supply Chain / Data Analyst", period:"Post-Master (Novembre 2027)", loc:"Singapour / Allemagne / Australie", color:"azure", tags:["Expatriation","Opérations","Langues"], pts:["Disponibilité à partir du 1er Novembre 2027 pour une immersion professionnelle à l'étranger (Volontariat International en Entreprise).","Pratique immersive et perfectionnement continu de mes compétences linguistiques."]},
           {role:"MSc Supply Chain Engineering / Management", co:"KLU Hamburg ou TUM Asia", period:"2028 — 2029", loc:"Allemagne / Singapour", color:"gold", tags:["Ingénierie","Stratégie","Excellence"], pts:["Spécialisation de haut niveau technique et managérial au sein d'institutions prestigieuses.","Projet d'intégrer soit l'approche ingénierie de la TUM Asia (Singapour), soit l'expertise Supply Chain de la KLU (Hambourg)."]}
         ],
         projects:[
-          {id:"p1",title:"Reverse Logistics App",type:"App Development",color:"gold",desc:"Outil de réception des bons de retour en entrepôt, développé sur AppSheet avec l'écosystème Google Workspace (présenté au HQ).",kpis:["0 Papier","Adoption Monde"],tags:["AppSheet","Google Apps Script","Logistique"],link:"#",github:"#"},
-          {id:"p2",title:"SAP Python Automation",type:"RPA & Scripting",color:"azure",desc:"Scripts Python automatisant les tâches SAP (validation retours, vérif. prix/quantités) avec reporting direct sur Google Chat.",kpis:["Gain de temps massif","0 Erreur de saisie"],tags:["Python","SAP","Google Chat API"],link:"#",github:null},
-          {id:"p3",title:"VMI Automation Engine",type:"Data Engineering",color:"lilac",desc:"Automatisation complète des réapprovisionnements VMI via Python et BigQuery, réduisant les ruptures de 15%.",kpis:["-15% OOS","+22h/mois"],tags:["Python","BigQuery","GCP"],link:null,github:"#"},
-          {id:"p4",title:"Ticketing System SNCF",type:"App Development",color:"emerald",desc:"Application interne pour la gestion et le suivi des incidents de production logistique en temps réel.",kpis:["-40% Résolution","200+ Users"],tags:["React","Node.js","SQL"],link:"#",github:null},
+          {id:"p1",title:"Reverse Logistics App",type:"App Development",color:"gold",desc:"Outil de réception des bons de retour en entrepôt, développé sur AppSheet avec l'écosystème Google Workspace (présenté au HQ).",kpis:["0 Papier","Adoption Monde"],tags:["AppSheet","Google Apps Script","Logistique"]},
+          {id:"p2",title:"SAP Python Automation",type:"RPA & Scripting",color:"azure",desc:"Scripts Python automatisant les tâches SAP (validation retours, vérif. prix/quantités) avec reporting direct sur Google Chat.",kpis:["Gain de temps massif","0 Erreur de saisie"],tags:["Python","SAP","Google Chat API"]},
+          {id:"p3",title:"VMI Automation Engine",type:"Data Engineering",color:"lilac",desc:"Automatisation complète des réapprovisionnements VMI via Python et BigQuery, réduisant les ruptures de 15%.",kpis:["-15% OOS","+22h/mois"],tags:["Python","BigQuery","GCP"]},
+          {id:"p4",title:"Ticketing System SNCF",type:"App Development",color:"emerald",desc:"Application interne pour la gestion et le suivi des incidents de production logistique en temps réel.",kpis:["-40% Résolution","200+ Users"],tags:["React","Node.js","SQL"]},
         ],
         recos: [
           { title: "Lettre de Recommandation", author: "Direction Supply Chain", co: "GROHE (LIXIL Group)", file: "reco_grohe.pdf", color: "gold" }
@@ -319,17 +508,19 @@
       },
       en:{
         badge:"Available — Mobile Across Europe", eyebrow:"Data Analyst & Supply Chain Coordinator", h1:["Transforming flows","into decisions."], sub:"Expert in logistics data modeling and industrial process optimization. MSc MTLCI — Kedge Business School.", cta1:"View Experience", cta2:"My Projects", 
-        navLabels:["Expertise","Experience","Projects","References","Dashboard","Education","Future","Terminal","Contact"], navCV: "CV",
+        navLabels:["Expertise","Experience","Projects","References","Education","Future","Terminal","Contact"], navCV: "CV",
         statusLabel: "Avail.", statusFull: "Available: Nov 2027",
-        sids:["skills","xp","projects","reco","dash","edu","future","term","cta"], 
-        sNums:["01","02","03","04","05","06","07","08","09"], 
-        kpis:["Service Rate","OTIF","Inventory Turn","Stock Discrepancy"], 
-        periods:[["ytd","YTD 2025"],["q3","Q3 2025"],["q2","Q2 2025"]], 
-        charts:["OTIF & Service Rate","Analytical Skills","Stock Discrepancy Evolution"], chartSubs:["monthly trend","expertise radar","VS OVERALL VOLUME"], 
+        sNums:["01","02","03","04","05","06","07","08"], 
         contactTitle:"Let's work together", contactSub:"Open to Supply Chain, Data & Logistics roles — mobile across Europe and internationally.", contactCTA:"Contact", tags:["Kedge Business School","GROHE · SNCF · T.E.A.","Available"], 
-        stats:[["4+","Years XP"],["5","Companies"],["5","Languages"],["10+","Tools"]], scrollLabel:"SCROLL", footerLeft:`© ${new Date().getFullYear()} Raphaël Chaumény — All rights reserved`, footerRight:"Built with HTML/JS Vanilla · Chart.js", 
-        techTitle:"Data & Analytics", techSub:"TECH STACK", opsTitle:"SC Operations", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"LEADERSHIP & COMMS", langsTitle:"Languages", langsSub:"MULTILINGUAL", kpiCard:"Inventory Discrepancy", projPlaceholder:"// The AppSheet project (Reverse logistic) is still ongoing",
-        certifTitle: "Certifications & Standards", certifs: ["TOEIC (945/990) - C1", "Lean Six Sigma Green Belt", "Google Data Analytics", "APICS CPIM (In Prep)", "Scrum Master PSM I"],
+        stats:[["4+","Years XP"],["5","Companies"],["5","Languages"],["10+","Tools"]], scrollLabel:"SCROLL", footerLeft:`© ${new Date().getFullYear()} Raphaël Chaumény — All rights reserved`, footerRight:"Built with HTML/JS Vanilla", 
+        techTitle:"Data & Analytics", techSub:"TECH STACK", opsTitle:"SC Operations", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"LEADERSHIP & COMMS", langsTitle:"Languages", langsSub:"MULTILINGUAL", projPlaceholder:"// The AppSheet project (Reverse logistic) is still ongoing",
+        certifTitle: "Certifications", 
+        certifs: [
+          "TOEIC (In Prep)", 
+          "Lean Six Sigma Green Belt (In Prep)", 
+          "Google Data Analytics (In Prep)", 
+          "International Trade Certificate (M1 Kedge BS)"
+        ],
         futureTitle:"Vision & Future", futureSub:"POST-MASTER GOALS",
         recoTitle:"Recommendations", recoSub:"PROFESSIONAL REFERENCES",
         termTitle:"Interactive Terminal",
@@ -339,32 +530,66 @@
         botFallback:"I'm not sure I understand. Please use the quick suggestions above!",
         chatSuggestions: ["📅 Available?", "💰 Salary?", "🎯 Proudest?", "🌟 Hobbies?"],
         glossary: { "VMI": "Vendor Managed Inventory", "OTIF": "On-Time In-Full", "ERP": "Enterprise Resource Planning", "WMS": "Warehouse Management System", "TMS": "Transport Management System", "OOS": "Out of Stock", "KPIs": "Key Performance Indicators" },
-        techStack:[{n:"Power BI",sub:"Data Viz",color:"gold"},{n:"Python",sub:"Analysis",color:"azure"},{n:"BigQuery",sub:"Data Warehouse",color:"lilac"},{n:"SQL",sub:"Querying",color:"gold"},{n:"Apps Script",sub:"Automation",color:"emerald"},{n:"AppSheet",sub:"No-Code",color:"azure"},{n:"ERP / WMS",sub:"Operations",color:"lilac"},{n:"Syniti",sub:"Data Quality",color:"coral"}],
-        opsSkills:["VMI & Automated Replenishment","Stock optimization & coverage","Transport Planning & TMS","Advanced WMS / ERP Management","Continuous Improvement (Lean/Kaizen)"],
-        softSkills:[{s:"Problem Solving",p:94,c:"gold"},{s:"Int. Communication",p:92,c:"azure"},{s:"Adaptability",p:91,c:"lilac"},{s:"Data Storytelling",p:89,c:"emerald"},{s:"Cross-team Mgmt",p:86,c:"gold"}],
-        langs:[{l:"French",lv:"Native",p:100,f:"FR"},{l:"English",lv:"C1",p:85,f:"EN"},{l:"Ukrainian",lv:"B1",p:55,f:"UA"},{l:"Russian",lv:"A2",p:35,f:"RU"},{l:"German",lv:"A1",p:25,f:"DE"}],
-        radar:[{s:"Coordination",v:100},{s:"WMS/ERP",v:100},{s:"VMI",v:80},{s:"Transport",v:80},{s:"Data Viz",v:60},{s:"SQL/Python",v:40}],
+        techStack:[
+          {n:"Power BI",sub:"Data Viz",color:"gold"},
+          {n:"Python",sub:"Analysis",color:"azure"},
+          {n:"BigQuery",sub:"Data Warehouse",color:"lilac"},
+          {n:"SQL",sub:"Querying",color:"gold"},
+          {n:"Apps Script",sub:"Automation",color:"emerald"},
+          {n:"AppSheet",sub:"No-Code",color:"azure"},
+          {n:"ERP / WMS",sub:"Operations",color:"lilac"},
+          {n:"Syniti",sub:"Data Quality",color:"coral"}
+        ],
+        opsSkills:[
+          "VMI & Automated Replenishment",
+          "Stock optimization & coverage",
+          "Transport Planning & TMS",
+          "Advanced WMS / ERP Management",
+          "Continuous Improvement (Lean/Kaizen)"
+        ],
+        softSkills:[
+          {s:"Problem Solving",p:94,c:"gold"},
+          {s:"Int. Communication",p:92,c:"azure"},
+          {s:"Adaptability",p:91,c:"lilac"},
+          {s:"Data Storytelling",p:89,c:"emerald"},
+          {s:"Cross-team Mgmt",p:86,c:"gold"}
+        ],
+        langs:[
+          {l:"French",lv:"Native",p:100,f:"FR"},
+          {l:"English",lv:"C1",p:85,f:"EN"},
+          {l:"Ukrainian",lv:"A2",p:35,f:"UA"},
+          {l:"Russian",lv:"A1",p:20,f:"RU"},
+          {l:"German",lv:"A1",p:20,f:"DE"}
+        ],
+        radar:[
+          {s:"Coordination",v:100},
+          {s:"WMS/ERP",v:100},
+          {s:"VMI",v:80},
+          {s:"Transport",v:80},
+          {s:"Data Viz",v:60},
+          {s:"SQL/Python",v:40}
+        ],
         xps:[
           {co:"GROHE — LIXIL Group",role:"Supply Chain Coordinator",period:"Sep 2025 — Present",loc:"France",color:"gold",tags:["VMI","BigQuery","Python","OTIF"],pts:["VMI management: product portfolio, automated replenishments, availability optimization.","Logistics KPI dashboards (stockouts, coverage, OTIF) via multi-source data.","Deployment of Apps Script, AppSheet, BigQuery & Syniti for flow automation."]},
           {co:"SNCF Supply Chain",role:"Production Performance Lead",period:"Jan — Sep 2025",loc:"Paris",color:"azure",tags:["Power BI","ERP","Ticketing"],pts:["Tracking logistics KPIs via ERP, WMS and real-time Power BI dashboards.","Design and deployment of an internal ticketing tool (−40% resolution time).","Inventory level optimization through cross-analysis and modeling."]},
           {co:"Lapeyre Logistique",role:"Logistics Supervisor",period:"Sep — Dec 2024",loc:"Rungis",color:"emerald",tags:["Management","WMS","Stocks"],pts:["Supervision of receipts, orders and physical inventories (35,000 m² warehouse).","Management, training and coaching of a 12-person floor team."]},
           {co:"T.E.A.",role:"Transport Planner",period:"Apr 2023 — Jun 2024",loc:"Fleury-Mérogis",color:"lilac",tags:["Transport Planning","TMS","Optimization"],pts:["Planning and optimization of national delivery routes on TMS.","Inter-site coordination and proactive management of operational exceptions."]},
-          {co:"Promocash",role:"Logistics & Operations Manager",period:"Jul 2022 — Mar 2023",loc:"Antony",color:"coral",tags:["Operations","Orders","Routing"],pts:["Management of orders and customer disputes, guaranteeing delivery reliability.","Optimization of delivery routes and operational resources."]},
+          {co:"Promocash",role:"Logistics & Operations Manager",period:"Jul 2022 — Mar 2023",loc:"Antony",color:"coral",tags:["Operations","Orders","Routing"],pts:["Management of orders and customer disputes, guaranteeing delivery reliability.","Optimization of delivery routes and operational resources."]}
         ],
         schools:[
           {school:"KEDGE Business School",loc:"Marseille",period:"2025–2027",color:"gold",degree:"Master (MSc) Transport, Logistics & Int. Trade",desc:"Specialization: Digitalization and integration of AI within Supply Chain and logistics."},
           {school:"Institut Nemo — iSTELI",loc:"Paris",period:"2024–2025",color:"azure",degree:"Bachelor's — Responsable en Logistique",desc:"International flows, supply chain control, operational leadership and customs regulations."},
-          {school:"LPO Gaspard Monge",loc:"Savigny-sur-Orge",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Transport & Logistics)",desc:"Technical foundations, multimodal transport and fleet management."},
+          {school:"LPO Gaspard Monge",loc:"Savigny-sur-Orge",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Transport & Logistics)",desc:"Technical foundations, multimodal transport and fleet management."}
         ],
         future: [
           {role:"V.I.E. Project", co:"Supply Chain / Data Analyst", period:"Post-Master (Nov 2027)", loc:"Singapore / Germany / Aus.", color:"azure", tags:["Expatriation","Operations","Languages"], pts:["Available from November 1st, 2027 for a professional immersion abroad (V.I.E program) to consolidate my international expertise.","Immersive practice and continuous improvement of my language skills."]},
           {role:"MSc Supply Chain Engineering / Management", co:"KLU Hamburg or TUM Asia", period:"2028 — 2029", loc:"Germany / Singapore", color:"gold", tags:["Engineering","Strategy","Excellence"], pts:["High-level technical and managerial specialization in prestigious institutions.","Goal to join either the engineering approach of TUM Asia (Singapore) or the Supply Chain expertise of KLU (Hamburg)."]}
         ],
         projects:[
-          {id:"p1",title:"Reverse Logistics App",type:"App Development",color:"gold",desc:"Warehouse return slips receiving tool, built on AppSheet with the Google Workspace ecosystem (presented at HQ).",kpis:["Paperless","Global Adoption"],tags:["AppSheet","Google Apps Script","Logistics"],link:"#",github:"#"},
-          {id:"p2",title:"SAP Python Automation",type:"RPA & Scripting",color:"azure",desc:"Python scripts to automate SAP tasks (return validation, price/quantity checks) with direct Google Chat reporting.",kpis:["Massive time saved","0 Input Error"],tags:["Python","SAP","Google Chat API"],link:"#",github:null},
-          {id:"p3",title:"VMI Automation Engine",type:"Data Engineering",color:"lilac",desc:"Full automation of VMI replenishments via Python and BigQuery, reducing stockouts by 15%.",kpis:["-15% OOS","+22h/month"],tags:["Python","BigQuery","GCP"],link:null,github:"#"},
-          {id:"p4",title:"SNCF Ticketing System",type:"App Development",color:"emerald",desc:"Full-stack internal application for real-time management of logistics production incidents.",kpis:["-40% Resolution","200+ Users"],tags:["React","Node.js","SQL"],link:"#",github:null},
+          {id:"p1",title:"Reverse Logistics App",type:"App Development",color:"gold",desc:"Warehouse return slips receiving tool, built on AppSheet with the Google Workspace ecosystem (presented at HQ).",kpis:["Paperless","Global Adoption"],tags:["AppSheet","Google Apps Script","Logistics"]},
+          {id:"p2",title:"SAP Python Automation",type:"RPA & Scripting",color:"azure",desc:"Python scripts to automate SAP tasks (return validation, price/quantity checks) with direct Google Chat reporting.",kpis:["Massive time saved","0 Input Error"],tags:["Python","SAP","Google Chat API"]},
+          {id:"p3",title:"VMI Automation Engine",type:"Data Engineering",color:"lilac",desc:"Full automation of VMI replenishments via Python and BigQuery, reducing stockouts by 15%.",kpis:["-15% OOS","+22h/month"],tags:["Python","BigQuery","GCP"]},
+          {id:"p4",title:"SNCF Ticketing System",type:"App Development",color:"emerald",desc:"Full-stack internal application for real-time management of logistics production incidents.",kpis:["-40% Resolution","200+ Users"],tags:["React","Node.js","SQL"]},
         ],
         recos: [
           { title: "Recommendation Letter", author: "Supply Chain Management", co: "GROHE (LIXIL Group)", file: "reco_grohe.pdf", color: "gold" }
@@ -381,17 +606,20 @@
       },
       de:{
         badge:"Verfügbar — Mobil in Europa", eyebrow:"Datenanalyst & Supply Chain Koordinator", h1:["Flüsse in Daten,","Daten in Entscheidungen."], sub:"Experte für logistische Datenmodellierung und Prozessoptimierung. M1 MTLCI — Kedge Business School.", cta1:"Erfahrung ansehen", cta2:"Meine Projekte", 
-        navLabels:["Expertise","Erfahrung","Projekte","Referenzen","Dashboard","Ausbildung","Zukunft","Terminal","Kontakt"], navCV: "Lebenslauf",
+        navLabels:["Expertise","Erfahrung","Projekte","Referenzen","Ausbildung","Zukunft","Terminal","Kontakt"], navCV: "Lebenslauf",
         statusLabel: "Frei", statusFull: "Verfügbar: Nov 2027",
-        sids:["skills","xp","projects","reco","dash","edu","future","term","cta"], 
-        sNums:["01","02","03","04","05","06","07","08","09"], 
-        kpis:["Servicequote","OTIF","Lagerumschlag","Bestandsabweichung"], 
-        periods:[["ytd","YTD 2025"],["q3","Q3 2025"],["q2","Q2 2025"]], 
-        charts:["OTIF & Servicegrad","Analytische Fähigkeiten","Bestandsabweichungen"], chartSubs:["monatlicher Verlauf","Kompetenz-Radar","VS GESAMTVOLUMEN"], 
+        sids:["skills","xp","projects","reco","edu","future","term","cta"], 
+        sNums:["01","02","03","04","05","06","07","08"], 
         contactTitle:"Zusammenarbeiten", contactSub:"Offen für Supply-Chain-, Data- und Logistik-Stellen — mobil in Europa und international.", contactCTA:"Kontakt", tags:["Kedge Business School","GROHE · SNCF · T.E.A.","Verfügbar"], 
-        stats:[["4+","Jahre XP"],["5","Unternehmen"],["5","Sprachen"],["10+","Tools"]], scrollLabel:"SCROLLEN", footerLeft:`© ${new Date().getFullYear()} Raphaël Chaumény — Alle Rechte vorbehalten`, footerRight:"Erstellt mit HTML/JS Vanilla · Chart.js", 
-        techTitle:"Daten & Analytik", techSub:"TECH-STACK", opsTitle:"SC-Operationen", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"FÜHRUNG & KOMM.", langsTitle:"Sprachen", langsSub:"MEHRSPRACHIG", kpiCard:"Inventarabweichungen", projPlaceholder:"// Das AppSheet-Projekt (Reverse Logistic) läuft noch",
-        certifTitle: "Zertifizierungen & Standards", certifs: ["TOEIC (945/990) - C1", "Lean Six Sigma Green Belt", "Google Data Analytics", "APICS CPIM (In Vorb.)", "Scrum Master PSM I"],
+        stats:[["4+","Jahre XP"],["5","Unternehmen"],["5","Sprachen"],["10+","Tools"]], scrollLabel:"SCROLLEN", footerLeft:`© ${new Date().getFullYear()} Raphaël Chaumény — Alle Rechte vorbehalten`, footerRight:"Erstellt mit HTML/JS Vanilla", 
+        techTitle:"Daten & Analytik", techSub:"TECH-STACK", opsTitle:"SC-Operationen", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"FÜHRUNG & KOMM.", langsTitle:"Sprachen", langsSub:"MEHRSPRACHIG", projPlaceholder:"// Das AppSheet-Projekt (Reverse Logistic) läuft noch",
+        certifTitle: "Zertifizierungen", 
+        certifs: [
+          "TOEIC (In Vorb.)", 
+          "Lean Six Sigma Green Belt (In Vorb.)", 
+          "Google Data Analytics (In Vorb.)", 
+          "Zertifikat für internationalen Handel (M1 Kedge)"
+        ],
         futureTitle:"Vision & Zukunft", futureSub:"POST-MASTER ZIELE", recoTitle:"Empfehlungen", recoSub:"BERUFLICHE REFERENZEN",
         termTitle:"Interaktives Terminal",
         termCmd:"python analyze.py --profile=chaumeny_r --verbose",
@@ -400,32 +628,66 @@
         botFallback:"Bitte verwenden Sie die Kurzvorschläge oben!",
         chatSuggestions: ["📅 Verfügbarkeit?", "💰 Gehalt?", "🎯 Stolz?", "🌟 Hobbys?"],
         glossary: { "VMI": "Vendor Managed Inventory", "OTIF": "On-Time In-Full", "ERP": "Enterprise Resource Planning", "WMS": "Warehouse Management System", "TMS": "Transport Management System", "OOS": "Out of Stock", "KPIs": "Key Performance Indicators" },
-        techStack:[{n:"Power BI",sub:"Visualisierung",color:"gold"},{n:"Python",sub:"Analyse",color:"azure"},{n:"BigQuery",sub:"Data Warehouse",color:"lilac"},{n:"SQL",sub:"Abfragen",color:"gold"},{n:"Apps Script",sub:"Automatisierung",color:"emerald"},{n:"AppSheet",sub:"No-Code",color:"azure"},{n:"ERP / WMS",sub:"Betrieb",color:"lilac"},{n:"Syniti",sub:"Datenqualität",color:"coral"}],
-        opsSkills:["VMI & automatische Nachbestellung","Bestandsoptimierung & Reichweite","Transportplanung & TMS","Erweitertes WMS/ERP-Management","Kontinuierliche Verbesserung (Lean/Kaizen)"],
-        softSkills:[{s:"Problemlösung",p:94,c:"gold"},{s:"Int. Kommunikation",p:92,c:"azure"},{s:"Anpassungsfähigkeit",p:91,c:"lilac"},{s:"Data Storytelling",p:89,c:"emerald"},{s:"Teamübergreif. Mgmt",p:86,c:"gold"}],
-        langs:[{l:"Französisch",lv:"Muttersprache",p:100,f:"FR"},{l:"Englisch",lv:"C1",p:85,f:"EN"},{l:"Ukrainisch",lv:"B1",p:55,f:"UA"},{l:"Russisch",lv:"A2",p:35,f:"RU"},{l:"Deutsch",lv:"A1",p:25,f:"DE"}],
-        radar:[{s:"Koordination",v:100},{s:"WMS/ERP",v:100},{s:"VMI",v:80},{s:"Transport",v:80},{s:"Data Viz",v:60},{s:"SQL/Python",v:40}],
+        techStack:[
+          {n:"Power BI",sub:"Visualisierung",color:"gold"},
+          {n:"Python",sub:"Analyse",color:"azure"},
+          {n:"BigQuery",sub:"Data Warehouse",color:"lilac"},
+          {n:"SQL",sub:"Abfragen",color:"gold"},
+          {n:"Apps Script",sub:"Automatisierung",color:"emerald"},
+          {n:"AppSheet",sub:"No-Code",color:"azure"},
+          {n:"ERP / WMS",sub:"Betrieb",color:"lilac"},
+          {n:"Syniti",sub:"Datenqualität",color:"coral"}
+        ],
+        opsSkills:[
+          "VMI & automatische Nachbestellung",
+          "Bestandsoptimierung & Reichweite",
+          "Transportplanung & TMS",
+          "Erweitertes WMS/ERP-Management",
+          "Kontinuierliche Verbesserung (Lean/Kaizen)"
+        ],
+        softSkills:[
+          {s:"Problemlösung",p:94,c:"gold"},
+          {s:"Int. Kommunikation",p:92,c:"azure"},
+          {s:"Anpassungsfähigkeit",p:91,c:"lilac"},
+          {s:"Data Storytelling",p:89,c:"emerald"},
+          {s:"Teamübergreif. Mgmt",p:86,c:"gold"}
+        ],
+        langs:[
+          {l:"Französisch",lv:"Muttersprache",p:100,f:"FR"},
+          {l:"Englisch",lv:"C1",p:85,f:"EN"},
+          {l:"Ukrainisch",lv:"A2",p:35,f:"UA"},
+          {l:"Russisch",lv:"A1",p:20,f:"RU"},
+          {l:"Deutsch",lv:"A1",p:20,f:"DE"}
+        ],
+        radar:[
+          {s:"Koordination",v:100},
+          {s:"WMS/ERP",v:100},
+          {s:"VMI",v:80},
+          {s:"Transport",v:80},
+          {s:"Data Viz",v:60},
+          {s:"SQL/Python",v:40}
+        ],
         xps:[
           {co:"GROHE — LIXIL Group",role:"Supply Chain Koordinator",period:"Sep 2025 — Heute",loc:"Frankreich",color:"gold",tags:["VMI","BigQuery","Python","OTIF"],pts:["VMI-Steuerung: Produktportfolio, automatische Nachbestellung, Verfügbarkeitsoptimierung.","Logistik-KPI-Dashboards (Fehlbestände, Reichweite, OTIF) per Multi-Source-Daten.","Einführung von Apps Script, AppSheet, BigQuery & Syniti zur Automatisierung."]},
           {co:"SNCF Supply Chain",role:"Produktionsleistungsmanager",period:"Jan — Sep 2025",loc:"Paris",color:"azure",tags:["Power BI","ERP","Ticketing"],pts:["KPI-Tracking über ERP, WMS und Power BI-Echtzeit-Dashboards.","Konzeption und Einführung eines Ticketing-Tools (−40 % Bearbeitungszeit).","Bestandsoptimierung durch Kreuzanalysen und Modellierung."]},
           {co:"Lapeyre Logistique",role:"Logistiksupervisor",period:"Sep — Dez 2024",loc:"Rungis",color:"emerald",tags:["Management","WMS","Bestand"],pts:["Überwachung Wareneingang, Bestellungen und Inventuren (35.000 m²).","Führung, Schulung und Coaching eines 12-köpfigen Teams."]},
           {co:"T.E.A.",role:"Transportplaner",period:"Apr 2023 — Jun 2024",loc:"Fleury-Mérogis",color:"lilac",tags:["Transportplanung","TMS","Optimierung"],pts:["Planung und Optimierung nationaler Liefertouren im TMS.","Standortübergreifende Koordination und proaktives Ausnahmemanagement."]},
-          {co:"Promocash",role:"Logistik- und Betriebsleiter",period:"Jul 2022 — Mar 2023",loc:"Antony",color:"coral",tags:["Operationen","Bestellungen","Routen"],pts:["Verwaltung von Bestellungen und Kundenstreitigkeiten, Gewährleistung der Lieferzuverlässigkeit.","Optimierung von Lieferrouten und operativen Ressourcen."]},
+          {co:"Promocash",role:"Logistik- und Betriebsleiter",period:"Jul 2022 — Mar 2023",loc:"Antony",color:"coral",tags:["Operationen","Bestellungen","Routen"],pts:["Verwaltung von Bestellungen und Kundenstreitigkeiten, Gewährleistung der Lieferzuverlässigkeit.","Optimierung von Lieferrouten und operativen Ressourcen."]}
         ],
         schools:[
           {school:"KEDGE Business School",loc:"Marseille",period:"2025–2027",color:"gold",degree:"Master (MSc) Transport, Logistik & Int. Handel",desc:"Spezialisierung: Digitalisierung und Integration von KI in Supply Chain und Logistik."},
           {school:"Institut Nemo — iSTELI",loc:"Paris",period:"2024–2025",color:"azure",degree:"Bachelor — Responsable en Logistik",desc:"Internationale Warenströme, Supply-Chain-Kontrolle, operative Führung und Zollrecht."},
-          {school:"LPO Gaspard Monge",loc:"Savigny-sur-Orge",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Transport & Logistik)",desc:"Technische Grundlagen, multimodaler Transport und Flottenmanagement."},
+          {school:"LPO Gaspard Monge",loc:"Savigny-sur-Orge",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Transport & Logistik)",desc:"Technische Grundlagen, multimodaler Transport und Flottenmanagement."}
         ],
         future: [
           {role:"V.I.E. Projekt", co:"Supply Chain / Data Analyst", period:"Post-Master (Nov 2027)", loc:"Singapur / Deutschland / Aus.", color:"azure", tags:["Auslandseinsatz","Operationen","Sprachen"], pts:["Verfügbar ab dem 1. November 2027 für eine berufliche Auslandserfahrung (V.I.E), um meine internationale Expertise zu festigen.","Praktische Anwendung und kontinuierliche Verbesserung meiner Sprachkenntnisse."]},
           {role:"MSc Supply Chain Engineering / Management", co:"KLU Hamburg oder TUM Asia", period:"2028 — 2029", loc:"Deutschland / Singapur", color:"gold", tags:["Ingenieurwesen","Strategie","Exzellenz"], pts:["Technische und betriebswirtschaftliche Spezialisierung auf höchstem Niveau an renommierten Instituten.","Ziel ist entweder der Ingenieuransatz der TUM Asia (Singapur) oder die Supply-Chain-Expertise der KLU (Hamburg)."]}
         ],
         projects:[
-          {id:"p1",title:"Reverse Logistics App",type:"App-Entwicklung",color:"gold",desc:"Werkzeug für den Wareneingang von Retouren, entwickelt mit AppSheet und Google Workspace (am HQ präsentiert).",kpis:["Papierlos","Globale Adaption"],tags:["AppSheet","Google Apps Script","Logistik"],link:"#",github:"#"},
-          {id:"p2",title:"SAP Python Automation",type:"RPA & Scripting",color:"azure",desc:"Python-Skripte zur Automatisierung von SAP-Aufgaben (Retourenvalidierung, Preisprüfungen) mit direkter Google Chat-Berichterstattung.",kpis:["Massive Zeitersparnis","0 Eingabefehler"],tags:["Python","SAP","Google Chat API"],link:"#",github:null},
-          {id:"p3",title:"VMI Automation Engine",type:"Data Engineering",color:"lilac",desc:"Vollständige Automatisierung der VMI-Nachbestellungen via Python und BigQuery — Fehlbestände um 15 % reduziert.",kpis:["-15% OOS","+22h/Monat"],tags:["Python","BigQuery","GCP"],link:null,github:"#"},
-          {id:"p4",title:"SNCF Ticketing-System",type:"App-Entwicklung",color:"emerald",desc:"Full-Stack-Anwendung für das Echtzeit-Management von Produktionsvorfällen in der Logistik.",kpis:["-40% Bearbeitung","200+ Nutzer"],tags:["React","Node.js","SQL"],link:"#",github:null},
+          {id:"p1",title:"Reverse Logistics App",type:"App-Entwicklung",color:"gold",desc:"Werkzeug für den Wareneingang von Retouren, entwickelt mit AppSheet und Google Workspace (am HQ präsentiert).",kpis:["Papierlos","Globale Adaption"],tags:["AppSheet","Google Apps Script","Logistik"]},
+          {id:"p2",title:"SAP Python Automation",type:"RPA & Scripting",color:"azure",desc:"Python-Skripte zur Automatisierung von SAP-Aufgaben (Retourenvalidierung, Preisprüfungen) mit direkter Google Chat-Berichterstattung.",kpis:["Massive Zeitersparnis","0 Eingabefehler"],tags:["Python","SAP","Google Chat API"]},
+          {id:"p3",title:"VMI Automation Engine",type:"Data Engineering",color:"lilac",desc:"Vollständige Automatisierung der VMI-Nachbestellungen via Python und BigQuery — Fehlbestände um 15 % reduziert.",kpis:["-15% OOS","+22h/Monat"],tags:["Python","BigQuery","GCP"]},
+          {id:"p4",title:"SNCF Ticketing-System",type:"App-Entwicklung",color:"emerald",desc:"Full-Stack-Anwendung für das Echtzeit-Management von Produktionsvorfällen in der Logistik.",kpis:["-40% Bearbeitung","200+ Nutzer"],tags:["React","Node.js","SQL"]},
         ],
         recos: [
           { title: "Empfehlungsschreiben", author: "Supply Chain Management", co: "GROHE (LIXIL Group)", file: "reco_grohe.pdf", color: "gold" }
@@ -442,17 +704,20 @@
       },
       ru:{
         badge:"Доступен — Мобилен в Европе", eyebrow:"Аналитик данных & Координатор цепи поставок", h1:["Превращаю потоки","в решения."], sub:"Эксперт по моделированию логистических данных и оптимизации процессов. M1 MTLCI — Kedge Business School.", cta1:"Посмотреть опыт", cta2:"Мои проекты", 
-        navLabels:["Навыки","Опыт","Проекты","Рекомендации","Дашборд","Образование","Будущее","Терминал","Контакт"], navCV: "Резюме",
+        navLabels:["Навыки","Опыт","Проекты","Рекомендации","Образование","Будущее","Терминал","Контакт"], navCV: "Резюме",
         statusLabel: "Свободен", statusFull: "Доступен: Ноя 2027",
-        sids:["skills","xp","projects","reco","dash","edu","future","term","cta"], 
-        sNums:["01","02","03","04","05","06","07","08","09"], 
-        kpis:["Уровень сервиса","OTIF","Оборот запасов","Расхождение"], 
-        periods:[["ytd","ЗА 2025"],["q3","Q3 2025"],["q2","Q2 2025"]], 
-        charts:["OTIF & Уровень сервиса","Аналитические навыки","Эволюция расхождений"], chartSubs:["ежемесячная динамика","радар компетенций","VS ОБЩИЙ ОБЪЕМ"], 
+        sids:["skills","xp","projects","reco","edu","future","term","cta"], 
+        sNums:["01","02","03","04","05","06","07","08"], 
         contactTitle:"Работаем вместе", contactSub:"Открыт к предложениям в сфере Supply Chain, Data и логистики — мобилен в Европе.", contactCTA:"Контакт", tags:["Kedge Business School","GROHE · SNCF · T.E.A.","Доступен"], 
-        stats:[["4+","Лет опыта"],["5","Компаний"],["5","Языков"],["10+","Инструментов"]], scrollLabel:"ПРОКРУТИТЬ", footerLeft:`© ${new Date().getFullYear()} Рафаэль Шомени — Все права защищены`, footerRight:"Создано на HTML/JS Vanilla · Chart.js", 
-        techTitle:"Данные & Аналитика", techSub:"СТЕК ТЕХНОЛОГИЙ", opsTitle:"Операции SC", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"ЛИДЕРСТВО & КОММ.", langsTitle:"Языки", langsSub:"МНОГОЯЗЫЧНЫЙ", kpiCard:"Расхождения запасов", projPlaceholder:"// Проект AppSheet (возвратная логистика) всё ещё в разработке.",
-        certifTitle: "Сертификаты", certifs: ["TOEIC (945/990) - C1", "Lean Six Sigma Green Belt", "Google Data Analytics", "APICS CPIM (В процессе)", "Scrum Master PSM I"],
+        stats:[["4+","Лет опыта"],["5","Компаний"],["5","Языков"],["10+","Инструментов"]], scrollLabel:"ПРОКРУТИТЬ", footerLeft:`© ${new Date().getFullYear()} Рафаэль Шомени — Все права защищены`, footerRight:"Создано на HTML/JS Vanilla", 
+        techTitle:"Данные & Аналитика", techSub:"СТЕК ТЕХНОЛОГИЙ", opsTitle:"Операции SC", opsSub:"SUPPLY CHAIN OPS", softTitle:"Soft Skills", softSub:"ЛИДЕРСТВО & КОММ.", langsTitle:"Языки", langsSub:"МНОГОЯЗЫЧНЫЙ", projPlaceholder:"// Проект AppSheet (возвратная логистика) всё ещё в разработке.",
+        certifTitle: "Сертификаты", 
+        certifs: [
+          "TOEIC (В процессе)", 
+          "Lean Six Sigma Green Belt (В процессе)", 
+          "Google Data Analytics (В процессе)", 
+          "Сертификат по международной торговле (M1 Kedge BS)"
+        ],
         futureTitle:"Видение и Будущее", futureSub:"ЦЕЛИ ПОСЛЕ МАГИСТРАТУРЫ", recoTitle:"Рекомендации", recoSub:"ПРОФЕССИОНАЛЬНЫЕ РЕКОМЕНДАЦИИ",
         termTitle:"Интерактивный терминал",
         termCmd:"python analyze.py --profile=chaumeny_r --verbose",
@@ -461,32 +726,66 @@
         botFallback:"Пожалуйста, используйте быстрые подсказки!",
         chatSuggestions: ["📅 Доступность?", "💰 Зарплата?", "🎯 Гордость?", "🌟 Хобби?"],
         glossary: { "VMI": "Vendor Managed Inventory", "OTIF": "On-Time In-Full", "ERP": "Enterprise Resource Planning", "WMS": "Warehouse Management System", "TMS": "Transport Management System", "OOS": "Out of Stock", "KPIs": "Key Performance Indicators" },
-        techStack:[{n:"Power BI",sub:"Визуализация",color:"gold"},{n:"Python",sub:"Анализ",color:"azure"},{n:"BigQuery",sub:"Хранилище данных",color:"lilac"},{n:"SQL",sub:"Запросы",color:"gold"},{n:"Apps Script",sub:"Автоматизация",color:"emerald"},{n:"AppSheet",sub:"No-Code",color:"azure"},{n:"ERP / WMS",sub:"Операции",color:"lilac"},{n:"Syniti",sub:"Качество данных",color:"coral"}],
-        opsSkills:["VMI & Автоматическое пополнение","Оптимизация запасов & покрытие","Планирование транспорта & TMS","Продвинутое управление WMS/ERP","Непрерывное улучшение (Lean/Kaizen)"],
-        softSkills:[{s:"Решение проблем",p:94,c:"gold"},{s:"Межд. коммуникация",p:92,c:"azure"},{s:"Адаптируемость",p:91,c:"lilac"},{s:"Data Storytelling",p:89,c:"emerald"},{s:"Кросс-ком. менедж.",p:86,c:"gold"}],
-        langs:[{l:"Французский",lv:"Родной",p:100,f:"FR"},{l:"Английский",lv:"C1",p:85,f:"EN"},{l:"Украинский",lv:"B1",p:55,f:"UA"},{l:"Русский",lv:"A2",p:35,f:"RU"},{l:"Немецкий",lv:"A1",p:25,f:"DE"}],
-        radar:[{s:"Координация",v:100},{s:"WMS/ERP",v:100},{s:"VMI",v:80},{s:"Транспорт",v:80},{s:"Data Viz",v:60},{s:"SQL/Python",v:40}],
+        techStack:[
+          {n:"Power BI",sub:"Визуализация",color:"gold"},
+          {n:"Python",sub:"Анализ",color:"azure"},
+          {n:"BigQuery",sub:"Хранилище данных",color:"lilac"},
+          {n:"SQL",sub:"Запросы",color:"gold"},
+          {n:"Apps Script",sub:"Автоматизация",color:"emerald"},
+          {n:"AppSheet",sub:"No-Code",color:"azure"},
+          {n:"ERP / WMS",sub:"Операции",color:"lilac"},
+          {n:"Syniti",sub:"Качество данных",color:"coral"}
+        ],
+        opsSkills:[
+          "VMI & Автоматическое пополнение",
+          "Оптимизация запасов & покрытие",
+          "Планирование транспорта & TMS",
+          "Продвинутое управление WMS/ERP",
+          "Непрерывное улучшение (Lean/Kaizen)"
+        ],
+        softSkills:[
+          {s:"Решение проблем",p:94,c:"gold"},
+          {s:"Межд. коммуникация",p:92,c:"azure"},
+          {s:"Адаптируемость",p:91,c:"lilac"},
+          {s:"Data Storytelling",p:89,c:"emerald"},
+          {s:"Кросс-ком. менедж.",p:86,c:"gold"}
+        ],
+        langs:[
+          {l:"Французский",lv:"Родной",p:100,f:"FR"},
+          {l:"Английский",lv:"C1",p:85,f:"EN"},
+          {l:"Украинский",lv:"A2",p:35,f:"UA"},
+          {l:"Русский",lv:"A1",p:20,f:"RU"},
+          {l:"Немецкий",lv:"A1",p:20,f:"DE"}
+        ],
+        radar:[
+          {s:"Координация",v:100},
+          {s:"WMS/ERP",v:100},
+          {s:"VMI",v:80},
+          {s:"Транспорт",v:80},
+          {s:"Data Viz",v:60},
+          {s:"SQL/Python",v:40}
+        ],
         xps:[
           {co:"GROHE — LIXIL Group",role:"Координатор цепи поставок",period:"Сен 2025 — н.в.",loc:"Франция",color:"gold",tags:["VMI","BigQuery","Python","OTIF"],pts:["Управление VMI: портфель продуктов, автоматическое пополнение, оптимизация наличия.","Дашборды KPI логистики (дефицит, покрытие, OTIF) на основе многоисточниковых данных.","Внедрение Apps Script, AppSheet, BigQuery и Syniti для автоматизации потоков."]},
           {co:"SNCF Supply Chain",role:"Менеджер производительности",period:"Янв — Сен 2025",loc:"Париж",color:"azure",tags:["Power BI","ERP","Тикетинг"],pts:["Отслеживание KPI через ERP, WMS и Power BI в реальном времени.","Разработка и внедрение тикет-системы (−40% времени обработки).","Оптимизация запасов с помощью перекрёстного анализа и моделирования."]},
           {co:"Lapeyre Logistique",role:"Супервайзер логистики",period:"Сен — Дек 2024",loc:"Рунжи",color:"emerald",tags:["Менеджмент","WMS","Запасы"],pts:["Контроль приёмки, заказов и физической инвентаризации (склад 35 000 м²).","Управление, обучение и коучинг команды из 12 сотрудников."]},
           {co:"T.E.A.",role:"Планировщик транспорта",period:"Апр 2023 — Июн 2024",loc:"Флёри-Мерожи",color:"lilac",tags:["Транспорт","TMS","Оптимизация"],pts:["Планирование и оптимизация национальных маршрутов доставки в TMS.","Межплощадочная координация и проактивное управление исключения."]},
-          {co:"Promocash",role:"Менеджер по логистике и операциям",period:"Июл 2022 — Мар 2023",loc:"Антони",color:"coral",tags:["Операции","Заказы","Маршруты"],pts:["Управление заказами и спорами клиентов, обеспечение надежности поставок.","Оптимизация маршрутов доставки и операционных ресурсов."]},
+          {co:"Promocash",role:"Менеджер по логистике и операциям",period:"Июл 2022 — Мар 2023",loc:"Антони",color:"coral",tags:["Операции","Заказы","Маршруты"],pts:["Управление заказами и спорами клиентов, обеспечение надежности поставок.","Оптимизация маршрутов доставки и операционных ресурсов."]}
         ],
         schools:[
           {school:"KEDGE Business School",loc:"Марсель",period:"2025–2027",color:"gold",degree:"Master (MSc) Транспорт, Логистика & Межд. торговля",desc:"Специализация: Цифровизация и внедрение ИИ в Supply Chain и логистике."},
           {school:"Institut Nemo — iSTELI",loc:"Париж",period:"2024–2025",color:"azure",degree:"Бакалавр — Responsable en Logistique",desc:"Международные потоки, контроль цепи поставок, операционное лидерство и таможня."},
-          {school:"LPO Gaspard Monge",loc:"Савиньи-сюр-Орж",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Транспорт и логистика)",desc:"Технические основы, мультимодальный транспорт и управление флотом."},
+          {school:"LPO Gaspard Monge",loc:"Савиньи-сюр-Орж",period:"2022–2024",color:"lilac",degree:"BTS GTLA (Транспорт и логистика)",desc:"Технические основы, мультимодальный транспорт и управление флотом."}
         ],
         future: [
           {role:"Проект V.I.E.", co:"Supply Chain / Data Analyst", period:"С Ноября 2027", loc:"Сингапур / Германия / Австр.", color:"azure", tags:["Стажировка","Операции","Языки"], pts:["Готовность к зарубежной стажировке (V.I.E) с 1 ноября 2027 для укрепления международного опыта.","Непрерывное совершенствование языковых навыков на практике."]},
           {role:"MSc Supply Chain Engineering / Management", co:"KLU Гамбург или TUM Asia", period:"2028 — 2029", loc:"Германия / Сингапур", color:"gold", tags:["Инженерия","Стратегия","Превосходство"], pts:["Высокоуровневая техническая и управленческая специализация в престижных учебных заведениях.","Цель — инженерный подход TUM Asia (Сингапур) или экспертиза в Supply Chain в KLU (Гамбург)."]}
         ],
         projects:[
-          {id:"p1",title:"Reverse Logistics App",type:"Разработка приложений",color:"gold",desc:"Инструмент приема возвратных накладных на складе, создан на AppSheet (Google Workspace). Представлен в HQ.",kpis:["Без бумаги","Адаптация в мире"],tags:["AppSheet","Google Apps Script","Логистика"],link:"#",github:"#"},
-          {id:"p2",title:"SAP Python Automation",type:"RPA & Скриптинг",color:"azure",desc:"Python скрипты для автоматизации задач SAP (проверка возвратов, цен) с прямыми отчетами в Google Chat.",kpis:["Экономия времени","0 Ошибок ввода"],tags:["Python","SAP","Google Chat API"],link:"#",github:null},
-          {id:"p3",title:"VMI Automation Engine",type:"Инж. данных",color:"lilac",desc:"Полная автоматизация пополнения VMI через Python и BigQuery — дефицит снижен на 15%.",kpis:["-15% дефицит","+22ч/мес"],tags:["Python","BigQuery","GCP"],link:null,github:"#"},
-          {id:"p4",title:"Тикет-система SNCF",type:"Разработка приложений",color:"emerald",desc:"Full-stack приложение для управления и отслеживания производственных инцидентов.",kpis:["-40% решение","200+ польз."],tags:["React","Node.js","SQL"],link:"#",github:null},
+          {id:"p1",title:"Reverse Logistics App",type:"Разработка приложений",color:"gold",desc:"Инструмент приема возвратных накладных на складе, создан на AppSheet (Google Workspace). Представлен в HQ.",kpis:["Без бумаги","Адаптация в мире"],tags:["AppSheet","Google Apps Script","Логистика"]},
+          {id:"p2",title:"SAP Python Automation",type:"RPA & Скриптинг",color:"azure",desc:"Python скрипты для автоматизации задач SAP (проверка возвратов, цен) с прямыми отчетами в Google Chat.",kpis:["Экономия времени","0 Ошибок ввода"],tags:["Python","SAP","Google Chat API"]},
+          {id:"p3",title:"VMI Automation Engine",type:"Инж. данных",color:"lilac",desc:"Полная автоматизация пополнения VMI через Python и BigQuery — дефицит снижен на 15%.",kpis:["-15% дефицит","+22ч/мес"],tags:["Python","BigQuery","GCP"]},
+          {id:"p4",title:"Тикет-система SNCF",type:"Разработка приложений",color:"emerald",desc:"Full-stack приложение для управления и отслеживания производственных инцидентов.",kpis:["-40% решение","200+ польз."],tags:["React","Node.js","SQL"]},
         ],
         recos: [
           { title: "Рекомендательное письмо", author: "Менеджмент Supply Chain", co: "GROHE (LIXIL Group)", file: "reco_grohe.pdf", color: "gold" }
@@ -503,27 +802,30 @@
       },
     };
 
-    const DASH_DATA = {
-      ytd:{trend:[{m:"Jan",otif:88,svc:91,vol:1200,ecart:0.6},{m:"Fév",otif:89,svc:92,vol:1250,ecart:0.5},{m:"Mar",otif:87,svc:91,vol:1100,ecart:0.55},{m:"Avr",otif:92,svc:94,vol:1350,ecart:0.4},{m:"Mai",otif:91,svc:95,vol:1400,ecart:0.35},{m:"Jun",otif:94,svc:96,vol:1500,ecart:0.42},{m:"Jul",otif:93,svc:95,vol:1450,ecart:0.38},{m:"Aoû",otif:96,svc:97,vol:1600,ecart:0.3},{m:"Sep",otif:97,svc:98,vol:1650,ecart:0.25}],kpis:{svc:"96.2%",otif:"94.1%",rot:"8.4×",rup:"0.3%"}},
-      q3:{trend:[{m:"Jul",otif:93,svc:95,vol:1450,ecart:0.38},{m:"Aoû",otif:96,svc:97,vol:1600,ecart:0.3},{m:"Sep",otif:97,svc:98,vol:1650,ecart:0.25}],kpis:{svc:"97.5%",otif:"96.5%",rot:"9.1×",rup:"0.25%"}},
-      q2:{trend:[{m:"Avr",otif:92,svc:94,vol:1350,ecart:0.4},{m:"Mai",otif:91,svc:95,vol:1400,ecart:0.35},{m:"Jun",otif:94,svc:96,vol:1500,ecart:0.42}],kpis:{svc:"95.0%",otif:"92.3%",rot:"7.8×",rup:"0.4%"}},
-    };
-
     /* ════════════════════════════════════════════════════════════════════
        STATE & INITIALIZATION
     ════════════════════════════════════════════════════════════════════ */
     let currentLang = 'fr';
     let currentTheme = 'wada1'; 
-    let dashFilter = 'ytd';
-    let charts = {};
     let activeObserver = null;
     let canvasRAF = null;
     let isPageVisible = true;
     let isHackMode = false;
+    let radarChart = null;
 
     const $ = id => document.getElementById(id);
     const getVar = name => getComputedStyle(document.documentElement).getPropertyValue(`--${name}`).trim();
     const hexToRgb = hex => { const n=parseInt(hex.replace("#",""),16); return `${(n>>16)&255},${(n>>8)&255},${n&255}`; };
+    function hexToRgbA(hex, alpha){
+        let c;
+        if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+            c= hex.substring(1).split('');
+            if(c.length== 3) c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+            c= '0x'+c.join('');
+            return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+alpha+')';
+        }
+        return `rgba(200,200,200,${alpha})`;
+    }
 
     function init() {
       applyTheme(currentTheme);
@@ -549,15 +851,6 @@
         isPageVisible = !document.hidden;
         if(isPageVisible) initCanvas();
       });
-
-      setTimeout(() => {
-        const p = $('preloader');
-        if(p) {
-          p.style.opacity = '0';
-          p.style.visibility = 'hidden';
-          setTimeout(() => p.remove(), 800);
-        }
-      }, 1000);
     }
 
     /* ════════════════════════════════════════════════════════════════════
@@ -584,7 +877,6 @@
       renderXP(t);
       renderProjects(t);
       renderRecos(t);
-      renderDashboard(t);
       renderEducation(t);
       renderFuture(t);
       renderTerminal(t);
@@ -594,12 +886,10 @@
       lucide.createIcons();
       initObservers();
       initCounters();
-      updateCharts();
+      renderRadarChart(t);
     }
 
-    function anchorFor(sid) {
-      return sid === 'cta' ? '#cta-wrap' : `#${sid}-wrap`;
-    }
+    function anchorFor(sid) { return sid === 'cta' ? '#cta-wrap' : `#${sid}-wrap`; }
 
     function SectionHeader(num, title) {
       return `
@@ -612,6 +902,48 @@
         </div>`;
     }
 
+    /* Modals Logic */
+    function openModal(category, index) {
+      const t = DICT[currentLang];
+      const expandedData = EXPANDED_DATA[currentLang] || EXPANDED_DATA['fr'];
+      let item, details = null;
+
+      if(category === 'xp') { item = t.xps[index]; details = expandedData.xps?.[index]; }
+      if(category === 'proj') { item = t.projects[index]; details = expandedData.projects?.[index]; }
+      if(category === 'edu') { item = t.schools[index]; details = expandedData.schools?.[index]; }
+      if(category === 'future') { item = t.future[index]; details = expandedData.future?.[index]; }
+
+      if(!item) return;
+
+      $('modal-title').textContent = item.title || item.role || item.school;
+      $('modal-subtitle').textContent = item.co || item.type || item.degree;
+      
+      const body = $('modal-body');
+      let html = "";
+      
+      // Inject tags
+      const tags = item.tags ? `<div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;">${item.tags.map(tag => `<span style="background:rgba(255,255,255,0.05);border:1px solid var(--dim);color:var(--silver);padding:4px 10px;border-radius:6px;font-size:11px;font-family:var(--font-mono)">${tag}</span>`).join('')}</div>` : '';
+      html += tags;
+
+      // Inject Expanded Content
+      if (details && details.content) {
+        html += details.content;
+      } else {
+        html += `<p style="font-style:italic">Détails en cours de rédaction...</p>`;
+      }
+
+      body.innerHTML = html;
+      $('global-modal').classList.add('open');
+      document.body.style.overflow = 'hidden'; // prevent bg scroll
+    }
+
+    function closeModal(e) {
+      if(e && e.target !== $('global-modal') && !e.target.closest('.modal-close')) return;
+      $('global-modal').classList.remove('open');
+      document.body.style.overflow = 'auto';
+    }
+
+    /* Rendering Functions */
     function renderNav(t) {
       $('navbar').innerHTML = `
         <div style="max-width:1280px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between">
@@ -627,37 +959,25 @@
               </div>
             </div>
           </a>
-          <nav class="pcnav" style="display:flex;gap:2px;align-items:center" aria-label="Navigation principale">
-            ${t.navLabels.map((l,i) => `<a href="${anchorFor(SIDS[i])}" class="nav-link" style="padding:8px 16px;border-radius:8px;color:var(--silver);text-decoration:none;font-size:13px;font-weight:400;font-family:var(--font-ui);transition:color .2s,background .2s;letter-spacing:.3px;">${l}</a>`).join('')}
+          <nav class="pcnav" style="display:flex;gap:2px;align-items:center">
+            ${t.navLabels.map((l,i) => `<a href="${anchorFor(SIDS[i])}" class="nav-link" style="padding:8px 16px;border-radius:8px;color:var(--silver);text-decoration:none;font-size:13px;font-family:var(--font-ui);transition:color .2s,background .2s;letter-spacing:.3px;">${l}</a>`).join('')}
           </nav>
           <div class="pcnav" style="display:flex;gap:10px;align-items:center">
-            
             <div class="cmd-k-hint" style="background:var(--bg2);border:1px solid var(--dim);color:var(--silver);border-radius:8px;padding:6px 12px;font-size:11px;font-family:var(--font-mono);display:flex;align-items:center;gap:4px;cursor:pointer;" onclick="toggleCmdPalette()">
               <kbd style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:10px;">Ctrl</kbd> <kbd style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:10px;">K</kbd>
             </div>
-
             <div class="dd" id="status-dd">
-              <button onclick="toggleDD('status-dd')" aria-expanded="false" style="background:rgba(16,214,138,0.1);border:1px solid rgba(16,214,138,0.3);color:var(--emerald);border-radius:8px;padding:7px 13px;font-size:12px;font-family:var(--font-mono);font-weight:700;letter-spacing:1px;display:flex;align-items:center;gap:7px;cursor:pointer;transition:all 0.2s;">
+              <button onclick="toggleDD('status-dd')" aria-expanded="false" style="background:rgba(16,214,138,0.1);border:1px solid rgba(16,214,138,0.3);color:var(--emerald);border-radius:8px;padding:7px 13px;font-size:12px;font-family:var(--font-mono);font-weight:700;display:flex;align-items:center;gap:7px;cursor:pointer;">
                 <span style="width:6px;height:6px;border-radius:50%;background:var(--emerald);display:block;animation:pulse 2s infinite"></span>
                 ${t.statusLabel}
               </button>
               <div class="dd-menu" role="menu" style="min-width: 200px;">
-                <div style="padding: 11px 16px; border-bottom: 1px solid var(--dim); color: var(--silver); font-size: 10px; font-family: var(--font-mono); letter-spacing: 1px;">
-                  ${t.statusFull}
-                </div>
-                <a href="https://calendar.google.com/calendar/u/0/r/eventedit?text=Entretien+Rapha%C3%ABl+Chaum%C3%A9ny" target="_blank" rel="noopener" class="dd-opt" role="menuitem">
-                  <i data-lucide="calendar" style="width:14px;height:14px"></i> Google Agenda
-                </a>
-                <a href="mailto:chaumenyr@gmail.com" class="dd-opt" role="menuitem">
-                  <i data-lucide="mail" style="width:14px;height:14px"></i> Email
-                </a>
+                <div style="padding: 11px 16px; border-bottom: 1px solid var(--dim); color: var(--silver); font-size: 10px; font-family: var(--font-mono);">${t.statusFull}</div>
+                <a href="mailto:chaumenyr@gmail.com" class="dd-opt" role="menuitem"><i data-lucide="mail" style="width:14px"></i> Email</a>
               </div>
             </div>
-
-            <a href="CV_Raphael_Chaumeny.pdf" target="_blank" download="CV_Raphael_Chaumeny.pdf" title="${t.navCV}" style="background:transparent;border:1px solid var(--dim);color:var(--silver);border-radius:8px;padding:7px 10px;font-size:13px;display:flex;align-items:center;cursor:pointer;transition:all .2s" onmouseenter="this.style.background='var(--bg3)';this.style.borderColor='var(--gold)40';this.style.color='var(--gold)'" onmouseleave="this.style.background='transparent';this.style.borderColor='var(--dim)';this.style.color='var(--silver)'">
-              <i data-lucide="download" style="width:14px;height:14px"></i>
-            </a>
-
+            <a href="CV_Raphael_Chaumeny.pdf" target="_blank" download title="${t.navCV}" style="border:1px solid var(--dim);color:var(--silver);border-radius:8px;padding:7px 10px;display:flex;cursor:pointer;"><i data-lucide="download" style="width:14px"></i></a>
+            
             <div class="dd" id="theme-dd">
               <button onclick="toggleDD('theme-dd')" aria-expanded="false" aria-label="Changer le thème" style="background:var(--bg2);border:1px solid var(--dim);color:var(--silver);border-radius:8px;padding:7px 10px;font-size:13px;display:flex;align-items:center;cursor:pointer;transition:all .2s">
                 <i data-lucide="palette" style="width:14px;height:14px"></i>
@@ -676,9 +996,9 @@
               </div>
             </div>
 
-            <a href="#cta-wrap" style="background:linear-gradient(135deg,var(--goldD),var(--gold));color:var(--bg0);padding:8px 22px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 20px rgba(201,168,76,0.3);font-family:var(--font-ui); transition: transform 0.2s, box-shadow 0.3s;" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform='none'">${t.contactCTA}</a>
+            <a href="#cta-wrap" style="background:linear-gradient(135deg,var(--goldD),var(--gold));color:var(--bg0);padding:8px 22px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 20px rgba(201,168,76,0.3); transition: transform 0.2s;" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform='none'">${t.contactCTA}</a>
           </div>
-          <button class="burg" onclick="toggleMobileMenu()" aria-expanded="false" aria-label="Menu" style="background:none;border:none;color:var(--chalk);font-size:22px;padding:4px;cursor:pointer">☰</button>
+          <button class="burg" onclick="toggleMobileMenu()" style="background:none;border:none;color:var(--chalk);font-size:22px;padding:4px;cursor:pointer">☰</button>
         </div>
         <div id="mobile-menu" style="display:none;background:var(--bg1);border-top:1px solid var(--dim);padding:20px 32px 28px;flex-direction:column;gap:16px;" role="navigation" aria-label="Menu mobile">
           ${t.navLabels.map((l,i) => `<a href="${anchorFor(SIDS[i])}" onclick="closeMobileMenu()" style="color:var(--silver);text-decoration:none;font-size:16px;font-family:var(--font-ui)">0${i+1} &nbsp; ${l}</a>`).join('')}
@@ -692,9 +1012,9 @@
 
     function renderSideNav(t) {
       $('sidenav').innerHTML = t.navLabels.map((l,i) => `
-        <a href="${anchorFor(SIDS[i])}" class="dot-link" data-id="${SIDS[i]}-wrap" aria-label="${l}" style="display:flex;align-items:center;gap:8px;text-decoration:none;justify-content:flex-end">
+        <a href="${anchorFor(SIDS[i])}" class="dot-link" data-id="${SIDS[i]}-wrap" style="display:flex;align-items:center;gap:8px;text-decoration:none;justify-content:flex-end">
           <span class="dot-label" style="display:none;color:var(--gold);font-size:9px;font-weight:700;font-family:var(--font-mono);letter-spacing:2px;text-transform:uppercase">${l}</span>
-          <div class="dot-indicator" style="width:6px;height:6px;border-radius:3px;background:var(--slate);transition:all .4s cubic-bezier(.34,1.56,.64,1)"></div>
+          <div class="dot-indicator" style="width:6px;height:6px;border-radius:3px;background:var(--slate);transition:all .4s"></div>
         </a>
       `).join('');
     }
@@ -706,7 +1026,7 @@
           <div class="reveal flip-container" style="display:inline-flex;align-items:center;justify-content:center;margin-bottom:36px;position:relative" onclick="this.classList.toggle('flipped')">
             <div class="flipper">
               <div class="front">
-                <img src="moi.jpeg" alt="Raphaël Chaumény" onerror="this.style.display='none'" style="width:100%;height:100%;object-fit:cover;">
+                <img src="CHAUMENY Raphael.jpg" alt="Raphaël Chaumény" onerror="this.style.display='none'" style="width:100%;height:100%;object-fit:cover;">
               </div>
               <div class="back">
                 <div class="scan-line"></div>
@@ -724,11 +1044,12 @@
                 </div>
               </div>
             </div>
+            <div class="hint-toast">Digital Twin</div>
           </div>
           <br/>
-          
-          <div class="reveal" style="display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(201,168,76,.3);border-radius:100px;padding:8px 24px;margin-bottom:48px;background:rgba(201,168,76,.06);transition-delay:.1s">
-            <span style="width:7px;height:7px;border-radius:50%;background:var(--emerald);display:block;animation:pulse 2.5s infinite" aria-hidden="true"></span>
+
+          <div class="reveal" style="display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(201,168,76,.3);border-radius:100px;padding:8px 24px;margin-bottom:48px;background:rgba(201,168,76,.06);">
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--emerald);display:block;animation:pulse 2.5s infinite"></span>
             <span style="font-family:var(--font-mono);font-size:11px;color:var(--gold);letter-spacing:2.5px;font-weight:500">${t.badge}</span>
           </div>
           <div class="reveal" style="transition-delay:.2s">
@@ -740,20 +1061,20 @@
           </div>
           <p class="reveal" style="font-family:var(--font-ui);font-size:clamp(15px,1.8vw,18px);color:var(--silver);line-height:1.7;max-width:580px;margin:0 auto 52px;font-weight:300;transition-delay:.3s">${formatText(t.sub)}</p>
           <div class="reveal flex" style="gap:16px;justify-content:center;flex-wrap:wrap;transition-delay:.4s">
-            <a href="#xp-wrap" style="background:linear-gradient(135deg,var(--goldD),var(--gold));color:var(--bg0);padding:15px 36px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(201,168,76,.35);font-family:var(--font-ui); transition: transform 0.2s, box-shadow 0.3s;" onmouseenter="e=>{e.currentTarget.style.transform='translateY(-2px)'}" onmouseleave="e=>{e.currentTarget.style.transform='none'}">
-              ${t.cta1} <i data-lucide="arrow-up-right" style="width:16px" aria-hidden="true"></i>
+            <a href="#xp-wrap" style="background:linear-gradient(135deg,var(--goldD),var(--gold));color:var(--bg0);padding:15px 36px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(201,168,76,.35);">
+              ${t.cta1} <i data-lucide="arrow-up-right" style="width:16px"></i>
             </a>
-            <a href="#projects-wrap" style="border:1px solid var(--slate);color:var(--silver);padding:15px 36px;border-radius:10px;font-weight:400;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:10px;letter-spacing:.3px;transition:all .3s;font-family:var(--font-ui)" onmouseenter="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseleave="this.style.borderColor='var(--slate)';this.style.color='var(--silver)'">
-              <i data-lucide="folder-open" style="width:16px" aria-hidden="true"></i> ${t.cta2}
+            <a href="#projects-wrap" style="border:1px solid var(--slate);color:var(--silver);padding:15px 36px;border-radius:10px;font-weight:400;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:10px;">
+              <i data-lucide="folder-open" style="width:16px"></i> ${t.cta2}
             </a>
           </div>
           <div class="reveal hsg" style="display:grid;grid-template-columns:repeat(4,1fr);margin-top:88px;border-top:1px solid var(--dim);transition-delay:.5s">
             ${t.stats.map((s,i) => `
               <div style="padding:28px 20px;border-right:${i<3?'1px solid var(--dim)':'none'}">
                 <div style="font-family:var(--font-display);font-size:clamp(30px,4vw,52px);font-weight:600;color:var(--chalk);line-height:1">
-                  <span class="stat-counter" data-target="${parseInt(s[0])||0}" aria-label="${s[0]}">0</span>${s[0].includes('+')?'+':''}
+                  <span class="stat-counter" data-target="${parseInt(s[0])||0}">0</span>${s[0].includes('+')?'+':''}
                 </div>
-                <div style="font-family:var(--font-ui);color:var(--silver);font-size:12px;margin-top:8px;letter-spacing:.5px;font-weight:300">${s[1]}</div>
+                <div style="font-family:var(--font-ui);color:var(--silver);font-size:12px;margin-top:8px;letter-spacing:.5px;">${s[1]}</div>
               </div>
             `).join('')}
           </div>
@@ -778,7 +1099,7 @@
                 <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px">
                   <div style="width:2px;height:28px;background:linear-gradient(180deg,var(--gold),var(--goldD));border-radius:1px"></div>
                   <div>
-                    <h3 style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--chalk);margin:0">${t.techTitle}</h3>
+                    <h3 style="font-family:var(--font-display);font-size:22px;color:var(--chalk);margin:0">${t.techTitle}</h3>
                     <p style="font-family:var(--font-mono);color:var(--gold);font-size:11px;letter-spacing:2px;margin:2px 0 0">${t.techSub}</p>
                   </div>
                 </div>
@@ -793,21 +1114,17 @@
               </div>
             </div>
 
+            <!-- Radar Chart remplaçant l'ancien dashboard -->
             <div class="reveal b5" style="grid-column:span 5;transition-delay:.1s">
-              <div class="gc" style="${card()}">
-                <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px">
+              <div class="gc" style="${card({css:'display:flex;flex-direction:column;'})}">
+                 <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
                   <div style="width:2px;height:28px;background:linear-gradient(180deg,var(--azure),var(--azureL));border-radius:1px"></div>
                   <div>
-                    <h3 style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--chalk);margin:0">${t.opsTitle}</h3>
-                    <p style="font-family:var(--font-mono);color:var(--azure);font-size:11px;letter-spacing:2px;margin:2px 0 0">${t.opsSub}</p>
+                    <h3 style="font-family:var(--font-display);font-size:20px;color:var(--chalk);margin:0">Compétences Analytiques</h3>
+                    <p style="font-family:var(--font-mono);color:var(--azure);font-size:11px;letter-spacing:2px;margin:2px 0 0">RADAR D'EXPERTISE</p>
                   </div>
                 </div>
-                ${t.opsSkills.map((s,i) => `
-                  <div style="display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:${i<t.opsSkills.length-1?'1px solid var(--dim)':'none'}">
-                    <span style="font-family:var(--font-mono);color:var(--gold);font-size:12px;margin-top:1px" aria-hidden="true">▸</span>
-                    <span style="font-family:var(--font-ui);color:var(--silver);font-size:13px;line-height:1.5">${formatText(s)}</span>
-                  </div>
-                `).join('')}
+                <div style="flex:1;position:relative; min-height: 220px;"><canvas id="radar-chart"></canvas></div>
               </div>
             </div>
 
@@ -816,7 +1133,7 @@
                 <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px">
                   <div style="width:2px;height:28px;background:linear-gradient(180deg,var(--lilac),var(--lilac));border-radius:1px"></div>
                   <div>
-                    <h3 style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--chalk);margin:0">${t.softTitle}</h3>
+                    <h3 style="font-family:var(--font-display);font-size:20px;color:var(--chalk);margin:0">${t.softTitle}</h3>
                     <p style="font-family:var(--font-mono);color:var(--lilac);font-size:11px;letter-spacing:2px;margin:2px 0 0">${t.softSub}</p>
                   </div>
                 </div>
@@ -826,7 +1143,7 @@
                       <span style="font-family:var(--font-ui);color:var(--silver);font-size:13px">${s.s}</span>
                       <span style="font-family:var(--font-mono);color:var(--${s.c});font-size:11px;font-weight:700">${s.p}%</span>
                     </div>
-                    <div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden" role="progressbar" aria-valuenow="${s.p}" aria-valuemin="0" aria-valuemax="100" aria-label="${s.s}">
+                    <div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden">
                       <div class="anim-bar" data-width="${s.p}" style="height:100%;background:var(--${s.c});width:0;transition:width 1s ease"></div>
                     </div>
                   </div>
@@ -839,7 +1156,7 @@
                 <div style="display:flex;align-items:center;gap:12px;width:100%">
                   <div style="width:2px;height:28px;background:linear-gradient(180deg,var(--emerald),var(--emerald));border-radius:1px"></div>
                   <div>
-                    <h3 style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--chalk);margin:0">${t.langsTitle}</h3>
+                    <h3 style="font-family:var(--font-display);font-size:20px;color:var(--chalk);margin:0">${t.langsTitle}</h3>
                     <p style="font-family:var(--font-mono);color:var(--emerald);font-size:11px;letter-spacing:2px;margin:2px 0 0">${t.langsSub}</p>
                   </div>
                 </div>
@@ -850,7 +1167,7 @@
                       <span style="font-family:var(--font-mono);font-size:10px;color:var(--emerald);letter-spacing:1px">${lg.lv}</span>
                     </div>
                     <div style="font-family:var(--font-ui);font-weight:600;font-size:14px;color:var(--chalk);margin-bottom:10px">${lg.l}</div>
-                    <div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden" role="progressbar" aria-valuenow="${lg.p}" aria-valuemin="0" aria-valuemax="100" aria-label="${lg.l} — ${lg.lv}">
+                    <div style="height:3px;background:var(--dim);border-radius:2px;overflow:hidden">
                       <div class="anim-bar" data-width="${lg.p}" style="height:100%;background:var(--emerald);width:0;transition:width 1s ease"></div>
                     </div>
                   </div>
@@ -859,12 +1176,11 @@
             </div>
 
             <!-- Certifications Block -->
-            ${t.certifs ? `
             <div class="reveal b12" style="grid-column:span 12;transition-delay:.4s;margin-top:8px;">
               <div class="gc" style="${card({css:'padding:32px;display:flex;align-items:center;gap:32px;flex-wrap:wrap;background:var(--bg3);border-color:var(--gold);'})}">
                 <div style="display:flex;align-items:center;gap:16px;min-width:250px;">
                   <div style="width:48px;height:48px;border-radius:12px;background:rgba(201,168,76,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">
-                    <i data-lucide="award" style="width:24px;height:24px;"></i>
+                    <i data-lucide="award" style="width:24px;"></i>
                   </div>
                   <div>
                     <h3 style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--chalk);margin:0">${t.certifTitle}</h3>
@@ -879,11 +1195,26 @@
                    `).join('')}
                 </div>
               </div>
-            </div>` : ''}
+            </div>
 
           </div>
         </div>
       `;
+    }
+
+    function renderRadarChart(t) {
+      if(radarChart) radarChart.destroy();
+      const ctx = $('radar-chart');
+      if(!ctx) return;
+      const cGold = getVar('gold'), cDim = getVar('dim');
+      radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: t.radar.map(d=>d.s),
+          datasets: [{ data: t.radar.map(d=>d.v), backgroundColor: hexToRgbA(cGold, 0.2), borderColor: cGold, pointBackgroundColor: cGold }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, scales: { r: { grid: { color: cDim }, angleLines: { color: cDim }, pointLabels: { color: getVar('silver'), font: { size: 10, family: "'JetBrains Mono', monospace" } }, ticks: { display: false }, min: 0, max: 100 } }, plugins: { legend: { display: false } } }
+      });
     }
 
     function renderXP(t) {
@@ -891,17 +1222,17 @@
         <div style="max-width:960px;margin:0 auto;position:relative">
           ${SectionHeader(t.sNums[1], t.navLabels[1])}
           <div style="position:relative;padding-left:48px">
-            <div style="position:absolute;left:18px;top:4px;bottom:4px;width:1px;background:linear-gradient(180deg,var(--gold),var(--azure),var(--lilac),var(--emerald),var(--coral),transparent)" aria-hidden="true"></div>
+            <div style="position:absolute;left:18px;top:4px;bottom:4px;width:1px;background:linear-gradient(180deg,var(--gold),var(--azure),var(--lilac),var(--emerald),var(--coral),transparent)"></div>
             <div style="display:flex;flex-direction:column;gap:24px">
               ${t.xps.map((x,i) => `
-                <div class="reveal" style="position:relative;transition-delay:${i*.1}s">
-                  <div style="position:absolute;left:-36px;top:28px;width:32px;height:32px;border-radius:50%;background:var(--bg0);border:2px solid var(--${x.color});display:flex;align-items:center;justify-content:center;z-index:2" aria-hidden="true">
+                <div class="reveal" style="position:relative;transition-delay:${i*.1}s" onclick="openModal('xp', ${i})">
+                  <div style="position:absolute;left:-36px;top:28px;width:32px;height:32px;border-radius:50%;background:var(--bg0);border:2px solid var(--${x.color});display:flex;align-items:center;justify-content:center;z-index:2">
                     <div style="width:8px;height:8px;border-radius:50%;background:var(--${x.color})"></div>
                   </div>
                   <article class="xpc gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:32px;border-left:3px solid var(--${x.color})">
                     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
                       <div>
-                        <h3 style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--chalk);margin:0 0 4px;letter-spacing:-0.01em">${x.role}</h3>
+                        <h3 style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--chalk);margin:0 0 4px;">${x.role}</h3>
                         <div style="font-family:var(--font-mono);font-size:12px;color:var(--${x.color});letter-spacing:1.5px">${x.co}</div>
                       </div>
                       <div style="text-align:right">
@@ -909,19 +1240,22 @@
                           <span style="font-family:var(--font-mono);font-size:11px;color:var(--${x.color})">${x.period}</span>
                         </div>
                         <div style="font-family:var(--font-mono);font-size:10px;color:var(--slate);display:flex;align-items:center;gap:4px;justify-content:flex-end">
-                          <i data-lucide="map-pin" style="width:10px" aria-hidden="true"></i> ${x.loc}
+                          <i data-lucide="map-pin" style="width:10px"></i> ${x.loc}
                         </div>
                       </div>
                     </div>
                     <ul style="padding:0;margin:0 0 22px;list-style:none;display:flex;flex-direction:column;gap:10px">
                       ${x.pts.map(p => `
                         <li style="display:flex;gap:12px;font-size:13px;color:var(--silver);line-height:1.6;font-family:var(--font-ui)">
-                          <span style="color:var(--${x.color});flex-shrink:0;margin-top:1px;font-family:var(--font-mono)" aria-hidden="true">▸</span>${formatText(p)}
+                          <span style="color:var(--${x.color});flex-shrink:0;margin-top:1px;font-family:var(--font-mono)">▸</span>${formatText(p)}
                         </li>
                       `).join('')}
                     </ul>
-                    <div style="display:flex;flex-wrap:wrap;gap:8px" aria-label="Tags">
-                      ${x.tags.map(tag => `<span style="background:rgba(255,255,255,0.03);border:1px solid var(--dim);color:var(--${x.color});border-radius:6px;padding:4px 12px;font-size:11px;font-weight:600;font-family:var(--font-mono)">${tag}</span>`).join('')}
+                    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                      <div style="display:flex;flex-wrap:wrap;gap:8px">
+                        ${x.tags.map(tag => `<span style="background:rgba(255,255,255,0.03);border:1px solid var(--dim);color:var(--${x.color});border-radius:6px;padding:4px 12px;font-size:11px;font-weight:600;font-family:var(--font-mono)">${tag}</span>`).join('')}
+                      </div>
+                      <div style="color:var(--silver); font-size:12px; display:flex; align-items:center; gap:4px; opacity:0.7"><i data-lucide="plus-circle" style="width:14px"></i> Détails</div>
                     </div>
                   </article>
                 </div>
@@ -938,17 +1272,16 @@
           ${SectionHeader(t.sNums[2], t.navLabels[2])}
           <div class="pjg" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px">
             ${t.projects.map((p,i) => `
-              <article class="reveal pj gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition-delay:${i*.1}s">
-                <div style="height:180px;position:relative;border-bottom:1px solid var(--dim)">
+              <article class="reveal pj gc" onclick="openModal('proj', ${i})" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition-delay:${i*.1}s">
+                <div style="height:140px;position:relative;border-bottom:1px solid var(--dim)">
                   <div class="pbg" style="position:absolute;inset:0;background:radial-gradient(circle at bottom right,var(--${p.color}),var(--bg2) 80%);opacity:0.3"></div>
-                  <div style="position:absolute;inset:0;background-image:radial-gradient(var(--${p.color}) 1px,transparent 1px);background-size:20px 20px;opacity:0.1" aria-hidden="true"></div>
-                  <div style="position:absolute;top:16px;right:20px;font-family:var(--font-display);font-size:72px;font-weight:600;color:var(--${p.color});opacity:.15;line-height:1" aria-hidden="true">0${i+1}</div>
+                  <div style="position:absolute;inset:0;background-image:radial-gradient(var(--${p.color}) 1px,transparent 1px);background-size:20px 20px;opacity:0.1"></div>
+                  <div style="position:absolute;top:16px;right:20px;font-family:var(--font-display);font-size:72px;font-weight:600;color:var(--${p.color});opacity:.15;line-height:1">0${i+1}</div>
                   <div style="position:absolute;top:24px;left:24px">
                     <span style="font-family:var(--font-mono);font-size:10px;color:var(--${p.color});padding:4px 10px;border:1px solid var(--${p.color});border-radius:100px;background:var(--bg0)">${p.type.toUpperCase()}</span>
                   </div>
                   <div class="pov" style="position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;gap:16px">
-                    ${p.link && p.link !== '#' ? `<a href="${p.link}" target="_blank" rel="noopener" aria-label="Voir le projet ${p.title}" style="width:44px;height:44px;border-radius:50%;background:var(--${p.color});color:var(--bg0);display:flex;align-items:center;justify-content:center"><i data-lucide="external-link" style="width:20px" aria-hidden="true"></i></a>` : ''}
-                    ${p.github && p.github !== '#' ? `<a href="${p.github}" target="_blank" rel="noopener" aria-label="Code source de ${p.title}" style="width:44px;height:44px;border-radius:50%;background:var(--bg3);border:1px solid var(--dim);color:var(--chalk);display:flex;align-items:center;justify-content:center"><i data-lucide="github" style="width:20px" aria-hidden="true"></i></a>` : ''}
+                    <span style="color:var(--chalk); font-family:var(--font-mono); font-size:12px; letter-spacing:1px; display:flex; align-items:center; gap:6px"><i data-lucide="eye" style="width:16px"></i> Explorer le projet</span>
                   </div>
                 </div>
                 <div style="padding:32px;flex:1;display:flex;flex-direction:column">
@@ -957,7 +1290,7 @@
                   <div style="display:flex;gap:16px;margin-bottom:24px">
                     ${p.kpis.map(k => `
                       <div style="display:flex;align-items:center;gap:6px">
-                        <i data-lucide="target" style="width:11px;color:var(--${p.color})" aria-hidden="true"></i>
+                        <i data-lucide="target" style="width:11px;color:var(--${p.color})"></i>
                         <span style="font-family:var(--font-mono);font-size:11px;color:var(--chalk)">${formatText(k)}</span>
                       </div>
                     `).join('')}
@@ -974,9 +1307,6 @@
       `;
     }
 
-    /* ════════════════════════════════════════════════════════════════════
-       RECOMMENDATIONS
-    ════════════════════════════════════════════════════════════════════ */
     function renderRecos(t) {
       if(!t.recos) return;
       $('reco-wrap').innerHTML = `
@@ -992,7 +1322,7 @@
                 <div style="flex:1">
                   <h3 style="font-family:var(--font-display);font-size:20px;color:var(--chalk);margin:0 0 4px">${r.author}</h3>
                   <div style="font-family:var(--font-mono);font-size:11px;color:var(--${r.color});letter-spacing:1px;margin-bottom:8px">${r.co}</div>
-                  <a href="${r.file}" target="_blank" style="font-family:var(--font-ui);font-size:13px;color:var(--silver);text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:color .2s" onmouseover="this.style.color='var(--${r.color})'" onmouseout="this.style.color='var(--silver)'">
+                  <a href="${r.file}" target="_blank" style="font-family:var(--font-ui);font-size:13px;color:var(--silver);text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:color .2s">
                     Ouvrir le PDF <i data-lucide="arrow-right" style="width:12px"></i>
                   </a>
                 </div>
@@ -1003,87 +1333,22 @@
       `;
     }
 
-    function renderDashboard(t) {
-      $('dash-wrap').innerHTML = `
-        <div style="max-width:1280px;margin:0 auto">
-          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px">
-            ${SectionHeader(t.sNums[4], t.navLabels[4])}
-            <div style="margin-bottom:64px;display:flex;background:var(--bg2);border:1px solid var(--dim);border-radius:100px;padding:4px" role="group" aria-label="Filtre de période">
-              ${t.periods.map(p => `
-                <button onclick="setDashFilter('${p[0]}')" class="dash-btn ${dashFilter===p[0]?'active':''}" aria-pressed="${dashFilter===p[0]}" style="background:${dashFilter===p[0]?'linear-gradient(135deg,var(--goldD),var(--gold))':'none'};color:${dashFilter===p[0]?'var(--bg0)':'var(--silver)'};padding:8px 20px;border-radius:100px;border:none;font-size:12px;font-family:var(--font-mono);cursor:pointer;transition:all .2s">${p[1]}</button>
-              `).join('')}
-            </div>
-          </div>
-          
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:16px" id="kpi-cards">
-            <!-- Filled by updateCharts -->
-          </div>
-
-          <div class="c2" style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px">
-            <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:28px;height:360px;display:flex;flex-direction:column">
-              <div><h3 style="font-family:var(--font-display);font-size:18px;margin:0 0 4px">${t.charts[0]}</h3><p style="font-family:var(--font-mono);font-size:10px;color:var(--silver);margin:0">${t.chartSubs[0].toUpperCase()}</p></div>
-              <div style="flex:1;position:relative"><canvas id="chart1" aria-label="${t.charts[0]}"></canvas></div>
-            </div>
-            <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:28px;height:360px;display:flex;flex-direction:column;transition-delay:.1s">
-              <div><h3 style="font-family:var(--font-display);font-size:18px;margin:0 0 4px">${t.charts[1]}</h3><p style="font-family:var(--font-mono);font-size:10px;color:var(--silver);margin:0">${t.chartSubs[1].toUpperCase()}</p></div>
-              <div style="flex:1;position:relative"><canvas id="chart2" aria-label="${t.charts[1]}"></canvas></div>
-            </div>
-          </div>
-
-          <div class="c2" style="display:grid;grid-template-columns:3fr 2fr;gap:16px">
-            <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:28px;height:320px;display:flex;flex-direction:column">
-              <div><h3 style="font-family:var(--font-display);font-size:18px;margin:0 0 4px">${t.charts[2]}</h3><p style="font-family:var(--font-mono);font-size:10px;color:var(--silver);margin:0">${t.chartSubs[2].toUpperCase()}</p></div>
-              <div style="flex:1;position:relative"><canvas id="chart3" aria-label="${t.charts[2]}"></canvas></div>
-            </div>
-
-            <!-- TABLEAU DES ECARTS D'INVENTAIRE -->
-            <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:28px;height:320px;display:flex;flex-direction:column;transition-delay:.1s;overflow-x:auto;">
-              <h3 style="font-family:var(--font-display);font-size:18px;color:var(--chalk);margin:0 0 16px">${t.kpiCard} (< 0.5%)</h3>
-              <table class="kpi-table" aria-label="${t.kpiCard}" style="width:100%;border-collapse:collapse;">
-                <thead>
-                  <tr>
-                    <th class="top-hdr"></th>
-                    <th colspan="3" class="top-hdr text-center" style="border-left:1px solid var(--dim);border-right:1px solid var(--dim)">RÉPARTITION DES ÉCARTS</th>
-                    <th colspan="2" class="top-hdr text-center">POURCENTAGE</th>
-                  </tr>
-                  <tr style="background:var(--bg3);color:var(--silver);">
-                    <th class="text-left" scope="col" style="color:var(--chalk)">Magasin</th>
-                    <th scope="col" style="color:var(--coral)">FAUX</th>
-                    <th scope="col" style="color:var(--emerald)">VRAI</th>
-                    <th scope="col" style="border-right:1px solid var(--dim)">Total</th>
-                    <th scope="col" style="color:var(--coral)">ÉCART</th>
-                    <th scope="col" style="color:var(--emerald)">ISO</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td class="text-left">L001</td><td>0</td><td>435</td><td style="border-right:1px solid var(--dim);font-weight:600">435</td><td style="color:var(--silver)">0%</td><td>100%</td></tr>
-                  <tr><td class="text-left">L002</td><td>0</td><td>15</td><td style="border-right:1px solid var(--dim);font-weight:600">15</td><td style="color:var(--silver)">0%</td><td>100%</td></tr>
-                  <tr><td class="text-left">L003</td><td>0</td><td>28</td><td style="border-right:1px solid var(--dim);font-weight:600">28</td><td style="color:var(--silver)">0%</td><td>100%</td></tr>
-                  <tr><td class="text-left">L004</td><td>0</td><td>118</td><td style="border-right:1px solid var(--dim);font-weight:600">118</td><td style="color:var(--silver)">0%</td><td>100%</td></tr>
-                  <tr class="total-row"><td class="text-left">Total</td><td style="color:var(--coral)">0</td><td style="color:var(--emerald)">596</td><td style="border-right:1px solid var(--dim)">596</td><td style="color:var(--coral)">0.0%</td><td style="color:var(--emerald)">100%</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
     function renderEducation(t) {
       $('edu-wrap').innerHTML = `
         <div style="max-width:1280px;margin:0 auto">
-          ${SectionHeader(t.sNums[5], t.navLabels[5])}
+          ${SectionHeader(t.sNums[4], t.navLabels[4])}
           <div class="edg" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
             ${t.schools.map((s,i) => `
-              <article class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:36px;position:relative;overflow:hidden;transition-delay:${i*.1}s">
-                <div style="position:absolute;bottom:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,var(--${s.color}) 0%,transparent 70%);opacity:.15" aria-hidden="true"></div>
+              <article class="reveal gc" onclick="openModal('edu', ${i})" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:36px;position:relative;overflow:hidden;transition-delay:${i*.1}s">
+                <div style="position:absolute;bottom:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,var(--${s.color}) 0%,transparent 70%);opacity:.15"></div>
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px">
                   <span style="font-family:var(--font-mono);font-size:11px;color:var(--${s.color});padding:4px 10px;border:1px solid var(--${s.color});border-radius:6px;background:rgba(0,0,0,0.2)">${s.period}</span>
-                  <span style="font-family:var(--font-mono);font-size:10px;color:var(--slate);display:flex;align-items:center;gap:4px"><i data-lucide="map-pin" style="width:10px" aria-hidden="true"></i> ${s.loc}</span>
+                  <span style="font-family:var(--font-mono);font-size:10px;color:var(--slate);display:flex;align-items:center;gap:4px"><i data-lucide="map-pin" style="width:10px"></i> ${s.loc}</span>
                 </div>
                 <h3 style="font-family:var(--font-display);font-size:20px;margin:0 0 8px">${s.school}</h3>
                 <h4 style="font-family:var(--font-ui);font-size:13px;font-weight:500;color:var(--${s.color});margin:0 0 20px">${s.degree}</h4>
-                <p style="font-family:var(--font-ui);font-size:13px;color:var(--silver);line-height:1.65;margin:0">${formatText(s.desc)}</p>
+                <p style="font-family:var(--font-ui);font-size:13px;color:var(--silver);line-height:1.65;margin:0 0 16px;">${formatText(s.desc)}</p>
+                <div style="color:var(--silver); font-size:12px; display:flex; align-items:center; gap:4px; opacity:0.7"><i data-lucide="plus-circle" style="width:14px"></i> Voir rapports/photos</div>
               </article>
             `).join('')}
           </div>
@@ -1094,16 +1359,15 @@
     function renderFuture(t) {
       $('future-wrap').innerHTML = `
         <div style="max-width:1280px;margin:0 auto">
-          ${SectionHeader(t.sNums[6], t.navLabels[6])}
+          ${SectionHeader(t.sNums[5], t.navLabels[5])}
           
           <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 32px; align-items: start;">
-            
             <div style="position:relative;padding-left:48px">
-              <div style="position:absolute;left:18px;top:4px;bottom:4px;width:1px;background:linear-gradient(180deg,var(--azure),var(--gold),transparent)" aria-hidden="true"></div>
+              <div style="position:absolute;left:18px;top:4px;bottom:4px;width:1px;background:linear-gradient(180deg,var(--azure),var(--gold),transparent)"></div>
               <div style="display:flex;flex-direction:column;gap:24px">
                 ${t.future.map((f,i) => `
-                  <div class="reveal" style="position:relative;transition-delay:${i*.1}s">
-                    <div style="position:absolute;left:-36px;top:28px;width:32px;height:32px;border-radius:50%;background:var(--bg0);border:2px solid var(--${f.color});display:flex;align-items:center;justify-content:center;z-index:2" aria-hidden="true">
+                  <div class="reveal" style="position:relative;transition-delay:${i*.1}s" onclick="openModal('future', ${i})">
+                    <div style="position:absolute;left:-36px;top:28px;width:32px;height:32px;border-radius:50%;background:var(--bg0);border:2px solid var(--${f.color});display:flex;align-items:center;justify-content:center;z-index:2">
                       <div style="width:8px;height:8px;border-radius:50%;background:var(--${f.color})"></div>
                     </div>
                     <article class="xpc gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:32px;border-left:3px solid var(--${f.color})">
@@ -1117,19 +1381,22 @@
                             <span style="font-family:var(--font-mono);font-size:11px;color:var(--${f.color})">${f.period}</span>
                           </div>
                           <div style="font-family:var(--font-mono);font-size:10px;color:var(--slate);display:flex;align-items:center;gap:4px;justify-content:flex-end">
-                            <i data-lucide="map-pin" style="width:10px" aria-hidden="true"></i> ${f.loc}
+                            <i data-lucide="map-pin" style="width:10px"></i> ${f.loc}
                           </div>
                         </div>
                       </div>
                       <ul style="padding:0;margin:0 0 22px;list-style:none;display:flex;flex-direction:column;gap:10px">
                         ${f.pts.map(pt => `
                           <li style="display:flex;gap:12px;font-size:13px;color:var(--silver);line-height:1.6;font-family:var(--font-ui)">
-                            <span style="color:var(--${f.color});flex-shrink:0;margin-top:1px;font-family:var(--font-mono)" aria-hidden="true">▸</span>${formatText(pt)}
+                            <span style="color:var(--${f.color});flex-shrink:0;margin-top:1px;font-family:var(--font-mono)">▸</span>${formatText(pt)}
                           </li>
                         `).join('')}
                       </ul>
-                      <div style="display:flex;flex-wrap:wrap;gap:8px">
-                        ${f.tags.map(tag => `<span style="background:rgba(255,255,255,0.03);border:1px solid var(--dim);color:var(--${f.color});border-radius:6px;padding:4px 12px;font-size:11px;font-weight:600;font-family:var(--font-mono)">${tag}</span>`).join('')}
+                      <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                        <div style="display:flex;flex-wrap:wrap;gap:8px">
+                          ${f.tags.map(tag => `<span style="background:rgba(255,255,255,0.03);border:1px solid var(--dim);color:var(--${f.color});border-radius:6px;padding:4px 12px;font-size:11px;font-weight:600;font-family:var(--font-mono)">${tag}</span>`).join('')}
+                        </div>
+                        <div style="color:var(--silver); font-size:12px; display:flex; align-items:center; gap:4px; opacity:0.7"><i data-lucide="plus-circle" style="width:14px"></i> Explorer l'ambition</div>
                       </div>
                     </article>
                   </div>
@@ -1139,11 +1406,9 @@
 
             <!-- Stylized Global Map SVG -->
             <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:32px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;min-height:280px;height:100%;">
-              <!-- Tech Grid Background -->
               <div style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.15;background-image:linear-gradient(var(--azure) 1px, transparent 1px), linear-gradient(90deg, var(--azure) 1px, transparent 1px);background-size:30px 30px;background-position:center center;"></div>
-              
               <svg viewBox="0 0 1000 500" style="width:100%;height:auto;z-index:1;overflow:visible;">
-                <!-- Authentic Simplified World Map Path (High Precision Vector) -->
+                <!-- Authentic Simplified World Map Path -->
                 <g fill="var(--bg1)" stroke="var(--silver)" stroke-width="0.8" opacity="0.4" stroke-linejoin="round" stroke-linecap="round">
                   <path d="M 283.4 56.6 C 283.4 56.6 280.9 59.8 281.3 64.9 C 281.7 70.1 274.6 77.8 266.1 79.5 C 257.6 81.2 249.7 74.8 245.9 76.5 C 242 78.2 239.5 86.8 241.2 92.3 C 242.9 97.9 238.2 108.6 230.1 106 C 222 103.4 213.9 104.7 203.2 100 C 192.5 95.3 191.7 87.2 189.5 81.2 C 187.4 75.2 184 73.1 176.7 71 C 169.4 68.8 152.8 62.4 148.1 58.6 C 143.4 54.7 131.8 45.7 122 41 C 112.1 36.3 118.6 34.6 126.7 34.2 C 134.8 33.8 136.1 38.5 142.1 38.9 C 148.1 39.3 155.4 35.9 160.1 32 C 164.8 28.2 165.2 23.5 168.6 20.1 C 172.1 16.7 182.8 21.8 190.9 21.4 C 199 21 213.5 24 219.1 27.4 C 224.6 30.8 238.3 35.1 245.2 38.5 C 252 41.9 261 41 268.3 46.2 C 275.5 51.3 283.4 56.6 283.4 56.6 Z" />
                   <path d="M 271.8 232.7 C 271.8 232.7 279.1 228 285.5 228.4 C 291.9 228.8 296.6 233.5 301.3 236.9 C 306 240.4 316.3 241.6 320.6 248 C 324.8 254.5 330.8 266 333.4 274.6 C 336 283.1 334.3 293 331.7 298.1 C 329.1 303.2 320.2 316.1 316.3 325.5 C 312.5 334.9 313.3 349 311.6 358.4 C 309.9 367.8 312.9 375.5 307.8 385 C 302.6 394.4 293.7 413.2 289.4 420.9 C 285.1 428.6 279.6 443.1 274 445.3 C 268.5 447.4 256.1 438.4 250.9 428.6 C 245.8 418.8 243.7 400 241.5 391.4 C 239.4 382.9 240.2 371.3 237.7 363.6 C 235.1 356 226.6 338.9 221.9 328.6 C 217.2 318.3 216.7 301.7 218 292.7 C 219.3 283.7 222.7 275.6 229.1 268.7 C 235.6 261.9 248 247.4 253.9 241.8 C 259.9 236.3 271.8 232.7 271.8 232.7 Z" />
@@ -1164,41 +1429,26 @@
                 <path d="M 506 114 Q 647 80 788 246" fill="none" stroke="var(--azure)" stroke-width="2.5" stroke-dasharray="350" stroke-dashoffset="350" stroke-linecap="round" style="animation: flowArc 4s infinite linear 1s;"/>
                 <path d="M 788 246 Q 850 250 919 344" fill="none" stroke="var(--emerald)" stroke-width="2.5" stroke-dasharray="150" stroke-dashoffset="150" stroke-linecap="round" style="animation: flowArc 3s infinite linear 2s;"/>
 
-                <!-- Glow effects for nodes -->
                 <defs>
-                  <filter id="glow-gold" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                  </filter>
-                  <filter id="glow-azure" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                  </filter>
-                  <filter id="glow-emerald" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                  </filter>
+                  <filter id="glow-gold" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>
+                  <filter id="glow-azure" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>
+                  <filter id="glow-emerald" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>
                 </defs>
 
                 <!-- Accurate Nodes -->
-                <!-- Paris -->
                 <circle cx="506" cy="114" r="4" fill="var(--bg0)" stroke="var(--gold)" stroke-width="2.5" filter="url(#glow-gold)"/>
                 <text x="506" y="130" fill="var(--silver)" font-family="var(--font-mono)" font-size="10" font-weight="700" text-anchor="middle">Paris (FR)</text>
                 
-                <!-- Hamburg -->
                 <circle cx="528" cy="101" r="4" fill="var(--bg0)" stroke="var(--gold)" stroke-width="2.5" filter="url(#glow-gold)"/>
                 <text x="528" y="90" fill="var(--silver)" font-family="var(--font-mono)" font-size="10" font-weight="700" text-anchor="middle">Hamburg (DE)</text>
                 
-                <!-- Singapore -->
                 <circle cx="788" cy="246" r="4" fill="var(--bg0)" stroke="var(--azure)" stroke-width="2.5" filter="url(#glow-azure)"/>
                 <text x="788" y="262" fill="var(--silver)" font-family="var(--font-mono)" font-size="10" font-weight="700" text-anchor="middle">Singapore (SG)</text>
                 
-                <!-- Australia (Sydney) -->
                 <circle cx="919" cy="344" r="4" fill="var(--bg0)" stroke="var(--emerald)" stroke-width="2.5" filter="url(#glow-emerald)"/>
                 <text x="919" y="360" fill="var(--silver)" font-family="var(--font-mono)" font-size="10" font-weight="700" text-anchor="middle">Australia (AU)</text>
               </svg>
             </div>
-
           </div>
         </div>
       `;
@@ -1207,7 +1457,7 @@
     function renderTerminal(t) {
       $('term-wrap').innerHTML = `
         <div style="max-width:800px;margin:0 auto">
-          ${SectionHeader(t.sNums[7], t.termTitle)}
+          ${SectionHeader(t.sNums[6], t.termTitle)}
           <div class="reveal term-box" style="border-radius:16px;overflow:hidden;border:1px solid var(--dim);box-shadow:0 40px 80px rgba(0,0,0,.6)">
             <div style="background:var(--bg3);padding:12px 20px;display:flex;align-items:center;border-bottom:1px solid var(--dim)">
               <div style="display:flex;gap:7px">
@@ -1217,7 +1467,6 @@
               </div>
               <div style="flex:1;text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--silver)">rchaumeny@portfolio:~</div>
             </div>
-            <!-- Interactive Terminal Content -->
             <div style="background:var(--bg0);padding:32px;font-family:var(--font-mono);font-size:13px;min-height:300px;line-height:2;overflow-y:auto" id="term-content">
               <!-- Animated via JS -->
             </div>
@@ -1234,7 +1483,7 @@
       ).join('') : '';
 
       wrap.innerHTML = `
-        <div id="ai-chat-window" class="gc" style="display: none; width: 340px; height: 460px; background: var(--bg2); border: 1px solid var(--dim); border-radius: 16px; margin-bottom: 16px; flex-direction: column; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,.6);">
+        <div id="ai-chat-window" class="gc" style="display: none; position: absolute; bottom: 72px; left: 0; width: 340px; height: 460px; background: var(--bg2); border: 1px solid var(--dim); border-radius: 16px; flex-direction: column; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,.6);">
           <div id="ai-chat-header" style="background: var(--bg3); padding: 12px 16px; border-bottom: 1px solid var(--dim); display: flex; align-items: center; justify-content: space-between; cursor: grab;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <i data-lucide="bot" style="color: var(--gold); width: 18px;"></i>
@@ -1249,8 +1498,7 @@
             </div>
           </div>
           
-          <!-- Quick Replies Section -->
-          <div style="padding: 8px 12px; background: var(--bg0); border-top: 1px solid var(--dim); display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;">
+          <div style="padding: 8px 12px; background: var(--bg0); border-top: 1px solid var(--dim); display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;">
             ${suggestionsHtml}
           </div>
 
@@ -1270,55 +1518,66 @@
     }
 
     function makeChatDraggable() {
-      const wrap = $('bot-wrap');
-      let isDragging = false;
-      let offsetX, offsetY;
-
+      let isDragging = false, offsetX, offsetY, win;
       document.addEventListener('mousedown', (e) => {
         if (e.target.closest('#ai-chat-header')) {
+          win = $('ai-chat-window');
+          if (!win) return;
           isDragging = true;
-          const rect = wrap.getBoundingClientRect();
+          const rect = win.getBoundingClientRect();
           offsetX = e.clientX - rect.left;
           offsetY = e.clientY - rect.top;
-          wrap.style.bottom = 'auto';
-          wrap.style.right = 'auto';
+          
+          win.style.bottom = 'auto'; 
+          win.style.right = 'auto';
+          win.style.position = 'fixed';
+          win.style.left = `${rect.left}px`;
+          win.style.top = `${rect.top}px`;
         }
       });
-
       document.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-          wrap.style.left = `${e.clientX - offsetX}px`;
-          wrap.style.top = `${e.clientY - offsetY}px`;
+        if (isDragging && win) {
+          win.style.left = `${e.clientX - offsetX}px`;
+          win.style.top = `${e.clientY - offsetY}px`;
         }
       });
-
       document.addEventListener('mouseup', () => { isDragging = false; });
     }
 
     function renderFooter(t) {
       $('cta-wrap').innerHTML = `
         <div style="max-width:800px;margin:0 auto;text-align:center">
-          <div class="reveal" style="background:var(--bg2);border:1px solid rgba(201,168,76,0.2);border-radius:28px;padding:72px 52px;position:relative;overflow:hidden">
-            <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)" aria-hidden="true"></div>
-            <div style="position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.07) 0%,transparent 70%);filter:blur(40px)" aria-hidden="true"></div>
-            <div style="font-family:var(--font-mono);font-size:10px;color:var(--gold);letter-spacing:4px;margin-bottom:20px" aria-hidden="true">${t.sNums[8] || "09"} CONTACT</div>
+          <div class="reveal" style="background:var(--bg2);border:1px solid rgba(201,168,76,0.2);border-radius:28px;padding:72px 52px;position:relative;overflow:hidden; margin-bottom:48px;">
+            <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)"></div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--gold);letter-spacing:4px;margin-bottom:20px">${t.sNums[7] || "08"} CONTACT</div>
             <h2 style="font-family:var(--font-display);font-size:clamp(36px,5vw,60px);color:var(--chalk);margin:0 0 20px;line-height:1">${t.contactTitle}</h2>
             <p style="font-family:var(--font-ui);color:var(--silver);font-size:16px;max-width:500px;margin:0 auto 52px">${t.contactSub}</p>
             <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:48px">
-              <a href="mailto:chaumenyr@gmail.com" style="background:linear-gradient(135deg,var(--goldD),var(--gold));color:var(--bg0);padding:15px 36px;border-radius:10px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(201,168,76,0.3);font-family:var(--font-ui);transition:all .3s" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 16px 48px rgba(201,168,76,0.45)'" onmouseleave="this.style.transform='none';this.style.boxShadow='0 8px 32px rgba(201,168,76,0.3)'">
-                <i data-lucide="mail" style="width:16px" aria-hidden="true"></i> chaumenyr@gmail.com
+              <a href="mailto:chaumenyr@gmail.com" style="background:linear-gradient(135deg,var(--goldD),var(--gold));color:var(--bg0);padding:15px 36px;border-radius:10px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(201,168,76,0.3);font-family:var(--font-ui);transition:all .3s" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform='none'">
+                <i data-lucide="mail" style="width:16px"></i> chaumenyr@gmail.com
               </a>
-              <a href="tel:+33666220527" style="border:1px solid var(--slate);color:var(--silver);padding:15px 36px;border-radius:10px;text-decoration:none;display:flex;align-items:center;gap:10px;font-family:var(--font-ui);transition:all .3s" onmouseenter="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseleave="this.style.borderColor='var(--slate)';this.style.color='var(--silver)'">
-                <i data-lucide="phone" style="width:16px" aria-hidden="true"></i> +33 6 66 22 05 27
+              <a href="tel:+33666220527" style="border:1px solid var(--slate);color:var(--silver);padding:15px 36px;border-radius:10px;text-decoration:none;display:flex;align-items:center;gap:10px;font-family:var(--font-ui);">
+                <i data-lucide="phone" style="width:16px"></i> +33 6 66 22 05 27
               </a>
-              <a href="https://fr.linkedin.com/in/raphaelchaumeny" target="_blank" rel="noopener" style="border:1px solid var(--slate);color:var(--silver);padding:15px 36px;border-radius:10px;text-decoration:none;display:flex;align-items:center;gap:10px;font-family:var(--font-ui);transition:all .3s" onmouseenter="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseleave="this.style.borderColor='var(--slate)';this.style.color='var(--silver)'">
-                <i data-lucide="linkedin" style="width:16px" aria-hidden="true"></i> LinkedIn
+              <a href="https://fr.linkedin.com/in/raphaelchaumeny" target="_blank" rel="noopener" style="border:1px solid var(--slate);color:var(--silver);padding:15px 36px;border-radius:10px;text-decoration:none;display:flex;align-items:center;gap:10px;font-family:var(--font-ui);">
+                <i data-lucide="linkedin" style="width:16px"></i> LinkedIn
               </a>
-            </div>
-            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px">
-              ${t.tags.map(tag => `<span style="background:rgba(255,255,255,0.03);border:1px solid var(--dim);color:var(--silver);padding:6px 18px;border-radius:100px;font-size:11px;font-family:var(--font-mono)">${tag}</span>`).join('')}
             </div>
           </div>
+
+          <!-- Business Card Flip Element -->
+          <div class="reveal bcard-container" onclick="this.classList.toggle('flipped')">
+            <div class="bcard-flipper">
+              <div class="bcard-front">
+                <img src="1.png" alt="Carte de visite Raphaël Chaumény (Recto)" class="bcard-img" onerror="this.style.display='none'">
+              </div>
+              <div class="bcard-back">
+                <img src="2.png" alt="Carte de visite Raphaël Chaumény (Verso)" class="bcard-img" onerror="this.style.display='none'">
+              </div>
+            </div>
+            <div class="click-hint">CLIQUEZ POUR RETOURNER</div>
+          </div>
+
           <div style="margin-top:64px;border-top:1px solid var(--dim);padding-top:40px;color:var(--slate);font-size:11px;font-family:var(--font-mono);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
             <span>${t.footerLeft}</span>
             <span>${t.footerRight}</span>
@@ -1335,7 +1594,7 @@
       p.id = 'cmd-palette';
       p.style.cssText = `display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);z-index:99999;align-items:flex-start;justify-content:center;padding-top:10vh;opacity:0;transition:opacity 0.2s;`;
       p.innerHTML = `
-        <div style="width:100%;max-width:600px;background:var(--bg2);border:1px solid var(--dim);border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,0.5);overflow:hidden;transform:scale(0.95);transition:transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
+        <div style="width:100%;max-width:600px;background:var(--bg2);border:1px solid var(--dim);border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,0.5);overflow:hidden;transform:scale(0.95);transition:transform 0.2s;">
           <div style="padding:16px 24px;border-bottom:1px solid var(--dim);display:flex;align-items:center;gap:12px;">
             <i data-lucide="search" style="color:var(--silver);width:20px;"></i>
             <input type="text" id="cmd-input" placeholder="Que cherchez-vous ?" style="background:transparent;border:none;color:var(--chalk);font-size:16px;font-family:var(--font-ui);flex:1;outline:none;">
@@ -1346,13 +1605,8 @@
       `;
       document.body.appendChild(p);
       
-      p.addEventListener('click', (e) => {
-        if(e.target === p) toggleCmdPalette();
-      });
-      
-      $('cmd-input').addEventListener('input', (e) => {
-        updateCmdResults(e.target.value);
-      });
+      p.addEventListener('click', (e) => { if(e.target === p) toggleCmdPalette(); });
+      $('cmd-input').addEventListener('input', (e) => updateCmdResults(e.target.value));
     }
 
     function toggleCmdPalette() {
@@ -1367,11 +1621,7 @@
       } else {
         p.style.display = 'flex';
         updateCmdResults('');
-        setTimeout(() => {
-          p.style.opacity = '1';
-          p.querySelector('div').style.transform = 'scale(1)';
-          $('cmd-input').focus();
-        }, 10);
+        setTimeout(() => { p.style.opacity = '1'; p.querySelector('div').style.transform = 'scale(1)'; $('cmd-input').focus(); }, 10);
       }
     }
 
@@ -1385,9 +1635,7 @@
         { title: "Voir mon LinkedIn", icon: "linkedin", type: "Lien", action: () => { window.open('https://fr.linkedin.com/in/raphaelchaumeny'); toggleCmdPalette(); } },
         { title: "Thème : Karashi & Ruri (Défaut)", icon: "palette", type: "Thème", action: () => { setTheme('wada1'); toggleCmdPalette(); } },
         { title: "Thème : Kuro & Gin", icon: "palette", type: "Thème", action: () => { setTheme('wada10'); toggleCmdPalette(); } },
-        { title: "Ouvrir le Chat IA", icon: "bot", type: "Assistant", action: () => { toggleCmdPalette(); toggleAIBot(); } },
-        { title: "Aller à : Projets", icon: "folder-open", type: "Navigation", action: () => { window.location.hash = "projects-wrap"; toggleCmdPalette(); } },
-        { title: "Aller à : Expérience", icon: "briefcase", type: "Navigation", action: () => { window.location.hash = "xp-wrap"; toggleCmdPalette(); } }
+        { title: "Ouvrir le Chat IA", icon: "bot", type: "Assistant", action: () => { toggleCmdPalette(); toggleAIBot(); } }
       ];
       
       const filtered = actions.filter(a => a.title.toLowerCase().includes(q) || a.type.toLowerCase().includes(q));
@@ -1411,14 +1659,8 @@
     function setTheme(id) { 
       currentTheme = id; 
       isHackMode = (id === 'hack');
-      applyTheme(id); updateCharts(); renderNav(DICT[currentLang]); lucide.createIcons(); 
-    }
-    function setDashFilter(f) { 
-      dashFilter = f; 
-      renderDashboard(DICT[currentLang]); 
-      lucide.createIcons(); 
-      updateCharts(); 
-      initObservers(); 
+      applyTheme(id); renderNav(DICT[currentLang]); lucide.createIcons(); 
+      renderRadarChart(DICT[currentLang]);
     }
 
     function applyTheme(id) {
@@ -1446,13 +1688,12 @@
       if(activeObserver) activeObserver.disconnect();
       activeObserver = new IntersectionObserver(entries => {
         entries.forEach(e => {
-          // Fade & Parallax effect for sections scrolling out of view
           if(e.target.tagName.toLowerCase() === 'section') {
             const rect = e.target.getBoundingClientRect();
             if(rect.top < 0 && rect.bottom > 0) {
               const progress = Math.min(1, Math.abs(rect.top) / window.innerHeight);
-              e.target.style.opacity = 1 - (progress * 0.3); // Attenuated from 0.8
-              e.target.style.transform = `translateY(${progress * 20}px)`; // Reduced from 40px
+              e.target.style.opacity = 1 - (progress * 0.3);
+              e.target.style.transform = `translateY(${progress * 20}px)`;
             } else {
               e.target.style.opacity = 1;
               e.target.style.transform = 'none';
@@ -1464,7 +1705,6 @@
             const bars = e.target.querySelectorAll('.anim-bar');
             bars.forEach(b => b.style.width = b.dataset.width + '%');
             
-            // Trigger interactive terminal animation ONLY ONCE
             if(e.target.classList.contains('term-box') && !e.target.dataset.run) {
               e.target.dataset.run = '1'; 
               runTermAnim();
@@ -1475,7 +1715,6 @@
       
       document.querySelectorAll('.reveal').forEach(el => activeObserver.observe(el));
       document.querySelectorAll('main > section').forEach(el => {
-        // Add scroll listener directly to handle parallax
         window.addEventListener('scroll', () => {
           const rect = el.getBoundingClientRect();
           if(rect.top < 0 && rect.bottom > 0) {
@@ -1496,7 +1735,7 @@
           if (e.isIntersecting) {
             e.target.querySelectorAll('.stat-counter').forEach(el => {
               if (el.dataset.done) return; el.dataset.done = '1';
-              const target = parseFloat(el.dataset.target); // keep decimals if needed
+              const target = parseFloat(el.dataset.target);
               let start;
               const step = ts => {
                 if(!start) start = ts; const p = Math.min((ts - start)/1600, 1);
@@ -1513,99 +1752,6 @@
     }
 
     /* ════════════════════════════════════════════════════════════════════
-       CHART.JS IMPLEMENTATION
-    ════════════════════════════════════════════════════════════════════ */
-    Chart.defaults.color = '#8a9bb5';
-    Chart.defaults.font.family = "'JetBrains Mono', 'Fira Code', monospace";
-
-    function updateCharts() {
-      const t = DICT[currentLang];
-      const data = DASH_DATA[dashFilter];
-      
-      const kpiMap = [
-        {l:t.kpis[0], v:data.kpis.svc, c:'gold', i:'◉'},
-        {l:t.kpis[1], v:data.kpis.otif, c:'azure', i:'◈'},
-        {l:t.kpis[2], v:data.kpis.rot, c:'emerald', i:'◎'},
-        {l:t.kpis[3], v:data.kpis.rup, c:'coral', i:'◇'}
-      ];
-      const kpiCardsEl = $('kpi-cards');
-      if(kpiCardsEl) {
-        kpiCardsEl.innerHTML = kpiMap.map((k,i) => `
-          <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:16px;padding:24px;transition-delay:${i*.05}s">
-            <div style="display:flex;justify-content:space-between;margin-bottom:16px">
-              <span style="font-family:var(--font-ui);font-size:12px;color:var(--silver)">${k.l}</span>
-              <span style="font-family:var(--font-mono);font-size:16px;color:var(--${k.c});opacity:.6">${k.i}</span>
-            </div>
-            <div style="font-family:var(--font-display);font-size:42px;font-weight:600;color:var(--${k.c})">${k.v}</div>
-            <div style="height:2px;background:var(--dim);margin-top:16px"><div style="height:100%;background:var(--${k.c});width:100%"></div></div>
-          </div>
-        `).join('');
-      }
-
-      const cGold = getVar('gold'), cAzure = getVar('azure'), cCoral = getVar('coral'), cDim = getVar('dim');
-      
-      if(charts.c1) charts.c1.destroy();
-      const ctx1 = $('chart1');
-      if(ctx1) {
-        charts.c1 = new Chart(ctx1, {
-          type: 'line',
-          data: {
-            labels: data.trend.map(d=>d.m),
-            datasets: [
-              { label: 'OTIF', data: data.trend.map(d=>d.otif), borderColor: cGold, backgroundColor: hexToRgbA(cGold, 0.2), fill: true, tension: 0.4, borderWidth: 2 },
-              { label: t.kpis[0], data: data.trend.map(d=>d.svc), borderColor: cAzure, backgroundColor: hexToRgbA(cAzure, 0.2), fill: true, tension: 0.4, borderWidth: 2 }
-            ]
-          },
-          options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false } }, y: { min: 80, grid: { color: cDim } } }, plugins: { legend: { display: false } } }
-        });
-      }
-
-      if(charts.c2) charts.c2.destroy();
-      const ctx2 = $('chart2');
-      if(ctx2) {
-        charts.c2 = new Chart(ctx2, {
-          type: 'radar',
-          data: {
-            labels: t.radar.map(d=>d.s),
-            datasets: [{ data: t.radar.map(d=>d.v), backgroundColor: hexToRgbA(cGold, 0.2), borderColor: cGold, pointBackgroundColor: cGold }]
-          },
-          options: { responsive: true, maintainAspectRatio: false, scales: { r: { grid: { color: cDim }, angleLines: { color: cDim }, pointLabels: { color: getVar('silver'), font: { size: 10 } }, ticks: { display: false }, min: 0, max: 100 } }, plugins: { legend: { display: false } } }
-        });
-      }
-
-      if(charts.c3) charts.c3.destroy();
-      const ctx3 = $('chart3');
-      if(ctx3) {
-        charts.c3 = new Chart(ctx3, {
-          type: 'bar',
-          data: {
-            labels: data.trend.map(d=>d.m),
-            datasets: [
-              { type: 'bar', label: 'Volume (U)', data: data.trend.map(d=>d.vol), backgroundColor: cAzure, yAxisID: 'y', borderRadius: 4 },
-              { type: 'line', label: 'Écart (%)', data: data.trend.map(d=>d.ecart), borderColor: cCoral, backgroundColor: cCoral, yAxisID: 'y1', tension: 0.4, borderWidth: 2 }
-            ]
-          },
-          options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false } }, y: { grid: { color: cDim } }, y1: { position: 'right', min: 0, grid: { display: false } } }, plugins: { legend: { display: false } } }
-        });
-      }
-      
-      if(activeObserver) {
-        document.querySelectorAll('#kpi-cards .reveal').forEach(el => activeObserver.observe(el));
-      }
-    }
-
-    function hexToRgbA(hex, alpha){
-        let c;
-        if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
-            c= hex.substring(1).split('');
-            if(c.length== 3) c= [c[0], c[0], c[1], c[1], c[2], c[2]];
-            c= '0x'+c.join('');
-            return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+alpha+')';
-        }
-        return `rgba(200,200,200,${alpha})`;
-    }
-
-    /* ════════════════════════════════════════════════════════════════════
        INTERACTIVE TERMINAL & NLP CHATBOT
     ════════════════════════════════════════════════════════════════════ */
     function toggleAIBot() {
@@ -1613,25 +1759,16 @@
       if (!w) return;
       if (w.style.display === 'none') {
         w.style.display = 'flex';
-        setTimeout(() => {
-          w.style.opacity = '1';
-          w.style.transform = 'translateY(0) scale(1)';
-          const inp = $('ai-chat-input');
-          if(inp) inp.focus();
-        }, 10);
+        setTimeout(() => { w.style.opacity = '1'; w.style.transform = 'translateY(0) scale(1)'; $('ai-chat-input')?.focus(); }, 10);
       } else {
-        w.style.opacity = '0';
-        w.style.transform = 'translateY(10px) scale(0.95)';
+        w.style.opacity = '0'; w.style.transform = 'translateY(10px) scale(0.95)';
         setTimeout(() => { w.style.display = 'none'; }, 300);
       }
     }
 
     function triggerQuickReply(text) {
       const inp = $('ai-chat-input');
-      if(inp) {
-        inp.value = text;
-        handleAIChatSubmit(new Event('submit'));
-      }
+      if(inp) { inp.value = text; handleAIChatSubmit(new Event('submit')); }
     }
 
     function showTypingIndicator() {
@@ -1654,16 +1791,8 @@
     }
 
     function typeWriterEffect(element, text, index = 0) {
-      if (index === 0) {
-        element.innerHTML = "";
-      }
-      
-      // If it contains HTML tags, skip typewriter effect for simplicity
-      if (text.includes('<')) {
-        element.innerHTML = text;
-        return;
-      }
-
+      if (index === 0) element.innerHTML = "";
+      if (text.includes('<')) { element.innerHTML = text; return; }
       if (index < text.length) {
         element.innerHTML += text.charAt(index);
         setTimeout(() => typeWriterEffect(element, text, index + 1), 15 + Math.random() * 20);
@@ -1680,10 +1809,8 @@
 
       appendChatMessage(val, 'user');
       input.value = '';
-      
       showTypingIndicator();
 
-      // Délai pour simuler la "réflexion" du bot
       setTimeout(() => {
         removeTypingIndicator();
         const response = getBotResponse(val);
@@ -1734,20 +1861,11 @@
 
       if(c.includes('skills')) return "Coordination: 100%, WMS: 100%, VMI: 80%, Transport: 80%.";
       if(c.includes('contact')) return "Email: chaumenyr@gmail.com <br> Tel: +33 6 66 22 05 27 <br> LinkedIn: <a href='https://fr.linkedin.com/in/raphaelchaumeny' target='_blank' style='color:var(--gold)'>Raphaël Chaumény</a>";
-      if(c === 'matrix' || c === 'hack') {
-          setTheme('hack');
-          return "<span style='color:var(--emerald)'>[ACCÈS AUTORISÉ]</span> Mode Matrix activé.";
-      }
-      if(c === 'sudo hire raphael') {
-          return "<span style='color:var(--emerald);font-weight:bold;'>Excellente décision.</span> Le candidat a été prévenu.";
-      }
-
+      if(c === 'matrix' || c === 'hack') { setTheme('hack'); return "<span style='color:var(--emerald)'>[ACCÈS AUTORISÉ]</span> Mode Matrix activé."; }
+      
       for(const [key, words] of Object.entries(kw)) {
-        if(words.some(w => c.includes(w))) {
-          return t[key];
-        }
+        if(words.some(w => c.includes(w))) return t[key];
       }
-
       return DICT[currentLang].botFallback || "Je ne suis pas sûr de comprendre. Demandez-moi mes dispos, mes hobbies, ou mon salaire !";
     }
 
@@ -1769,9 +1887,7 @@
           if(l.t === 'ok') c = 'var(--emerald)';
           html += `<div style="color:${c};padding-left:4px">${l.s}</div>`;
           if(i === lines.length - 1) {
-            setTimeout(() => {
-              renderInteractivePrompt(tc, html);
-            }, 800);
+            setTimeout(() => { renderInteractivePrompt(tc, html); }, 800);
           } else {
             tc.innerHTML = html + `<div style="margin-top:12px;display:flex;gap:12px"><span style="color:var(--gold)">❯</span><span style="width:7px;height:16px;background:var(--chalk);animation:blink 1s step-end infinite"></span></div>`;
           }
@@ -1810,11 +1926,11 @@
       if(c === 'help') {
         response = `Available Commands :<br>
         <span style="color:var(--azure)">clear</span>   : Nettoyer le terminal<br>
-        <span style="color:var(--azure)">skills</span>  : Afficher les KPIs majeurs<br>
+        <span style="color:var(--azure)">skills</span>  : Afficher les compétences<br>
         <span style="color:var(--azure)">contact</span> : Afficher les coordonnées<br>
         <span style="color:var(--azure)">theme</span>   : Lister les thèmes<br>
         <span style="color:var(--coral)">matrix</span>  : [ACCÈS SÉCURISÉ REQUIS]<br>
-        ... ou posez-moi des questions naturelles (ex: "quand es-tu dispo ?", "quel est ton défaut ?")`;
+        ... ou posez-moi des questions naturelles (ex: "quand es-tu dispo ?")`;
       } 
       else if(c === 'clear') { hist.innerHTML = ''; return; }
       else if(c.startsWith('theme')) {
@@ -1823,7 +1939,7 @@
           setTheme(parts[1]);
           response = `> Thème changé pour : ${THEMES[parts[1]].name}`;
         } else {
-          response = `> Thèmes dispos: wada1, wada2, wada3, wada4, wada5, wada6, wada7, wada8, wada9, wada10`;
+          response = `> Thèmes dispos: wada1, wada10, hack`;
         }
       } else {
         response = `<span style="color:var(--gold)">></span> ` + getBotResponse(cmd);
@@ -1853,26 +1969,24 @@
         x: Math.random()*canvas.width, y: Math.random()*canvas.height,
         vx: (Math.random()-.5)*.3, vy: (Math.random()-.5)*.3, r: Math.random()*1.2+.4, ph: Math.random()*Math.PI*2,
         col: ['gold','azure','silver','slate'][Math.floor(Math.random()*4)],
-        char: Math.random() > 0.5 ? '1' : '0' // For matrix mode
+        char: Math.random() > 0.5 ? '1' : '0' 
       }));
 
       const draw = ts => {
         if(!isPageVisible) { canvasRAF = requestAnimationFrame(draw); return; }
         
         if (isHackMode) {
-          // Matrix Mode
           ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
           ctx.fillRect(0,0,canvas.width,canvas.height);
           ctx.fillStyle = '#10d68a';
           ctx.font = '14px monospace';
           pts.forEach(p => {
-            p.y += 3 + Math.random()*2; // Fast fall
+            p.y += 3 + Math.random()*2;
             if(p.y > canvas.height) { p.y = 0; p.x = Math.random()*canvas.width; }
             if(Math.random()<0.05) p.char = Math.random() > 0.5 ? '1' : '0';
             ctx.fillText(p.char, p.x, p.y);
           });
         } else {
-          // Normal Mode
           ctx.clearRect(0,0,canvas.width,canvas.height);
           const cG = hexToRgb(getVar('gold')), cS = hexToRgb(getVar('slate'));
           
@@ -1906,8 +2020,6 @@
       let mx=-200, my=-200, rx=-200, ry=-200, hov=false;
       window.addEventListener('mousemove', e => { 
         mx=e.clientX; my=e.clientY; 
-        
-        // Spotlight Effect ONLY (No 3D Tilt)
         const target = e.target.closest('.gc');
         if(target) {
           const rect = target.getBoundingClientRect();
@@ -1916,7 +2028,7 @@
         }
       }, {passive:true});
       
-      document.addEventListener('mouseover', e => { if(e.target.closest('a,button,[role=button],.dash-btn,input,.flip-container,.reco-card,.glossary-term,.quick-reply-btn')) hov=true; });
+      document.addEventListener('mouseover', e => { if(e.target.closest('a,button,[role=button],.dash-btn,input,.flip-container,.reco-card,.glossary-term,.quick-reply-btn,.gc')) hov=true; });
       document.addEventListener('mouseout', () => hov=false);
       const tick = () => {
         rx += (mx - rx)*.15; ry += (my - ry)*.15;
@@ -1934,30 +2046,17 @@
     function setupEventListeners() {
       document.addEventListener('click', e => {
         if (!e.target.closest('.dd')) {
-          document.querySelectorAll('.dd').forEach(el => {
-            el.classList.remove('open');
-            const btn = el.querySelector('button[aria-expanded]');
-            if(btn) btn.setAttribute('aria-expanded','false');
-          });
+          document.querySelectorAll('.dd').forEach(el => { el.classList.remove('open'); });
         }
       });
 
       document.addEventListener('keydown', e => {
-        // Cmd+K / Ctrl+K Palette Binding
-        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-          e.preventDefault();
-          toggleCmdPalette();
-        }
-        
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); toggleCmdPalette(); }
         if(e.key === 'Escape') {
-          document.querySelectorAll('.dd').forEach(el => {
-            el.classList.remove('open');
-            const btn = el.querySelector('button[aria-expanded]');
-            if(btn) btn.setAttribute('aria-expanded','false');
-          });
+          document.querySelectorAll('.dd').forEach(el => el.classList.remove('open'));
           closeMobileMenu();
-          const p = $('cmd-palette');
-          if(p && p.style.display === 'flex') toggleCmdPalette();
+          if($('cmd-palette') && $('cmd-palette').style.display === 'flex') toggleCmdPalette();
+          if($('global-modal').classList.contains('open')) closeModal();
         }
       });
 
@@ -1981,28 +2080,28 @@
           if(ind) { ind.style.background = on ? 'var(--gold)' : 'var(--slate)'; ind.style.width = on ? '26px' : '6px'; }
           if(lbl) lbl.style.display = on ? 'block' : 'none';
         });
-      }, {passive:true});
-
-      window.addEventListener('scroll', () => {
+        
         const nb = $('navbar');
-        if(!nb) return;
-        nb.style.background = window.scrollY > 20 ? 'rgba(6,11,22,0.85)' : 'transparent';
-        nb.style.backdropFilter = window.scrollY > 20 ? 'blur(20px)' : 'none';
-        nb.style.borderBottom = window.scrollY > 20 ? '1px solid rgba(255,255,255,0.05)' : 'none';
+        if(nb) {
+          nb.style.background = window.scrollY > 20 ? 'rgba(6,11,22,0.85)' : 'transparent';
+          nb.style.backdropFilter = window.scrollY > 20 ? 'blur(20px)' : 'none';
+          nb.style.borderBottom = window.scrollY > 20 ? '1px solid rgba(255,255,255,0.05)' : 'none';
+        }
+        
+        const stBtn = $('scroll-top-btn');
+        if (stBtn) {
+          if (window.scrollY > 400) stBtn.classList.add('visible');
+          else stBtn.classList.remove('visible');
+        }
       }, {passive:true});
     }
 
     // Initialize App
     window.addEventListener('load', () => {
       init();
-      // Remove elegant preloader smoothly
       setTimeout(() => {
         const p = $('preloader');
-        if(p) {
-          p.style.opacity = '0';
-          p.style.visibility = 'hidden';
-          setTimeout(() => p.remove(), 800);
-        }
+        if(p) { p.style.opacity = '0'; p.style.visibility = 'hidden'; setTimeout(() => p.remove(), 800); }
       }, 1000);
     });
 
