@@ -1404,51 +1404,137 @@
               </div>
             </div>
 
-            <!-- Stylized Global Map SVG -->
+            <!-- ═══════ IMPROVED WORLD MAP SVG ═══════ -->
             <div class="reveal gc" style="background:var(--bg2);border:1px solid var(--dim);border-radius:20px;padding:32px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;min-height:280px;height:100%;">
-              <div style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.15;background-image:linear-gradient(var(--azure) 1px, transparent 1px), linear-gradient(90deg, var(--azure) 1px, transparent 1px);background-size:30px 30px;background-position:center center;"></div>
+              <div style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.13;background-image:linear-gradient(var(--azure) 1px,transparent 1px),linear-gradient(90deg,var(--azure) 1px,transparent 1px);background-size:28px 28px;"></div>
               <svg viewBox="0 0 1000 500" style="width:100%;height:auto;z-index:1;overflow:visible;">
-                <!-- Authentic Simplified World Map Path -->
-                <g fill="var(--bg1)" stroke="var(--silver)" stroke-width="0.8" opacity="0.4" stroke-linejoin="round" stroke-linecap="round">
-                  <path d="M 283.4 56.6 C 283.4 56.6 280.9 59.8 281.3 64.9 C 281.7 70.1 274.6 77.8 266.1 79.5 C 257.6 81.2 249.7 74.8 245.9 76.5 C 242 78.2 239.5 86.8 241.2 92.3 C 242.9 97.9 238.2 108.6 230.1 106 C 222 103.4 213.9 104.7 203.2 100 C 192.5 95.3 191.7 87.2 189.5 81.2 C 187.4 75.2 184 73.1 176.7 71 C 169.4 68.8 152.8 62.4 148.1 58.6 C 143.4 54.7 131.8 45.7 122 41 C 112.1 36.3 118.6 34.6 126.7 34.2 C 134.8 33.8 136.1 38.5 142.1 38.9 C 148.1 39.3 155.4 35.9 160.1 32 C 164.8 28.2 165.2 23.5 168.6 20.1 C 172.1 16.7 182.8 21.8 190.9 21.4 C 199 21 213.5 24 219.1 27.4 C 224.6 30.8 238.3 35.1 245.2 38.5 C 252 41.9 261 41 268.3 46.2 C 275.5 51.3 283.4 56.6 283.4 56.6 Z" />
-                  <path d="M 271.8 232.7 C 271.8 232.7 279.1 228 285.5 228.4 C 291.9 228.8 296.6 233.5 301.3 236.9 C 306 240.4 316.3 241.6 320.6 248 C 324.8 254.5 330.8 266 333.4 274.6 C 336 283.1 334.3 293 331.7 298.1 C 329.1 303.2 320.2 316.1 316.3 325.5 C 312.5 334.9 313.3 349 311.6 358.4 C 309.9 367.8 312.9 375.5 307.8 385 C 302.6 394.4 293.7 413.2 289.4 420.9 C 285.1 428.6 279.6 443.1 274 445.3 C 268.5 447.4 256.1 438.4 250.9 428.6 C 245.8 418.8 243.7 400 241.5 391.4 C 239.4 382.9 240.2 371.3 237.7 363.6 C 235.1 356 226.6 338.9 221.9 328.6 C 217.2 318.3 216.7 301.7 218 292.7 C 219.3 283.7 222.7 275.6 229.1 268.7 C 235.6 261.9 248 247.4 253.9 241.8 C 259.9 236.3 271.8 232.7 271.8 232.7 Z" />
-                  <path d="M 454.1 113.6 C 454.1 113.6 461.3 111.4 466 112.7 C 470.7 114 476.3 120 481.4 120 C 486.5 120 491.7 117.4 496.8 116.6 C 501.9 115.7 510.9 110.2 516 112.3 C 521.1 114.4 527.1 123.4 532.7 126 C 538.2 128.5 545.9 123.8 550.2 125.1 C 554.5 126.4 555.3 131.5 561.3 131.1 C 567.3 130.6 577.1 123.4 584.4 121.7 C 591.7 119.9 598.9 123.4 606.6 122.9 C 614.3 122.5 627.6 114 635.3 114 C 643 114 656.7 122.5 664.4 122.1 C 672.1 121.7 679.3 111.4 687.9 111 C 696.4 110.5 706.7 116.1 713.5 117.8 C 720.4 119.5 726.8 113.1 734.5 111.4 C 742.2 109.7 751.2 110.1 758.9 111 C 766.6 111.8 770 120 776 123 C 782 126 791 126.4 797.8 131.1 C 804.7 135.8 812.8 135.4 819.2 142.3 C 825.6 149.1 829.5 158.1 832.5 167 C 835.5 176 833.3 188.8 831.2 196.5 C 829 204.2 822.6 211.5 818.8 219.2 C 814.9 226.9 813.2 235.4 809.8 243.1 C 806.4 250.8 794 253.4 785.4 255.1 C 776.9 256.8 764.5 249.1 757.6 244 C 750.8 238.9 746.5 228.6 741.4 220.9 C 736.3 213.2 730.7 202.1 723.4 196.1 C 716.2 190.1 702.5 190.5 694.8 185.8 C 687.1 181.1 676.4 170.9 669.5 166.6 C 662.7 162.3 652.8 163.6 645.1 160.2 C 637.4 156.8 630.1 146.1 622.4 142.3 C 614.7 138.4 601 138.8 592.5 137.1 C 583.9 135.4 577.9 130.3 569.4 131.1 C 560.8 132 555.3 140.5 548 142.3 C 540.7 144 532.6 138 524 137.6 C 515.5 137.1 508.6 143.1 500.5 142.7 C 492.4 142.3 481.7 136.3 476.1 130.8 C 470.6 125.2 468 116.7 462 113.7 C 456 110.7 454.1 113.6 454.1 113.6 Z" />
-                  <path d="M 470.8 178 C 470.8 178 479.8 176.3 487.5 178 C 495.2 179.7 503.7 186.1 511.4 186.5 C 519.1 186.9 527.2 181.8 534.1 183.5 C 540.9 185.2 546.5 192.9 551.2 200.2 C 555.9 207.4 552.9 220.2 552 229.6 C 551.2 239 555.4 250.1 552.4 259.1 C 549.4 268 543.5 281.3 538.3 289.4 C 533.2 297.5 528.5 311.6 521.6 317.6 C 514.8 323.5 503.7 325.2 494.3 322.2 C 484.9 319.2 475.1 305.5 469.1 297.4 C 463.1 289.3 454.5 279 450.7 269.6 C 446.8 260.2 447.7 245.7 446.4 235.4 C 445.1 225.1 441.7 212.7 444.3 203.3 C 446.8 193.9 456.2 184.1 462.6 179.8 C 469 175.5 470.8 178 470.8 178 Z" />
-                  <path d="M 808 340.5 C 808 340.5 818.2 336.2 825.9 337.5 C 833.6 338.8 840 344.3 846.8 348.6 C 853.6 352.9 865.2 355.9 872 361 C 878.8 366.1 883.9 375.5 886.5 384 C 889 392.5 885.6 405.3 881.3 413 C 877 420.7 868.5 430.1 859.1 433.5 C 849.7 436.9 834.7 439 825.3 434.3 C 815.9 429.6 805.2 415.5 801.4 406.1 C 797.5 396.7 799.2 380 800.5 370.2 C 801.8 360.4 797.5 348.8 801.4 342 C 805.2 335.2 808 340.5 808 340.5 Z" />
-                  <path d="M 436.9 100.8 C 436.9 100.8 440.3 98.6 443.3 100.3 C 446.3 102.1 446.7 107.6 445 110.6 C 443.3 113.6 439.5 117.8 436.1 116.6 C 432.6 115.3 430.9 109.3 432.2 105.9 C 433.5 102.5 436.9 100.8 436.9 100.8 Z" />
-                  <path d="M 723.1 270.8 C 723.1 270.8 729.1 268.2 733.4 270.4 C 737.6 272.5 738.5 281.5 735.5 286.6 C 732.5 291.7 724.8 296 719.7 293 C 714.5 290 714.5 279.7 718.4 274.6 C 722.2 269.5 723.1 270.8 723.1 270.8 Z" />
-                </g>
-
-                <!-- Connecting Arcs -->
-                <path d="M 506 114 Q 517 90 528 101" fill="none" stroke="var(--dim)" stroke-width="2" stroke-linecap="round"/>
-                <path d="M 506 114 Q 647 80 788 246" fill="none" stroke="var(--dim)" stroke-width="2" stroke-linecap="round"/>
-                <path d="M 788 246 Q 850 250 919 344" fill="none" stroke="var(--dim)" stroke-width="2" stroke-linecap="round"/>
-
-                <!-- Animated glowing arcs -->
-                <path d="M 506 114 Q 517 90 528 101" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-dasharray="80" stroke-dashoffset="80" stroke-linecap="round" style="animation: flowArc 2.5s infinite linear;"/>
-                <path d="M 506 114 Q 647 80 788 246" fill="none" stroke="var(--azure)" stroke-width="2.5" stroke-dasharray="350" stroke-dashoffset="350" stroke-linecap="round" style="animation: flowArc 4s infinite linear 1s;"/>
-                <path d="M 788 246 Q 850 250 919 344" fill="none" stroke="var(--emerald)" stroke-width="2.5" stroke-dasharray="150" stroke-dashoffset="150" stroke-linecap="round" style="animation: flowArc 3s infinite linear 2s;"/>
-
                 <defs>
-                  <filter id="glow-gold" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>
-                  <filter id="glow-azure" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>
-                  <filter id="glow-emerald" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>
+                  <filter id="mgG" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                  <filter id="mgA" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                  <filter id="mgE" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
                 </defs>
-
-                <!-- Accurate Nodes -->
-                <circle cx="506" cy="114" r="4" fill="var(--bg0)" stroke="var(--gold)" stroke-width="2.5" filter="url(#glow-gold)"/>
-                <text x="506" y="130" fill="var(--silver)" font-family="var(--font-mono)" font-size="10" font-weight="700" text-anchor="middle">Paris (FR)</text>
-                
-                <circle cx="528" cy="101" r="4" fill="var(--bg0)" stroke="var(--gold)" stroke-width="2.5" filter="url(#glow-gold)"/>
-                <text x="528" y="90" fill="var(--silver)" font-family="var(--font-mono)" font-size="10" font-weight="700" text-anchor="middle">Hamburg (DE)</text>
-                
-                <circle cx="788" cy="246" r="4" fill="var(--bg0)" stroke="var(--azure)" stroke-width="2.5" filter="url(#glow-azure)"/>
-                <text x="788" y="262" fill="var(--silver)" font-family="var(--font-mono)" font-size="10" font-weight="700" text-anchor="middle">Singapore (SG)</text>
-                
-                <circle cx="919" cy="344" r="4" fill="var(--bg0)" stroke="var(--emerald)" stroke-width="2.5" filter="url(#glow-emerald)"/>
-                <text x="919" y="360" fill="var(--silver)" font-family="var(--font-mono)" font-size="10" font-weight="700" text-anchor="middle">Australia (AU)</text>
+                <!-- Graticules -->
+                <g stroke="var(--dim)" stroke-width="0.6" opacity="0.9">
+                  <line x1="0" y1="250" x2="1000" y2="250"/>
+                  <line x1="0" y1="202" x2="1000" y2="202" stroke-dasharray="5,8"/>
+                  <line x1="0" y1="298" x2="1000" y2="298" stroke-dasharray="5,8"/>
+                  <line x1="167" y1="0" x2="167" y2="500" stroke-dasharray="3,10"/>
+                  <line x1="333" y1="0" x2="333" y2="500" stroke-dasharray="3,10"/>
+                  <line x1="500" y1="0" x2="500" y2="500" stroke-dasharray="3,10"/>
+                  <line x1="667" y1="0" x2="667" y2="500" stroke-dasharray="3,10"/>
+                  <line x1="833" y1="0" x2="833" y2="500" stroke-dasharray="3,10"/>
+                </g>
+                <!-- Land masses -->
+                <g fill="var(--bg3)" stroke="var(--slate)" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round">
+                  <!-- North America -->
+                  <path d="M 33,68 L 42,88 L 42,103 L 52,109 L 60,101 L 78,96 L 100,105 L 124,116 L 138,130 L 147,151 L 149,169 L 145,183 L 150,197 L 155,212 L 163,222 L 172,218 L 181,208 L 192,199 L 205,193 L 215,188 L 220,196 L 216,207 L 208,213 L 220,179 L 216,167 L 215,153 L 219,140 L 222,129 L 226,119 L 234,109 L 244,106 L 258,111 L 264,106 L 260,93 L 248,81 L 236,71 L 218,61 L 200,53 L 182,49 L 165,49 L 148,52 L 130,51 L 112,49 L 92,51 L 72,51 Z"/>
+                  <path d="M 42,103 L 32,110 L 20,122 L 19,130 L 30,126 L 44,114 L 52,109 Z"/>
+                  <path d="M 149,169 L 153,183 L 149,198 L 145,185 L 143,172 Z"/>
+                  <path d="M 215,183 L 222,175 L 228,186 L 224,200 L 216,207 L 209,199 Z"/>
+                  <path d="M 172,218 L 178,210 L 185,215 L 183,223 L 177,225 Z"/>
+                  <path d="M 228,201 L 245,194 L 256,200 L 250,208 L 236,211 Z"/>
+                  <path d="M 262,207 L 270,203 L 278,208 L 274,215 L 262,214 Z"/>
+                  <!-- Greenland -->
+                  <path d="M 349,41 L 368,29 L 390,22 L 412,22 L 426,32 L 429,46 L 421,57 L 407,63 L 388,65 L 370,61 L 354,51 Z"/>
+                  <!-- Baffin Island -->
+                  <path d="M 265,73 L 281,63 L 297,63 L 312,73 L 311,86 L 299,93 L 281,90 Z"/>
+                  <!-- South America -->
+                  <path d="M 218,223 L 231,216 L 248,220 L 266,228 L 282,237 C 295,250 297,267 293,287 L 295,308 L 291,331 L 282,353 L 270,375 L 256,395 L 241,413 L 234,421 C 228,421 224,413 224,405 L 220,387 L 215,367 L 210,347 L 207,323 L 206,299 L 208,275 L 213,253 Z"/>
+                  <!-- Europe main -->
+                  <path d="M 480,125 L 492,118 L 505,114 L 518,112 L 530,110 L 543,108 L 557,106 L 568,110 L 578,115 L 586,122 L 594,128 L 603,126 L 614,123 L 626,126 L 633,134 L 625,142 L 612,147 L 599,150 L 587,150 L 573,147 L 560,150 L 548,154 L 535,152 L 522,150 L 509,150 L 498,152 L 488,152 L 480,150 L 474,144 L 474,134 Z"/>
+                  <!-- Scandinavia -->
+                  <path d="M 498,112 L 505,103 L 513,94 L 522,86 L 530,82 L 538,85 L 542,95 L 537,105 L 526,111 L 514,113 L 501,110 Z"/>
+                  <path d="M 519,84 L 526,76 L 536,72 L 546,76 L 547,86 L 538,90 L 527,87 Z"/>
+                  <path d="M 529,72 L 534,65 L 543,62 L 552,67 L 550,76 L 541,78 L 531,74 Z"/>
+                  <path d="M 550,76 L 558,69 L 569,69 L 576,77 L 571,86 L 559,87 L 548,82 Z"/>
+                  <path d="M 538,85 L 550,80 L 564,77 L 576,82 L 580,94 L 574,105 L 561,110 L 548,110 L 537,105 Z"/>
+                  <!-- UK & Ireland -->
+                  <path d="M 452,101 L 461,94 L 469,98 L 469,111 L 461,117 L 452,113 Z"/>
+                  <path d="M 444,106 L 451,101 L 455,110 L 452,118 L 443,116 Z"/>
+                  <path d="M 416,73 L 427,65 L 440,69 L 443,80 L 432,86 L 418,81 Z"/>
+                  <!-- Iberia -->
+                  <path d="M 474,134 L 474,144 L 480,150 L 490,152 L 490,163 L 480,170 L 470,167 L 461,158 L 460,146 L 462,134 Z"/>
+                  <!-- Italy -->
+                  <path d="M 513,141 L 521,137 L 529,141 L 535,152 L 531,163 L 521,167 L 513,157 L 510,147 Z"/>
+                  <path d="M 500,158 L 505,153 L 511,158 L 509,167 L 502,167 Z"/>
+                  <path d="M 516,168 L 523,163 L 530,168 L 527,175 L 517,175 Z"/>
+                  <!-- Greece -->
+                  <path d="M 523,152 L 531,150 L 538,157 L 536,167 L 527,168 Z"/>
+                  <!-- Turkey -->
+                  <path d="M 574,132 L 588,129 L 604,130 L 618,136 L 624,147 L 618,158 L 601,161 L 585,158 L 573,150 Z"/>
+                  <!-- Africa -->
+                  <path d="M 464,151 L 453,173 L 453,211 L 459,223 L 473,237 L 498,237 L 510,240 L 527,248 L 534,266 L 531,308 L 539,332 L 554,348 L 576,334 L 590,323 L 601,296 L 612,266 L 626,245 L 641,220 L 619,220 L 612,209 L 604,184 L 590,168 L 569,165 L 542,159 L 528,149 L 508,149 L 500,153 Z"/>
+                  <path d="M 635,220 L 643,223 L 637,236 L 623,242 L 617,234 L 624,221 Z"/>
+                  <path d="M 507,149 L 512,141 L 520,141 L 524,149 L 519,157 L 511,159 Z"/>
+                  <path d="M 550,291 L 559,281 L 568,289 L 571,309 L 565,324 L 554,327 L 543,317 L 543,301 Z"/>
+                  <circle cx="444" cy="182" r="3"/>
+                  <!-- Russia / Northern Asia -->
+                  <path d="M 538,103 L 550,99 L 563,95 L 578,91 L 596,88 L 615,84 L 634,81 L 653,78 L 673,76 L 693,74 L 713,74 L 733,76 L 752,80 L 770,84 L 788,89 L 806,93 L 824,97 L 841,100 L 858,102 L 875,102 L 890,100 L 906,97 L 921,94 L 936,92 L 950,97 L 956,110 L 948,124 L 933,134 L 919,142 L 903,147 L 887,149 L 870,149 L 854,147 L 836,144 L 820,142 L 803,140 L 787,138 L 770,137 L 753,138 L 736,141 L 720,146 L 704,150 L 688,152 L 672,151 L 657,148 L 642,143 L 628,137 L 616,130 L 604,124 L 592,122 L 580,122 L 567,124 L 553,128 L 540,132 L 528,130 L 516,122 L 508,114 L 517,110 L 529,106 Z"/>
+                  <!-- Arabian Peninsula -->
+                  <path d="M 566,164 L 578,162 L 592,163 L 604,171 L 609,186 L 609,202 L 601,218 L 589,224 L 576,221 L 565,210 L 559,195 L 558,180 Z"/>
+                  <!-- Iran / Afghanistan -->
+                  <path d="M 618,158 L 635,153 L 651,150 L 669,152 L 684,158 L 692,171 L 686,183 L 671,190 L 653,191 L 636,186 L 621,176 Z"/>
+                  <!-- India -->
+                  <path d="M 641,155 L 655,158 L 666,165 L 674,179 L 677,197 L 672,216 L 663,232 L 651,244 L 639,248 L 626,241 L 616,226 L 612,209 L 613,192 L 619,175 L 629,162 Z"/>
+                  <path d="M 652,251 L 658,245 L 665,252 L 661,261 L 652,258 Z"/>
+                  <!-- Indochina -->
+                  <path d="M 751,150 L 765,144 L 780,147 L 792,157 L 796,172 L 792,190 L 784,205 L 772,217 L 759,221 L 747,217 L 737,206 L 734,192 L 737,177 L 743,163 Z"/>
+                  <!-- Malay Peninsula → Singapore (789, 246) -->
+                  <path d="M 774,215 L 781,223 L 788,235 L 792,248 L 785,254 L 778,245 L 772,231 L 768,220 Z"/>
+                  <!-- Korea -->
+                  <path d="M 837,121 L 845,114 L 854,121 L 853,134 L 844,139 L 836,131 Z"/>
+                  <!-- Japan -->
+                  <path d="M 861,111 L 871,104 L 883,111 L 885,124 L 877,131 L 865,125 Z"/>
+                  <path d="M 856,123 L 865,121 L 871,128 L 867,137 L 857,134 Z"/>
+                  <path d="M 876,102 L 886,96 L 896,102 L 895,114 L 885,117 L 875,110 Z"/>
+                  <path d="M 842,161 L 850,154 L 857,161 L 855,171 L 846,171 Z"/>
+                  <!-- Sumatra -->
+                  <path d="M 753,250 L 768,243 L 784,246 L 799,256 L 810,270 L 808,284 L 795,290 L 779,287 L 764,276 L 752,263 Z"/>
+                  <!-- Borneo -->
+                  <path d="M 801,246 L 817,241 L 831,246 L 839,257 L 837,273 L 824,283 L 809,282 L 797,272 L 793,258 Z"/>
+                  <!-- Java -->
+                  <path d="M 770,297 L 788,292 L 809,297 L 813,306 L 797,311 L 775,308 Z"/>
+                  <!-- Sulawesi -->
+                  <path d="M 847,244 L 857,237 L 864,245 L 860,257 L 849,259 L 843,251 Z"/>
+                  <!-- Philippines -->
+                  <path d="M 826,191 L 835,184 L 844,191 L 843,204 L 834,209 L 824,202 Z"/>
+                  <path d="M 838,214 L 846,209 L 854,216 L 851,228 L 841,229 L 834,222 Z"/>
+                  <!-- Papua New Guinea -->
+                  <path d="M 883,270 L 898,263 L 914,267 L 923,280 L 919,292 L 902,294 L 887,284 Z"/>
+                  <!-- Australia -->
+                  <path d="M 800,302 L 817,288 L 834,281 L 851,280 L 867,284 L 883,291 L 898,302 L 909,317 L 916,335 L 919,352 L 913,368 L 905,380 L 891,384 L 874,384 L 857,377 L 840,368 L 823,358 L 808,345 L 797,331 L 793,316 L 793,302 Z"/>
+                  <!-- Tasmania -->
+                  <path d="M 863,390 L 872,384 L 881,390 L 879,402 L 866,402 Z"/>
+                  <!-- New Zealand -->
+                  <path d="M 938,370 L 946,363 L 955,370 L 952,384 L 943,388 L 935,379 Z"/>
+                  <path d="M 934,391 L 943,388 L 952,395 L 947,410 L 935,409 L 929,400 Z"/>
+                </g>
+                <!-- Shadow lines -->
+                <path d="M 507,114 Q 518,96 528,101" fill="none" stroke="var(--bg0)" stroke-width="5" stroke-linecap="round"/>
+                <path d="M 507,114 Q 650,48 789,246" fill="none" stroke="var(--bg0)" stroke-width="5" stroke-linecap="round"/>
+                <path d="M 789,246 Q 858,295 920,344" fill="none" stroke="var(--bg0)" stroke-width="5" stroke-linecap="round"/>
+                <!-- Animated flow arcs -->
+                <path d="M 507,114 Q 518,96 528,101" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-dasharray="90" stroke-dashoffset="90" stroke-linecap="round" style="animation:flowArc 2.5s infinite linear;"/>
+                <path d="M 507,114 Q 650,48 789,246" fill="none" stroke="var(--azureL)" stroke-width="2.5" stroke-dasharray="530" stroke-dashoffset="530" stroke-linecap="round" style="animation:flowArc 6s infinite linear 0.8s;"/>
+                <path d="M 789,246 Q 858,295 920,344" fill="none" stroke="var(--emerald)" stroke-width="2.5" stroke-dasharray="215" stroke-dashoffset="215" stroke-linecap="round" style="animation:flowArc 4s infinite linear 1.8s;"/>
+                <!-- Halo rings -->
+                <circle cx="507" cy="114" r="13" fill="none" stroke="var(--gold)" stroke-width="1.5" opacity="0.28"/>
+                <circle cx="528" cy="101" r="13" fill="none" stroke="var(--gold)" stroke-width="1.5" opacity="0.28"/>
+                <circle cx="789" cy="246" r="13" fill="none" stroke="var(--azure)" stroke-width="1.5" opacity="0.28"/>
+                <circle cx="920" cy="344" r="13" fill="none" stroke="var(--emerald)" stroke-width="1.5" opacity="0.28"/>
+                <!-- City nodes -->
+                <circle cx="507" cy="114" r="5" fill="var(--bg0)" stroke="var(--gold)" stroke-width="2.5" filter="url(#mgG)"/>
+                <circle cx="528" cy="101" r="5" fill="var(--bg0)" stroke="var(--gold)" stroke-width="2.5" filter="url(#mgG)"/>
+                <circle cx="789" cy="246" r="5" fill="var(--bg0)" stroke="var(--azure)" stroke-width="2.5" filter="url(#mgA)"/>
+                <circle cx="920" cy="344" r="5" fill="var(--bg0)" stroke="var(--emerald)" stroke-width="2.5" filter="url(#mgE)"/>
+                <!-- Labels -->
+                <text x="497" y="109" fill="var(--silver)" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" text-anchor="end">Paris (FR)</text>
+                <text x="538" y="96" fill="var(--silver)" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" text-anchor="start">Hamburg (DE)</text>
+                <text x="799" y="241" fill="var(--silver)" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" text-anchor="start">Singapore (SG)</text>
+                <text x="920" y="363" fill="var(--silver)" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" text-anchor="middle">Australia (AU)</text>
               </svg>
             </div>
+
           </div>
         </div>
       `;
