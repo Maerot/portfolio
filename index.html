@@ -294,7 +294,23 @@
       </div>
     </div>
   </div>
+<!-- Radial Menu Overlay -->
+  <div id="radial-menu-overlay" style="display:none; position:fixed; inset:0; background:rgba(6,10,18,0.7); backdrop-filter:blur(12px); z-index:999999; align-items:center; justify-content:center; opacity:0; transition:opacity 0.3s;">
+    <div id="radial-center" style="position:relative; width:400px; height:400px;">
+      <!-- Bouton central pour fermer -->
+      <button onclick="closeRadialMenu()" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:70px; height:70px; border-radius:50%; background:var(--bg2); border:1px solid var(--dim); color:var(--chalk); z-index:10; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 8px 32px rgba(0,0,0,0.5); transition: all 0.2s;" onmouseover="this.style.background='var(--coral)'; this.style.color='#fff';" onmouseout="this.style.background='var(--bg2)'; this.style.color='var(--chalk)';">
+        <i data-lucide="x" style="width:24px; height:24px;"></i>
+      </button>
+      
+      <!-- Texte au centre (qui changera au hover) -->
+      <div id="hover-theme-name" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); margin-top: 80px; font-family:var(--font-mono); font-size:12px; color:var(--gold); letter-spacing:2px; text-transform:uppercase; text-align:center; opacity:0.7; transition: opacity 0.2s;">
+        CHOOSE THEME
+      </div>
 
+      <!-- Les thèmes seront injectés ici en cercle -->
+      <div id="radial-items"></div>
+    </div>
+  </div>
   <script>
 /* ════════════════════════════════════════════════════════════════════
        DÉTAILS DES MODALES (REMPLACE LES FICHIERS JSON EXTERNES)
@@ -1152,7 +1168,25 @@ function hexToRgbA(hex, alpha){
     }
     return `rgba(200,200,200,${alpha})`;
 }
-    function init() {
+// Détection automatique de la langue
+function autoDetectLanguage() {
+  // navigator.language retourne des valeurs comme 'fr-FR', 'en-US', 'de', 'ru-RU'
+  const browserLang = (navigator.language || navigator.userLanguage).substring(0, 2).toLowerCase();
+  
+  // Liste de tes langues supportées
+  const supportedLangs = ['fr', 'en', 'de', 'ru'];
+  
+  // Si la langue du navigateur est supportée, on l'utilise, sinon on force l'anglais
+  if (supportedLangs.includes(browserLang)) {
+    currentLang = browserLang;
+  } else {
+    currentLang = 'en';
+  }
+}
+
+// À appeler dans ta fonction init() existante :
+function init() {
+      autoDetectLanguage(); // On détermine la langue AVANT de mettre à jour l'UI
       applyTheme(currentTheme);
       updateUI();
       setupEventListeners();
@@ -1309,14 +1343,9 @@ function hexToRgbA(hex, alpha){
             </div>
             <a href="CV_Raphael_Chaumeny.pdf" target="_blank" download title="${t.navCV}" style="border:1px solid var(--dim);color:var(--silver);border-radius:8px;padding:7px 10px;display:flex;cursor:pointer;"><i data-lucide="download" style="width:14px"></i></a>
             
-            <div class="dd" id="theme-dd">
-              <button onclick="toggleDD('theme-dd')" aria-expanded="false" aria-label="Changer le thème" style="background:var(--bg2);border:1px solid var(--dim);color:var(--silver);border-radius:8px;padding:7px 10px;font-size:13px;display:flex;align-items:center;cursor:pointer;transition:all .2s">
-                <i data-lucide="palette" style="width:14px;height:14px"></i>
-              </button>
-              <div class="dd-menu" role="menu" style="min-width:180px">
-                ${Object.values(THEMES).map(th => `<button class="dd-opt ${currentTheme===th.id?'active':''}" role="menuitem" onclick="setTheme('${th.id}')" ${th.id==='hack'?'style="display:none"':''}>${th.name}</button>`).join('')}
-              </div>
-            </div>
+            <button onclick="openRadialMenu()" aria-label="Changer le thème" style="background:var(--bg2); border:1px solid var(--dim); color:var(--silver); border-radius:8px; padding:7px 10px; display:flex; align-items:center; cursor:pointer; transition:all .2s">
+              <i data-lucide="palette" style="width:14px; height:14px"></i>
+            </button>
 
             <div class="dd" id="lang-dd">
               <button onclick="toggleDD('lang-dd')" aria-expanded="false" aria-label="Changer la langue" style="background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:var(--gold);border-radius:8px;padding:7px 13px;font-size:12px;font-family:var(--font-mono);font-weight:700;letter-spacing:1.2px;display:flex;align-items:center;gap:7px;cursor:pointer;">
@@ -2112,6 +2141,74 @@ function hexToRgbA(hex, alpha){
       }
     }
 
+    function openRadialMenu() {
+      const overlay = $('radial-menu-overlay');
+      const container = $('radial-items');
+      const textLabel = $('hover-theme-name');
+      container.innerHTML = '';
+      
+      // On retire le mode 'hack'
+      const themes = Object.values(THEMES).filter(t => t.id !== 'hack');
+      const angleStep = 360 / themes.length;
+      const radius = 140;
+
+      themes.forEach((th, index) => {
+        const angle = index * angleStep;
+        const rad = angle * (Math.PI / 180); 
+        const x = Math.round(radius * Math.cos(rad));
+        const y = Math.round(radius * Math.sin(rad));
+
+        const btn = document.createElement('button');
+        btn.style.cssText = `
+          position: absolute;
+          top: 50%; left: 50%;
+          width: 36px; height: 36px;
+          margin-top: -18px; margin-left: -18px;
+          transform: translate(${x}px, ${y}px) scale(0);
+          border-radius: 50%;
+          background: ${th.bg0};
+          border: 2px solid ${th.gold};
+          cursor: pointer;
+          transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          transition-delay: ${index * 0.02}s;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        `;
+        
+        btn.onmouseenter = () => {
+          applyTheme(th.id);
+          textLabel.textContent = th.name;
+          textLabel.style.color = th.gold;
+          btn.style.transform = `translate(${x}px, ${y}px) scale(1.3)`;
+          btn.style.zIndex = "10";
+        };
+        
+        btn.onmouseleave = () => {
+          applyTheme(currentTheme);
+          textLabel.textContent = "CHOOSE THEME";
+          textLabel.style.color = "var(--gold)";
+          btn.style.transform = `translate(${x}px, ${y}px) scale(1)`;
+          btn.style.zIndex = "1";
+        };
+        
+        btn.onclick = () => {
+          setTheme(th.id);
+          closeRadialMenu();
+        };
+
+        container.appendChild(btn);
+        setTimeout(() => { btn.style.transform = `translate(${x}px, ${y}px) scale(1)`; }, 10);
+      });
+
+      overlay.style.display = 'flex';
+      setTimeout(() => overlay.style.opacity = '1', 10);
+    }
+
+    function closeRadialMenu() {
+      const overlay = $('radial-menu-overlay');
+      overlay.style.opacity = '0';
+      setTimeout(() => overlay.style.display = 'none', 300);
+    }
+    
     function toggleDD(id) {
       document.querySelectorAll('.dd').forEach(el => { if(el.id !== id) el.classList.remove('open'); });
       $(id).classList.toggle('open');
