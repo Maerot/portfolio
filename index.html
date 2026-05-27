@@ -295,17 +295,15 @@
     </div>
   </div>
 <!-- Radial Menu Overlay -->
-  <div id="radial-menu-overlay" style="display:none; position:fixed; inset:0; background:rgba(6,10,18,0.7); backdrop-filter:blur(12px); z-index:999999; align-items:center; justify-content:center; opacity:0; transition:opacity 0.3s;">
-    <div id="radial-center" style="position:relative; width:400px; height:400px;">
-      <!-- Bouton central pour fermer -->
-      <button onclick="closeRadialMenu()" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:70px; height:70px; border-radius:50%; background:var(--bg2); border:1px solid var(--dim); color:var(--chalk); z-index:10; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 8px 32px rgba(0,0,0,0.5); transition: all 0.2s;" onmouseover="this.style.background='var(--coral)'; this.style.color='#fff';" onmouseout="this.style.background='var(--bg2)'; this.style.color='var(--chalk)';">
+  <div id="radial-menu-overlay" style="display:none; position:fixed; inset:0; background:rgba(6,10,18,0.4); backdrop-filter:blur(3px); z-index:999999; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s;">
+    <div id="radial-center" style="position:relative; width:100%; max-width:600px; height:600px;">
+      <button onclick="closeRadialMenu()" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:60px; height:60px; border-radius:50%; background:var(--bg2); border:2px solid var(--dim); color:var(--chalk); z-index:20; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 8px 32px rgba(0,0,0,0.5); transition: all 0.2s;" onmouseover="this.style.background='var(--coral)'; this.style.borderColor='var(--coral)'; this.style.color='#fff'; this.style.transform='translate(-50%, -50%) scale(1.1)';" onmouseout="this.style.background='var(--bg2)'; this.style.borderColor='var(--dim)'; this.style.color='var(--chalk)'; this.style.transform='translate(-50%, -50%) scale(1)';">
         <i data-lucide="x" style="width:24px; height:24px;"></i>
       </button>
       
-      <!-- Texte au centre (qui changera au hover) -->
-      <div id="hover-theme-name" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); margin-top: 80px; font-family:var(--font-mono); font-size:12px; color:var(--gold); letter-spacing:2px; text-transform:uppercase; text-align:center; opacity:0.7; transition: opacity 0.2s;">
-        CHOOSE THEME
-      </div>
+      <div id="radial-items"></div>
+    </div>
+  </div>
 
       <!-- Les thèmes seront injectés ici en cercle -->
       <div id="radial-items"></div>
@@ -2144,13 +2142,11 @@ function init() {
     function openRadialMenu() {
       const overlay = $('radial-menu-overlay');
       const container = $('radial-items');
-      const textLabel = $('hover-theme-name');
       container.innerHTML = '';
       
-      // On retire le mode 'hack'
       const themes = Object.values(THEMES).filter(t => t.id !== 'hack');
       const angleStep = 360 / themes.length;
-      const radius = 140;
+      const radius = 180; // Cercle plus grand pour le style CS:GO
 
       themes.forEach((th, index) => {
         const angle = index * angleStep;
@@ -2159,35 +2155,48 @@ function init() {
         const y = Math.round(radius * Math.sin(rad));
 
         const btn = document.createElement('button');
+        // Zone de clic massive grâce au padding: 24px et background transparent
         btn.style.cssText = `
           position: absolute;
           top: 50%; left: 50%;
-          width: 36px; height: 36px;
-          margin-top: -18px; margin-left: -18px;
-          transform: translate(${x}px, ${y}px) scale(0);
-          border-radius: 50%;
-          background: ${th.bg0};
-          border: 2px solid ${th.gold};
+          margin-top: ${y}px; margin-left: ${x}px;
+          transform: translate(-50%, -50%) scale(0.8);
+          background: transparent;
+          border: none;
           cursor: pointer;
-          transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          transition-delay: ${index * 0.02}s;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          padding: 24px;
+          border-radius: 16px;
+          transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          opacity: 0;
+          z-index: 10;
+        `;
+        
+        // Contenu : Le point de couleur + le Nom du thème
+        btn.innerHTML = `
+          <div class="theme-dot" style="width:20px; height:20px; border-radius:50%; background:${th.bg0}; border:3px solid ${th.gold}; box-shadow:0 4px 10px rgba(0,0,0,0.5); transition:all 0.2s;"></div>
+          <span style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:${th.gold}; letter-spacing:1px; text-transform:uppercase; text-shadow:0 2px 6px rgba(0,0,0,0.9); white-space:nowrap; transition:all 0.2s;">${th.name}</span>
         `;
         
         btn.onmouseenter = () => {
           applyTheme(th.id);
-          textLabel.textContent = th.name;
-          textLabel.style.color = th.gold;
-          btn.style.transform = `translate(${x}px, ${y}px) scale(1.3)`;
-          btn.style.zIndex = "10";
+          btn.style.transform = `translate(-50%, -50%) scale(1.15)`;
+          btn.style.zIndex = "20";
+          btn.querySelector('.theme-dot').style.transform = 'scale(1.4)';
+          btn.querySelector('.theme-dot').style.boxShadow = `0 0 15px ${th.gold}`;
+          btn.querySelector('span').style.textShadow = `0 0 12px ${th.gold}`;
         };
         
         btn.onmouseleave = () => {
           applyTheme(currentTheme);
-          textLabel.textContent = "CHOOSE THEME";
-          textLabel.style.color = "var(--gold)";
-          btn.style.transform = `translate(${x}px, ${y}px) scale(1)`;
-          btn.style.zIndex = "1";
+          btn.style.transform = `translate(-50%, -50%) scale(1)`;
+          btn.style.zIndex = "10";
+          btn.querySelector('.theme-dot').style.transform = 'scale(1)';
+          btn.querySelector('.theme-dot').style.boxShadow = '0 4px 10px rgba(0,0,0,0.5)';
+          btn.querySelector('span').style.textShadow = '0 2px 6px rgba(0,0,0,0.9)';
         };
         
         btn.onclick = () => {
@@ -2196,7 +2205,12 @@ function init() {
         };
 
         container.appendChild(btn);
-        setTimeout(() => { btn.style.transform = `translate(${x}px, ${y}px) scale(1)`; }, 10);
+        
+        // Animation d'apparition en cascade
+        setTimeout(() => { 
+          btn.style.opacity = '1';
+          btn.style.transform = `translate(-50%, -50%) scale(1)`; 
+        }, 10 + (index * 20));
       });
 
       overlay.style.display = 'flex';
@@ -2631,9 +2645,9 @@ function init() {
           closeMobileMenu();
           if($('cmd-palette') && $('cmd-palette').style.display === 'flex') toggleCmdPalette();
           if($('global-modal').classList.contains('open')) closeModal();
+          if($('radial-menu-overlay') && $('radial-menu-overlay').style.display === 'flex') closeRadialMenu();
         }
       });
-
       window.addEventListener('scroll', () => {
         const sids = SIDS;
         const mid = window.scrollY + window.innerHeight * 0.4;
