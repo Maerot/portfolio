@@ -295,13 +295,15 @@
     </div>
   </div>
 <!-- Radial Menu Overlay -->
-  <div id="radial-menu-overlay" style="display:none; position:fixed; inset:0; background:rgba(6,10,18,0.4); backdrop-filter:blur(3px); z-index:999999; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s;">
-    <div id="radial-center" style="position:relative; width:100%; max-width:600px; height:600px;">
-      <button onclick="closeRadialMenu()" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:60px; height:60px; border-radius:50%; background:var(--bg2); border:2px solid var(--dim); color:var(--chalk); z-index:20; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 8px 32px rgba(0,0,0,0.5); transition: all 0.2s;" onmouseover="this.style.background='var(--coral)'; this.style.borderColor='var(--coral)'; this.style.color='#fff'; this.style.transform='translate(-50%, -50%) scale(1.1)';" onmouseout="this.style.background='var(--bg2)'; this.style.borderColor='var(--dim)'; this.style.color='var(--chalk)'; this.style.transform='translate(-50%, -50%) scale(1)';">
+  <div id="radial-menu-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); backdrop-filter:blur(3px); z-index:999999; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s;">
+    <div id="radial-center" style="position:relative; width:500px; height:500px;">
+      
+      <div id="radial-items" style="position:absolute; inset:0;"></div>
+
+      <button onclick="closeRadialMenu()" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:60px; height:60px; border-radius:50%; background:rgba(10,15,25,0.9); border:2px solid var(--dim); color:var(--silver); z-index:20; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 0 20px rgba(0,0,0,0.8); transition: all 0.2s;" onmouseover="this.style.color='var(--coral)'; this.style.borderColor='var(--coral)';" onmouseout="this.style.color='var(--silver)'; this.style.borderColor='var(--dim)';">
         <i data-lucide="x" style="width:24px; height:24px;"></i>
       </button>
       
-      <div id="radial-items"></div>
     </div>
   </div>
 
@@ -2139,88 +2141,98 @@ function init() {
       }
     }
 
+    // ══════ CS:GO RADIAL MENU LOGIC ══════
     function openRadialMenu() {
       const overlay = $('radial-menu-overlay');
       const container = $('radial-items');
-      container.innerHTML = '';
       
       const themes = Object.values(THEMES).filter(t => t.id !== 'hack');
-      const angleStep = 360 / themes.length;
-      const radius = 180; // Cercle plus grand pour le style CS:GO
-
-      themes.forEach((th, index) => {
-        const angle = index * angleStep;
-        const rad = angle * (Math.PI / 180); 
-        const x = Math.round(radius * Math.cos(rad));
-        const y = Math.round(radius * Math.sin(rad));
-
-        const btn = document.createElement('button');
-        // Zone de clic massive grâce au padding: 24px et background transparent
-        btn.style.cssText = `
-          position: absolute;
-          top: 50%; left: 50%;
-          margin-top: ${y}px; margin-left: ${x}px;
-          transform: translate(-50%, -50%) scale(0.8);
-          background: transparent;
-          border: none;
-          cursor: pointer;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 10px;
-          padding: 24px;
-          border-radius: 16px;
-          transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          opacity: 0;
-          z-index: 10;
+      const N = themes.length;
+      const angleStep = 360 / N;
+      
+      // Tailles de la roue
+      const R_in = 45;   // Rayon intérieur (trou du milieu)
+      const R_out = 240; // Rayon extérieur (taille de la roue)
+      const R_text = 150; // Position du texte
+      
+      let svgHtml = `<svg viewBox="0 0 500 500" style="width:500px; height:500px; filter:drop-shadow(0 10px 30px rgba(0,0,0,0.8));">`;
+      
+      themes.forEach((th, i) => {
+        // Calcul des angles pour chaque part (le -90 permet de commencer tout en haut à midi)
+        const startAngle = (i - 0.5) * angleStep - 90;
+        const endAngle = (i + 0.5) * angleStep - 90;
+        const midAngle = i * angleStep - 90;
+        
+        const radS = startAngle * Math.PI / 180;
+        const radE = endAngle * Math.PI / 180;
+        const radM = midAngle * Math.PI / 180;
+        
+        // Calcul des 4 points de la part de camembert
+        const p1x = 250 + R_in * Math.cos(radS), p1y = 250 + R_in * Math.sin(radS);
+        const p2x = 250 + R_out * Math.cos(radS), p2y = 250 + R_out * Math.sin(radS);
+        const p3x = 250 + R_out * Math.cos(radE), p3y = 250 + R_out * Math.sin(radE);
+        const p4x = 250 + R_in * Math.cos(radE), p4y = 250 + R_in * Math.sin(radE);
+        
+        // Tracé SVG SVG (M=Move, L=Line, A=Arc)
+        const d = `M ${p1x} ${p1y} L ${p2x} ${p2y} A ${R_out} ${R_out} 0 0 1 ${p3x} ${p3y} L ${p4x} ${p4y} A ${R_in} ${R_in} 0 0 0 ${p1x} ${p1y} Z`;
+        
+        // Position du texte au centre de la part
+        const textX = 250 + R_text * Math.cos(radM);
+        const textY = 250 + R_text * Math.sin(radM);
+        
+        svgHtml += `
+          <g style="cursor:pointer;" 
+             onmouseenter="hoverTheme('${th.id}', this)" 
+             onmouseleave="leaveTheme(this)" 
+             onclick="setTheme('${th.id}'); closeRadialMenu();">
+            <path d="${d}" fill="rgba(20, 25, 35, 0.75)" stroke="var(--dim)" stroke-width="2" style="transition:all 0.15s ease-out;"></path>
+            <text x="${textX}" y="${textY}" fill="var(--silver)" font-family="var(--font-mono)" font-size="11" font-weight="700" text-anchor="middle" dominant-baseline="middle" letter-spacing="1" style="transition:all 0.15s ease-out; pointer-events:none;">${th.name.toUpperCase()}</text>
+          </g>
         `;
-        
-        // Contenu : Le point de couleur + le Nom du thème
-        btn.innerHTML = `
-          <div class="theme-dot" style="width:20px; height:20px; border-radius:50%; background:${th.bg0}; border:3px solid ${th.gold}; box-shadow:0 4px 10px rgba(0,0,0,0.5); transition:all 0.2s;"></div>
-          <span style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:${th.gold}; letter-spacing:1px; text-transform:uppercase; text-shadow:0 2px 6px rgba(0,0,0,0.9); white-space:nowrap; transition:all 0.2s;">${th.name}</span>
-        `;
-        
-        btn.onmouseenter = () => {
-          applyTheme(th.id);
-          btn.style.transform = `translate(-50%, -50%) scale(1.15)`;
-          btn.style.zIndex = "20";
-          btn.querySelector('.theme-dot').style.transform = 'scale(1.4)';
-          btn.querySelector('.theme-dot').style.boxShadow = `0 0 15px ${th.gold}`;
-          btn.querySelector('span').style.textShadow = `0 0 12px ${th.gold}`;
-        };
-        
-        btn.onmouseleave = () => {
-          applyTheme(currentTheme);
-          btn.style.transform = `translate(-50%, -50%) scale(1)`;
-          btn.style.zIndex = "10";
-          btn.querySelector('.theme-dot').style.transform = 'scale(1)';
-          btn.querySelector('.theme-dot').style.boxShadow = '0 4px 10px rgba(0,0,0,0.5)';
-          btn.querySelector('span').style.textShadow = '0 2px 6px rgba(0,0,0,0.9)';
-        };
-        
-        btn.onclick = () => {
-          setTheme(th.id);
-          closeRadialMenu();
-        };
-
-        container.appendChild(btn);
-        
-        // Animation d'apparition en cascade
-        setTimeout(() => { 
-          btn.style.opacity = '1';
-          btn.style.transform = `translate(-50%, -50%) scale(1)`; 
-        }, 10 + (index * 20));
       });
+      
+      svgHtml += `</svg>`;
+      container.innerHTML = svgHtml;
 
       overlay.style.display = 'flex';
       setTimeout(() => overlay.style.opacity = '1', 10);
     }
 
+    // Effet d'illumination au survol (Highlight CS:GO)
+    window.hoverTheme = function(id, el) {
+      applyTheme(id);
+      const th = THEMES[id];
+      const path = el.querySelector('path');
+      const text = el.querySelector('text');
+      
+      path.setAttribute('fill', 'rgba(255,255,255,0.08)');
+      path.setAttribute('stroke', th.gold);
+      path.setAttribute('stroke-width', '3');
+      
+      text.setAttribute('fill', th.gold);
+      text.setAttribute('font-size', '13');
+      text.style.textShadow = `0 0 12px ${th.gold}`;
+    };
+
+    // Retour à la normale
+    window.leaveTheme = function(el) {
+      applyTheme(currentTheme);
+      const path = el.querySelector('path');
+      const text = el.querySelector('text');
+      
+      path.setAttribute('fill', 'rgba(20, 25, 35, 0.75)');
+      path.setAttribute('stroke', 'var(--dim)');
+      path.setAttribute('stroke-width', '2');
+      
+      text.setAttribute('fill', 'var(--silver)');
+      text.setAttribute('font-size', '11');
+      text.style.textShadow = 'none';
+    };
+
     function closeRadialMenu() {
       const overlay = $('radial-menu-overlay');
       overlay.style.opacity = '0';
-      setTimeout(() => overlay.style.display = 'none', 300);
+      setTimeout(() => overlay.style.display = 'none', 200);
     }
     
     function toggleDD(id) {
