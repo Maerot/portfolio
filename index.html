@@ -1350,7 +1350,7 @@ function init() {
       if (details && details.content) {
         html += details.content;
       } else {
-        html += `<p style="font-style:italic">${t.modalFallback}</p>`;
+        html += `<p>${item.desc || t.modalFallback}</p>`;
       }
 
       body.innerHTML = html;
